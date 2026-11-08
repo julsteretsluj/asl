@@ -3,7 +3,7 @@ import { DRILLS, analyze, makeTiles } from "../gloss.js";
 import { LESSONS } from "../data.js";
 import { useAccess, useQuietMotion } from "../access.jsx";
 import { LessonPlayer } from "../components/Player.jsx";
-import { Feedback, Pill, Prose, Sheet } from "../components/ui.jsx";
+import { Feedback, GraphicSlot, Pill, Prose, Sheet } from "../components/ui.jsx";
 
 export function Grammar() {
   const [drillId, setDrillId] = useState(DRILLS[0].id);
@@ -22,6 +22,7 @@ export function Grammar() {
             A condition keeps the eyebrows up through the if-clause, then a nod lets them drop for the result. A rhetorical WHY? replaces because: you ask, and you answer.
           </p>
         </Prose>
+        <GraphicSlot id="grammar-desk" className="mt-6" />
       </header>
 
       <div className="flex flex-wrap gap-1.5" role="group" aria-label="Sentence">
@@ -32,7 +33,7 @@ export function Grammar() {
             aria-pressed={item.id === drill.id}
             onClick={() => setDrillId(item.id)}
             className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${
-              item.id === drill.id ? "bg-ink text-white" : "bg-white text-ink shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
+              item.id === drill.id ? "bg-ink text-white" : "bg-surface text-ink shadow-soft"
             }`}
           >
             {item.title}
@@ -43,7 +44,7 @@ export function Grammar() {
       <section className="grid items-start gap-6 lg:grid-cols-12">
         <div className="space-y-4 lg:col-span-5">
           <SentenceStage drill={drill} />
-          <details className="rounded-2xl bg-white px-4 py-3 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+          <details className="rounded-2xl bg-surface px-4 py-3 shadow-soft">
             <summary className="cursor-pointer text-[15px] font-medium">Filmed beginner lesson</summary>
             <div className="mt-3">
               <LessonPlayer lesson={LESSONS.one} />
@@ -94,7 +95,7 @@ function SentenceStage({ drill }) {
                 setStep(index);
               }}
               className={`rounded-xl px-3 py-2 text-[14px] font-medium tracking-[0.04em] ${
-                index === step ? "bg-ink text-white" : "bg-[#f2f2f7] text-ink"
+                index === step ? "bg-ink text-white" : "bg-muted text-ink"
               }`}
             >
               {item.gloss}
@@ -138,7 +139,7 @@ function SentenceStage({ drill }) {
 function Marker({ current, lexical }) {
   if (lexical && current.tag) {
     return (
-      <div className="mt-4 rounded-2xl bg-[#f2f2f7] px-4 py-4">
+      <div className="mt-4 rounded-2xl bg-muted px-4 py-4">
         <p className="text-[13px] font-medium text-secondary">Manual tag</p>
         <p className="mt-1 text-[28px] font-semibold tracking-[0.06em]">{current.tag}</p>
         <p className="mt-1 text-[14px] leading-6 text-secondary">
@@ -210,7 +211,7 @@ function Builder({ drill }) {
               }}
               onClick={() => add(tile.id)}
               className={`rounded-full px-3 py-1.5 text-[14px] font-medium tracking-[0.03em] ${
-                spent ? "bg-[#f2f2f7] text-[#aeaeb2]" : "bg-[#f2f2f7] text-ink hover:bg-[#e8e8ed]"
+                spent ? "bg-muted text-secondary" : "bg-muted text-ink hover:bg-line"
               }`}
             >
               {tile.label}
@@ -219,7 +220,7 @@ function Builder({ drill }) {
         })}
       </div>
       <div
-        className="mt-4 min-h-24 rounded-2xl border border-dashed border-line bg-[#fafafc] p-3"
+        className="mt-4 min-h-24 rounded-2xl border border-dashed border-line bg-muted p-3"
         onDragOver={(event) => event.preventDefault()}
         onDrop={(event) => {
           event.preventDefault();
@@ -237,7 +238,7 @@ function Builder({ drill }) {
                 <button
                   type="button"
                   onClick={() => remove(tile.id)}
-                  className="rounded-full bg-white px-3 py-1.5 text-[14px] font-medium tracking-[0.03em] shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
+                  className="rounded-full bg-surface px-3 py-1.5 text-[14px] font-medium tracking-[0.03em] shadow-soft"
                 >
                   {tile.label}
                   <span className="sr-only">, remove</span>

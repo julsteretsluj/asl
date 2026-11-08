@@ -75,6 +75,17 @@ export const UNITS = [
             "S-A-M",
             "Single letters with hyphens are the manual alphabet. THANK-YOU is one sign.",
           ),
+        
+          choice("STORE in a gloss is…", ["One sign", "Fingerspelling", "An English article"], "One sign", "Capitals name a sign. STORE is one sign."),
+          choice("THANK-YOU uses a hyphen because it is…", ["One sign", "Two signs", "Three letters"], "One sign", "The English words are produced as a single sign."),
+          blank("Mark the repetition.", "SAFE", "", ["++", "S-A-M", "STORE"], "++", "Plus-plus asks you to repeat the sign."),
+          bank("Two signs, not fingerspelling. Tap store, then thank-you.", ["STORE", "THANK-YOU", "S-A-M", "J-U-L-E-S"], ["STORE", "THANK-YOU"], "STORE and THANK-YOU are signs. The hyphenated letters are fingerspelling."),
+          match("Match the pairs.", [
+            ["Don't know", "DON'T-KNOW"],
+            ["Sam", "S-A-M"],
+            ["Store", "STORE"],
+            ["Repeat the sign", "SAFE++"],
+          ]),
         ],
       },
       {
@@ -114,6 +125,17 @@ export const UNITS = [
             "Comment",
             "The comment is what you are saying about the topic.",
           ),
+        
+          choice("What opens the store question?", ["TOMORROW", "STORE", "YOU"], "TOMORROW", "Time is first."),
+          choice("YOU GO, after the place, is the…", ["Comment", "Time", "Yes/no marker"], "Comment", "The comment is what you say about the topic."),
+          blank("Mark the yes/no.", "TOMORROW STORE YOU GO", "", ["[q]", "GOING", "THE"], "[q]", "Raised eyebrows, written [q]."),
+          bank("Build the comment only: the person, then the verb.", ["YOU", "GO", "TOMORROW", "STORE", "[q]", "ARE"], ["YOU", "GO"], "YOU GO is the comment. Time and the place stay outside it."),
+          match("Match the pairs.", [
+            ["Time", "TOMORROW"],
+            ["Topic", "STORE"],
+            ["Comment", "YOU GO"],
+            ["Yes/no marker", "[q]"],
+          ]),
         ],
       },
       {
@@ -151,6 +173,17 @@ export const UNITS = [
             "A rhetorical WHY?",
             "State it, ask WHY? with [rhq], then answer.",
           ),
+        
+          choice("is, am, and are…", ["Drop out", "Stay as IS", "Become [q]"], "Drop out", "The verb to be is not a separate sign here."),
+          choice("GO-TO, when you need it, is…", ["One sign", "The English word to", "Fingerspelling"], "One sign", "A lone TO is the preposition. GO-TO folds that path into one sign."),
+          blank("Gloss “I am fine.”", "I", "", ["FINE", "AM", "IS"], "FINE", "The copula drops."),
+          bank("Build “I am fine.” Leave am and is out.", ["I", "FINE", "AM", "IS", "THE"], ["I", "FINE"], "I and FINE. The be-verb is not signed."),
+          match("Match the pairs.", [
+            ["I am fine", "I FINE"],
+            ["going", "GO"],
+            ["the store", "STORE"],
+            ["go to", "GO-TO"],
+          ]),
         ],
       },
       {
@@ -192,6 +225,17 @@ export const UNITS = [
             "S-A-M",
             "One hyphen between each letter. A doubled letter would bounce or slide.",
           ),
+        
+          choice("V, next to U, opens…", ["A gap between the two fingers", "The thumb across the fist", "A pinky path"], "A gap between the two fingers", "U keeps index and middle together. V separates them.", {"letter":"V"}),
+          choice("Before the pinky traces a J, the handshape is…", ["I", "U", "S"], "I", "J keeps the I hand. The path is the letter.", {"letter":"I"}),
+          blank("Fingerspell Sam.", "", "", ["S-A-M", "SAM", "S-A-M-M"], "S-A-M", "One hyphen between each letter."),
+          bank("Tap the fist with the thumb at the side, then the two fingers that stay together.", ["A", "U", "S", "J"], ["A", "U"], "A keeps the thumb beside the index. U holds two fingers together."),
+          match("Match the pairs.", [
+            ["Thumb at the side", "A"],
+            ["Thumb across the fingers", "S"],
+            ["Two fingers together", "U"],
+            ["Pinky traces the letter", "J"],
+          ]),
         ],
       },
     ],
@@ -237,6 +281,17 @@ export const UNITS = [
             "to",
             "The English to is not a separate sign in this phrase.",
           ),
+        
+          choice("PLEASE in this set is…", ["One sign", "Two signs", "Fingerspelling"], "One sign", "A greeting can be one sign."),
+          choice("“I am fine” leaves out…", ["am", "I", "FINE"], "am", "The copula drops. The gloss is I FINE."),
+          blank("Mark the check-in.", "HOW YOU", "", ["[q]", "ARE", "FINE"], "[q]", "HOW YOU is a yes/no question."),
+          bank("Build “How are you?”", ["HOW", "YOU", "[q]", "ARE", "AM"], ["HOW", "YOU", "[q]"], "HOW YOU, then the raised-eyebrow marker. are drops."),
+          match("Match the pairs.", [
+            ["Hello", "HELLO"],
+            ["Please", "PLEASE"],
+            ["Sorry", "SORRY"],
+            ["I am fine", "I FINE"],
+          ]),
         ],
       },
       {
@@ -276,6 +331,17 @@ export const UNITS = [
             "YOU",
             "Point forward. That is the whole pronoun.",
           ),
+        
+          choice("YOU is produced by…", ["A point forward", "A point to your chest", "A fingerspelled U"], "A point forward", "The index finger points to the person."),
+          choice("A point in space does not mark…", ["Gender", "The person you already placed", "Your own chest"], "Gender", "he, she, and singular they share IX."),
+          blank("Gloss me.", "", "", ["I", "IX", "THE"], "I", "I touches your chest."),
+          bank("Yourself, then the person on your left.", ["I", "[index-left]", "YOU", "HE", "THE"], ["I", "[index-left]"], "I is your chest. [index-left] is the place you already set."),
+          match("Match the pairs.", [
+            ["Point to your chest", "I"],
+            ["Point forward", "YOU"],
+            ["We", "WE"],
+            ["Point on your left", "[index-left]"],
+          ]),
         ],
       },
       {
@@ -315,6 +381,17 @@ export const UNITS = [
             "YESTERDAY",
             "Past time still occupies the first slot.",
           ),
+        
+          choice("TODAY, like every time sign here, goes…", ["At the start", "After GO", "After the place"], "At the start", "Whichever time you use, it opens the sentence."),
+          choice("TOMORROW and YESTERDAY both start…", ["On the cheek", "On the chest", "At the waist"], "On the cheek", "The thumb is on the cheek. Forward is tomorrow. Back is yesterday."),
+          blank("Today, the store.", "", "STORE I GO", ["TODAY", "YESTERDAY", "TOMORROW"], "TODAY", "Time still takes the first slot."),
+          bank("Build “Tomorrow I go to the store.”", ["TOMORROW", "STORE", "I", "GO", "YESTERDAY", "NOW"], ["TOMORROW", "STORE", "I", "GO"], "Time, place, then I GO."),
+          match("Match the pairs.", [
+            ["Forward from the cheek", "TOMORROW"],
+            ["Back from the cheek", "YESTERDAY"],
+            ["Now", "NOW"],
+            ["Today", "TODAY"],
+          ]),
         ],
       },
       {
@@ -351,6 +428,17 @@ export const UNITS = [
             ["What", "WHAT"],
             ["Where", "WHERE"],
             ["When", "WHEN"],
+          ]),
+        
+          choice("WHO, WHAT, WHERE, and WHEN usually land…", ["At the end", "At the start", "In place of the verb"], "At the end", "The wh-sign closes the question, with [wh-q]."),
+          choice("Furrowed brows on a real why-question are written…", ["[wh-q]", "[q]", "[rhq]"], "[wh-q]", "[q] is yes/no. [rhq] is a question you answer yourself."),
+          blank("The check-in, not a wh-question.", "HOW YOU", "", ["[q]", "[wh-q]", "[rhq]"], "[q]", "HOW YOU as “how are you?” raises the brows."),
+          bank("Build “Where are you going?” about the store.", ["STORE", "YOU", "GO", "WHERE", "[wh-q]", "[q]", "ARE", "THE"], ["STORE", "YOU", "GO", "WHERE", "[wh-q]"], "Topic, comment, then WHERE with the furrowed-brow marker."),
+          match("Match the pairs.", [
+            ["Who", "WHO"],
+            ["What", "WHAT"],
+            ["Why", "WHY?"],
+            ["How are you?", "HOW YOU [q]"],
           ]),
         ],
       },
@@ -389,6 +477,17 @@ export const UNITS = [
             "Crossed fists on the chest",
             "The I-L-Y handshape is a different sign. LOVE hugs the fists in.",
           ),
+        
+          choice("A larger HAPPY, carried by the hands, is…", ["HAPPY++", "HAPPY with [q]", "A fingerspelled happy"], "HAPPY++", "Repetition enlarges the feeling."),
+          choice("The I-L-Y handshape is…", ["A different sign", "The sign LOVE", "The sign SAD"], "A different sign", "LOVE hugs crossed fists on the chest."),
+          blank("Intensify the sign.", "HAPPY", "", ["++", "[q]", "SAD"], "++", "Plus-plus is the repeat."),
+          bank("Tap love, then the repeated happy sign.", ["LOVE", "HAPPY++", "SAD", "TIRED", "[q]"], ["LOVE", "HAPPY++"], "LOVE is the crossed fists. HAPPY++ repeats the sign."),
+          match("Match the pairs.", [
+            ["Bent hands drop from the shoulders", "TIRED"],
+            ["Crossed fists on the chest", "LOVE"],
+            ["The sign, with the face at rest", "SAD"],
+            ["Repeat for a larger feeling", "HAPPY++"],
+          ]),
         ],
       },
     ],
@@ -436,6 +535,17 @@ export const UNITS = [
             "[q]",
             "This ask is yes/no.",
           ),
+        
+          choice("the, are, to, and going…", ["Drop out", "Open the sentence", "Replace [q]"], "Drop out", "The gloss keeps TOMORROW STORE YOU GO [q]."),
+          choice("In that gloss, STORE is the…", ["Topic", "Time", "Question marker"], "Topic", "Time first, then the place, then YOU GO."),
+          blank("The verb, not the English -ing.", "TOMORROW STORE YOU", "[q]", ["GO", "GOING", "ARE"], "GO", "Use GO."),
+          bank("Build the yes/no again. Leave the, are, to, and going out.", ["TOMORROW", "STORE", "YOU", "GO", "[q]", "THE", "ARE", "TO", "GOING"], ["TOMORROW", "STORE", "YOU", "GO", "[q]"], "Time, topic, comment, raised eyebrows."),
+          match("Match the pairs.", [
+            ["Time", "TOMORROW"],
+            ["Topic", "STORE"],
+            ["Verb", "GO"],
+            ["Yes/no marker", "[q]"],
+          ]),
         ],
       },
       {
@@ -473,6 +583,17 @@ export const UNITS = [
             "[cond] TOMORROW RAIN, [nod] I DESK SIT",
             "IF can replace [cond]. A missing nod is noted, and the clause order still has to hold.",
           ),
+        
+          choice("The manual tag IF stands in for…", ["[cond]", "[nod]", "WILL"], "[cond]", "IF and [cond] mark the same raised brows on the if-clause."),
+          choice("will, at, and the…", ["Drop out", "Come before TOMORROW", "Replace RAIN"], "Drop out", "They are not signs in this sentence."),
+          blank("Release the if-clause.", "[cond] TOMORROW RAIN", "I DESK SIT", ["[nod]", "[q]", "WILL"], "[nod]", "The nod sits with the result, before SIT."),
+          bank("Build the conditional again. Leave will, at, and the out.", ["[cond]", "TOMORROW", "RAIN", "[nod]", "I", "DESK", "SIT", "IF", "WILL", "AT", "THE"], ["[cond]", "TOMORROW", "RAIN", "[nod]", "I", "DESK", "SIT"], "Condition, time, rain, nod, then I DESK SIT."),
+          match("Match the pairs.", [
+            ["Raised brows on the if-clause", "[cond]"],
+            ["Manual tag for that clause", "IF"],
+            ["Nod with the result", "[nod]"],
+            ["The result", "SIT"],
+          ]),
         ],
       },
       {
@@ -510,6 +631,17 @@ export const UNITS = [
             "PARTY I NOT GO, WHY? [rhq] I TIRED",
             "Leave BECAUSE out.",
           ),
+        
+          choice("AM in “I am tired”…", ["Drops out", "Opens the sentence", "Replaces WHY?"], "Drops out", "The reason is I TIRED."),
+          choice("After WHY? [rhq], you sign the reason. That reason is…", ["I TIRED", "BECAUSE I TIRED", "NOT GO"], "I TIRED", "You answer the question you just asked."),
+          blank("Negate the verb.", "PARTY I", "GO", ["NOT", "AM", "BECAUSE"], "NOT", "NOT comes before GO."),
+          bank("Build the reason only.", ["I", "TIRED", "BECAUSE", "AM", "WHY?", "[rhq]"], ["I", "TIRED"], "Leave BECAUSE and AM out."),
+          match("Match the pairs.", [
+            ["The event", "PARTY"],
+            ["Not going", "NOT GO"],
+            ["Rhetorical why", "WHY? [rhq]"],
+            ["The reason", "I TIRED"],
+          ]),
         ],
       },
     ],
@@ -557,6 +689,17 @@ export const UNITS = [
             "me-HELP-right",
             "You are the start of the path. They are the end.",
           ),
+        
+          choice("right-HELP-me sends the help…", ["From their place to you", "From you to their place", "Straight up"], "From their place to you", "The start is named first. me at the end means the path arrives at you."),
+          choice("YOU, THE, and TO in the sister sentence…", ["Drop out", "Come before SISTER", "Replace the point"], "Drop out", "The gloss is SISTER [index-left] left-GIVE-me BOOK."),
+          blank("The object.", "SISTER [index-left] left-GIVE-me", "", ["BOOK", "THE", "YOU"], "BOOK", "Name her, point, send the verb, then the object."),
+          bank("I give the book to the person on my left.", ["me-GIVE-left", "BOOK", "left-GIVE-me", "YOU", "THE", "TO"], ["me-GIVE-left", "BOOK"], "The verb names the path. BOOK is the object."),
+          match("Match the pairs.", [
+            ["Sister on your left", "SISTER [index-left]"],
+            ["She gives me", "left-GIVE-me"],
+            ["I give to my left", "me-GIVE-left"],
+            ["I help the person on my right", "me-HELP-right"],
+          ]),
         ],
       },
       {
@@ -594,6 +737,17 @@ export const UNITS = [
             "On the near edge of the flat hand",
             "The second classifier shows the place of the cup.",
           ),
+        
+          choice("ON and THE in “the cup is on the table”…", ["Drop out", "Come before TABLE", "Replace CL:B"], "Drop out", "Name the things, then let the handshapes stand in."),
+          choice("You sign CUP…", ["Before CL:C", "After CL:C", "Instead of the C hand"], "Before CL:C", "Name the thing, then the classifier."),
+          blank("The flat surface.", "TABLE", "", ["CL:B", "CL:C", "ON"], "CL:B", "Palm down, after you have named TABLE."),
+          bank("Name the cup, then the handshape that stands in for it.", ["CUP", "CL:C", "TABLE", "CL:B", "ON", "THE", "[q]"], ["CUP", "CL:C"], "CUP, then CL:C."),
+          match("Match the pairs.", [
+            ["The table", "TABLE"],
+            ["A flat surface", "CL:B"],
+            ["The cup", "CUP"],
+            ["A C hand for the cup", "CL:C"],
+          ]),
         ],
       },
       {
@@ -631,6 +785,17 @@ export const UNITS = [
             "One piece of a sign: shape, place, path, palm, or face",
             "Change one piece and you may have produced a different word.",
           ),
+        
+          choice("SUMMER is signed at the…", ["Forehead", "Under the nose", "Cheek"], "Forehead", "SUMMER wipes the forehead. UGLY twists under the nose."),
+          choice("APPLE and ONION keep the same X twist. ONION changes the…", ["Location", "Movement", "Palm orientation"], "Location", "APPLE is on the cheek. ONION is at the corner of the eye."),
+          blank("MOTHER’s place.", "", "", ["Chin", "Forehead", "Cheek"], "Chin", "FATHER taps the forehead. MOTHER taps the chin. Same hand, different place."),
+          bank("Same X twist. Tap the cheek sign, then the one at the corner of the eye.", ["APPLE", "ONION", "CANDY", "SUMMER", "UGLY"], ["APPLE", "ONION"], "Cheek, then the corner of the eye."),
+          match("Match the pairs.", [
+            ["Wipes the forehead", "SUMMER"],
+            ["Twists under the nose", "UGLY"],
+            ["Straight index on the cheek", "CANDY"],
+            ["Forehead tap", "FATHER"],
+          ]),
         ],
       },
     ],

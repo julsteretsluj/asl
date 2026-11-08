@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PEOPLE, VERBS } from "../data.js";
 import { useAccess, useQuietMotion } from "../access.jsx";
-import { ExternalLink, Pill, Prose, Sheet } from "../components/ui.jsx";
+import { ExternalLink, GraphicSlot, Pill, Prose, Sheet } from "../components/ui.jsx";
 
 export function Space() {
   const { access } = useAccess();
@@ -33,6 +33,7 @@ export function Space() {
             A classifier is a handshape that stands in for a thing you have already named. TABLE, then CL:B shows the flat top. CUP, then CL:C sets the cup on the near edge.
           </p>
         </Prose>
+        <GraphicSlot id="space-desk" className="mt-6 max-w-md" />
       </header>
 
       <section className="grid items-start gap-6 lg:grid-cols-12">
@@ -55,7 +56,7 @@ export function Space() {
                       aria-pressed={loci[slot] === name}
                       onClick={() => setLoci((current) => ({ ...current, [slot]: current[slot] === name ? "" : name }))}
                       className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${
-                        loci[slot] === name ? "bg-ink text-white" : "bg-[#f2f2f7] text-ink"
+                        loci[slot] === name ? "bg-ink text-white" : "bg-muted text-ink"
                       }`}
                     >
                       {name}
@@ -74,7 +75,7 @@ export function Space() {
                 aria-pressed={verb === item.id}
                 onClick={() => setVerb(item.id)}
                 className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${
-                  verb === item.id ? "bg-ink text-white" : "bg-[#f2f2f7] text-ink"
+                  verb === item.id ? "bg-ink text-white" : "bg-muted text-ink"
                 }`}
               >
                 {item.label}
@@ -89,7 +90,7 @@ export function Space() {
                 aria-pressed={side === slot}
                 onClick={() => setSide(slot)}
                 className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${
-                  side === slot ? "bg-blue text-white" : "bg-white text-ink border border-line"
+                  side === slot ? "bg-blue text-white" : "bg-surface text-ink border border-line"
                 }`}
               >
                 Use {slot}
@@ -102,7 +103,7 @@ export function Space() {
               aria-pressed={direction === "toward-me"}
               onClick={() => setDirection("toward-me")}
               className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${
-                direction === "toward-me" ? "bg-ink text-white" : "bg-[#f2f2f7]"
+                direction === "toward-me" ? "bg-ink text-white" : "bg-muted"
               }`}
             >
               Toward me
@@ -112,7 +113,7 @@ export function Space() {
               aria-pressed={direction === "toward-them"}
               onClick={() => setDirection("toward-them")}
               className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${
-                direction === "toward-them" ? "bg-ink text-white" : "bg-[#f2f2f7]"
+                direction === "toward-them" ? "bg-ink text-white" : "bg-muted"
               }`}
             >
               Toward them
@@ -282,7 +283,7 @@ function SigningMap({ loci, path, travel, duration, quiet }) {
 function Locus({ x, y, label, empty }) {
   return (
     <g>
-      <circle cx={x} cy={y} r="22" fill="#FFFFFF" stroke={label ? "#007AFF" : "#D1D1D6"} strokeWidth="2" />
+      <circle cx={x} cy={y} r="22" fill="var(--color-surface)" stroke={label ? "var(--color-sky)" : "var(--color-line)"} strokeWidth="2" />
       <text
         x={x}
         y={y + 4}

@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAccess } from "../access.jsx";
 import { HandDiagram } from "../components/Hand.jsx";
+import { ArrowRight, Check, Clock3, Icon, Settings2, Sparkles, X } from "../components/icons.jsx";
+import { GraphicSlot, HeartGlyphs } from "../components/ui.jsx";
 import { gradeAttempt } from "../lessons.js";
-import { awardLesson } from "../progress.js";
-
-const HEARTS = 5;
+import { HEART_RESTORE_MS, nextHeartLabel } from "../progress.js";
+import { useProgress } from "../progress-state.jsx";
 
 function shuffle(list, seed) {
   const copy = [...list];
@@ -19,24 +20,32 @@ function shuffle(list, seed) {
 
 export function Lesson({ lesson, onExit }) {
   const { setOpen } = useAccess();
+  const { progress, spendHeart, refreshHearts, recordExercise, finishLesson } = useProgress();
   const [index, setIndex] = useState(0);
-  const [hearts, setHearts] = useState(HEARTS);
   const [results, setResults] = useState([]);
   const [phase, setPhase] = useState("ask");
   const [grade, setGrade] = useState(null);
   const [summary, setSummary] = useState(null);
   const [leaving, setLeaving] = useState(false);
   const [attempt, setAttempt] = useState(null);
+  const hearts = progress.hearts;
   const exercise = lesson.exercises[index];
   const ready = isReady(exercise, attempt);
   const busy = useRef(false);
+  const checked = useRef(false);
 
   useEffect(() => {
     setAttempt(null);
     setGrade(null);
     setPhase("ask");
     busy.current = false;
+    checked.current = false;
   }, [index]);
+
+  useEffect(() => {
+    if (phase !== "ask" || hearts > 0) return;
+    setPhase("hearts");
+  }, [phase, hearts]);
 
   useEffect(() => {
     const onKey = (event) => {
@@ -54,9 +63,16 @@ export function Lesson({ lesson, onExit }) {
   });
 
   function check() {
+    if (checked.current || phase !== "ask") return;
+    if (hearts <= 0) {
+      setPhase("hearts");
+      return;
+    }
+    checked.current = true;
     const payload = exercise.type === "bank" ? (attempt || []).map((tile) => tile.label) : attempt;
     const result = gradeAttempt(exercise, payload);
-    if (!result.ok) setHearts((value) => Math.max(0, value - 1));
+    recordExercise(lesson, exercise, result.ok);
+    if (!result.ok) spendHeart();
     setGrade(result);
     setPhase("feedback");
   }
@@ -66,7 +82,7 @@ export function Lesson({ lesson, onExit }) {
     busy.current = true;
     const correct = Boolean(grade?.ok);
     const nextResults = [...results, correct];
-    if (!correct && hearts === 0) {
+    if (!correct && progress.hearts <= 0) {
       setResults(nextResults);
       setPhase("hearts");
       return;
@@ -74,7 +90,7 @@ export function Lesson({ lesson, onExit }) {
     if (index + 1 >= lesson.exercises.length) {
       const score = nextResults.filter(Boolean).length;
       setResults(nextResults);
-      setSummary(awardLesson(lesson.id, { correct: score, total: lesson.exercises.length }));
+      setSummary(finishLesson(lesson.id, { correct: score, total: lesson.exercises.length }));
       setPhase("done");
       return;
     }
@@ -103,8 +119,9 @@ export function Lesson({ lesson, onExit }) {
         correct={results.filter(Boolean).length}
         total={results.length}
         onRetry={() => {
+          const next = refreshHearts();
+          if ((next?.hearts ?? 0) <= 0) return;
           setIndex(0);
-          setHearts(HEARTS);
           setResults([]);
           setSummary(null);
           setAttempt(null);
@@ -113,6 +130,7 @@ export function Lesson({ lesson, onExit }) {
           busy.current = false;
         }}
         onExit={onExit}
+        refreshHearts={refreshHearts}
       />
     );
   }
@@ -126,13 +144,13 @@ export function Lesson({ lesson, onExit }) {
           <button
             type="button"
             onClick={() => setLeaving(true)}
-            className="grid h-10 w-10 place-items-center rounded-full text-[20px] text-secondary hover:bg-white"
+            className="grid h-10 w-10 place-items-center rounded-full text-secondary hover:bg-surface"
             aria-label="Leave lesson"
           >
-            ×
+            <Icon as={X} size="md" />
           </button>
           <div
-            className="h-3 flex-1 overflow-hidden rounded-full bg-[#E5E5EA]"
+            className="h-3 flex-1 overflow-hidden rounded-full bg-muted"
             role="progressbar"
             aria-valuemin={0}
             aria-valuemax={lesson.exercises.length}
@@ -140,14 +158,15 @@ export function Lesson({ lesson, onExit }) {
             aria-label="Lesson progress"
           >
             <div
-              className="h-full rounded-full bg-[#146C43]"
+              className="h-full rounded-full bg-success"
               style={{ width: `${(index / lesson.exercises.length) * 100}%` }}
             />
           </div>
-          <p className="text-[13px] font-medium text-secondary" aria-label={`${hearts} of ${HEARTS} hearts`}>
-            <Hearts count={hearts} />
+          <p className="text-[13px] font-medium text-secondary">
+            <HeartGlyphs count={hearts} />
           </p>
-          <button type="button" onClick={() => setOpen(true)} className="text-[13px] font-medium text-blue">
+          <button type="button" onClick={() => setOpen(true)} className="inline-flex items-center gap-1 text-[13px] font-medium text-blue">
+            <Icon as={Settings2} size="xs" />
             Access
           </button>
         </div>
@@ -166,13 +185,13 @@ export function Lesson({ lesson, onExit }) {
 
       <footer
         className={`sticky bottom-0 border-t px-5 py-4 sm:px-6 ${
-          footerTone === "ok" ? "border-[#146C43]/20 bg-[#E7F6EE]" : footerTone === "bad" ? "border-[#7A271A]/15 bg-[#FDEEEC]" : "border-black/5 bg-canvas"
+          footerTone === "ok" ? "border-success/20 bg-success-soft" : footerTone === "bad" ? "border-danger/15 bg-danger-soft" : "border-line bg-canvas"
         }`}
       >
         <div className="mx-auto max-w-[640px]" aria-live="polite">
           {phase === "feedback" && grade ? (
             <>
-              <p className={`text-[20px] font-semibold ${grade.ok ? "text-[#146C43]" : "text-[#7A271A]"}`}>
+              <p className={`text-[20px] font-semibold ${grade.ok ? "text-success" : "text-danger"}`}>
                 {grade.ok ? "Correct" : "Correct answer"}
               </p>
               <p className="mt-1 text-[15px] leading-6 text-ink">
@@ -181,11 +200,12 @@ export function Lesson({ lesson, onExit }) {
               <button
                 type="button"
                 onClick={advance}
-                className={`mt-4 h-12 w-full rounded-2xl text-[16px] font-semibold text-white ${
-                  grade.ok ? "bg-[#146C43]" : "bg-[#7A271A]"
+                className={`mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl text-[16px] font-semibold text-white ${
+                  grade.ok ? "bg-success" : "bg-danger"
                 }`}
               >
                 Continue
+                <Icon as={ArrowRight} size="sm" className="text-white" />
               </button>
             </>
           ) : (
@@ -193,10 +213,11 @@ export function Lesson({ lesson, onExit }) {
               type="button"
               disabled={!ready}
               onClick={check}
-              className={`h-12 w-full rounded-2xl text-[16px] font-semibold ${
-                ready ? "bg-[#146C43] text-white" : "bg-[#E5E5EA] text-[#8E8E93]"
+              className={`inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl text-[16px] font-semibold ${
+                ready ? "bg-success text-white" : "bg-muted text-secondary"
               }`}
             >
+              <Icon as={Check} size="sm" className={ready ? "text-white" : "text-secondary"} />
               Check
             </button>
           )}
@@ -205,12 +226,12 @@ export function Lesson({ lesson, onExit }) {
 
       {leaving ? (
         <div className="fixed inset-0 z-30 flex items-end justify-center bg-black/20 p-4 sm:items-center">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.08)]" role="dialog" aria-modal="true" aria-labelledby="leave-title">
+          <div className="w-full max-w-sm rounded-2xl bg-surface p-5 shadow-soft" role="dialog" aria-modal="true" aria-labelledby="leave-title">
             <h2 id="leave-title" className="text-[20px] font-semibold tracking-[-0.02em]">
               Leave this lesson?
             </h2>
             <p className="mt-2 text-[15px] leading-6 text-secondary">
-              This attempt ends. Hearts and the bar reset. Finished lessons stay on the path.
+              This attempt ends and the bar resets. Spent hearts stay spent until they restore on the timer. Finished lessons stay on the path.
             </p>
             <div className="mt-4 flex flex-col gap-2">
               <button type="button" onClick={() => setLeaving(false)} className="h-11 rounded-2xl bg-blue text-[15px] font-semibold text-white">
@@ -234,18 +255,6 @@ function isReady(exercise, attempt) {
   if (exercise.type === "type") return typeof attempt === "string" && attempt.trim().length > 0;
   if (exercise.type === "match") return attempt === "done";
   return false;
-}
-
-function Hearts({ count }) {
-  return (
-    <span className="tracking-[0.15em]">
-      {Array.from({ length: HEARTS }, (_, index) => (
-        <span key={index} className={index < count ? "text-[#C43B3B]" : "text-[#E5E5EA]"}>
-          ♥
-        </span>
-      ))}
-    </span>
-  );
 }
 
 function Exercise({ exercise, attempt, setAttempt, revealed, correctId }) {
@@ -294,12 +303,12 @@ function Choice({ exercise, attempt, setAttempt, revealed, correctId }) {
             onClick={() => setAttempt(option.id)}
             className={`w-full rounded-2xl border px-4 py-4 text-left text-[17px] font-medium ${
               showRight
-                ? "border-[#146C43] bg-[#E7F6EE]"
+                ? "border-success bg-success-soft"
                 : showWrong
-                  ? "border-[#7A271A] bg-[#FDEEEC]"
+                  ? "border-danger bg-danger-soft"
                   : selected
-                    ? "border-blue bg-[#F3F8FF]"
-                    : "border-line bg-white"
+                    ? "border-blue bg-select-soft"
+                    : "border-line bg-surface"
             }`}
           >
             {option.label}
@@ -329,7 +338,7 @@ function Blank({ exercise, attempt, setAttempt, revealed, correctId }) {
               disabled={revealed}
               onClick={() => setAttempt(option)}
               className={`rounded-full px-4 py-2 text-[15px] font-medium ${
-                showRight ? "bg-[#146C43] text-white" : selected ? "bg-ink text-white" : "bg-white text-ink shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
+                showRight ? "bg-success text-white" : selected ? "bg-ink text-white" : "bg-surface text-ink shadow-soft"
               }`}
             >
               {option}
@@ -354,7 +363,7 @@ function Bank({ exercise, attempt, setAttempt }) {
   const remove = (id) => setAttempt(attempt.filter((item) => item.id !== id));
   return (
     <div>
-      <div className="min-h-24 rounded-2xl border border-dashed border-line bg-white p-3">
+      <div className="min-h-24 rounded-2xl border border-dashed border-line bg-surface p-3">
         {attempt.length === 0 ? (
           <p className="text-[15px] text-secondary">Tap the signs in order.</p>
         ) : (
@@ -364,7 +373,7 @@ function Bank({ exercise, attempt, setAttempt }) {
                 key={tile.id}
                 type="button"
                 onClick={() => remove(tile.id)}
-                className="rounded-xl border border-line bg-[#F7F7FA] px-3 py-2 text-[15px] font-medium tracking-[0.03em]"
+                className="rounded-xl border border-line bg-muted px-3 py-2 text-[15px] font-medium tracking-[0.03em]"
               >
                 {tile.label}
               </button>
@@ -380,7 +389,7 @@ function Bank({ exercise, attempt, setAttempt }) {
             disabled={used.has(tile.id)}
             onClick={() => add(tile)}
             className={`rounded-xl px-3 py-2 text-[15px] font-medium tracking-[0.03em] ${
-              used.has(tile.id) ? "bg-transparent text-[#D1D1D6]" : "bg-white text-ink shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
+              used.has(tile.id) ? "bg-transparent text-line" : "bg-surface text-ink shadow-soft"
             }`}
           >
             {tile.label}
@@ -400,7 +409,7 @@ function TypeAnswer({ attempt, setAttempt, revealed }) {
       spellCheck={false}
       aria-label="ASL gloss"
       placeholder="Type the gloss"
-      className="min-h-32 w-full rounded-2xl border border-line bg-white px-4 py-3 text-[18px] tracking-[0.04em]"
+      className="min-h-32 w-full rounded-2xl border border-line bg-surface px-4 py-3 text-[18px] tracking-[0.04em]"
     />
   );
 }
@@ -453,7 +462,7 @@ function Match({ exercise, setAttempt, revealed }) {
                 disabled={hidden || revealed}
                 onClick={() => tap(side, pair.id)}
                 className={`h-14 w-full rounded-2xl border text-[15px] font-medium ${
-                  hidden ? "border-transparent bg-transparent text-transparent" : selected ? "border-blue bg-[#F3F8FF]" : "border-line bg-white"
+                  hidden ? "border-transparent bg-transparent text-transparent" : selected ? "border-blue bg-select-soft" : "border-line bg-surface"
                 }`}
               >
                 {side === "a" ? pair.a : pair.b}
@@ -469,9 +478,11 @@ function Match({ exercise, setAttempt, revealed }) {
 function Complete({ lesson, summary, correct, total, onExit }) {
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-canvas px-6 text-center text-ink">
-      <p className="text-[13px] font-medium text-secondary">{lesson.unitTitle}</p>
+      <Icon as={Sparkles} size="xl" className="text-success" />
+      <p className="mt-3 text-[13px] font-medium text-secondary">{lesson.unitTitle}</p>
       <h1 className="mt-2 text-[34px] font-semibold tracking-[-0.03em]">Lesson complete</h1>
       <p className="mt-3 text-[18px]">{lesson.title}</p>
+      <GraphicSlot id="lesson-complete" className="mt-6 w-full max-w-sm" />
       <dl className="mt-8 grid w-full max-w-sm grid-cols-3 gap-3 text-center">
         <Stat label="Correct" value={`${correct}/${total}`} />
         <Stat label="XP" value={`+${summary.xpGain}`} />
@@ -482,33 +493,67 @@ function Complete({ lesson, summary, correct, total, onExit }) {
           ? "Every exercise held. The next lesson on the path is open."
           : "Misses stay in the score. The next lesson is open anyway. Replay this one whenever you want the pattern again."}
       </p>
-      <button type="button" onClick={onExit} className="mt-8 h-12 w-full max-w-sm rounded-2xl bg-[#146C43] text-[16px] font-semibold text-white">
+      <button
+        type="button"
+        onClick={onExit}
+        className="mt-8 inline-flex h-12 w-full max-w-sm items-center justify-center gap-2 rounded-2xl bg-success text-[16px] font-semibold text-white"
+      >
         Continue
+        <Icon as={ArrowRight} size="sm" className="text-white" />
       </button>
     </div>
   );
 }
 
-function HeartsOut({ correct, total, onRetry, onExit }) {
+function HeartsOut({ correct, total, onRetry, onExit, refreshHearts }) {
+  const { progress } = useProgress();
+  const [now, setNow] = useState(() => Date.now());
+  const label = nextHeartLabel(progress, now);
+  const canRetry = progress.hearts > 0;
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setNow(Date.now());
+      refreshHearts();
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [refreshHearts]);
+
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-canvas px-6 text-center text-ink">
-      <h1 className="text-[34px] font-semibold tracking-[-0.03em]">No hearts left</h1>
+      <HeartGlyphs count={progress.hearts} size={28} />
+      <h1 className="mt-4 text-[34px] font-semibold tracking-[-0.03em]">No hearts left</h1>
+      <GraphicSlot id="hearts-out" className="mt-5 w-full max-w-sm" />
       <p className="mt-3 max-w-sm text-[16px] leading-7 text-secondary">
-        This attempt stops at {correct} correct of {total} so far. Hearts refill as soon as you start the lesson again. There is no wait.
+        This attempt stops at {correct} correct of {total} so far. One heart returns every {HEART_RESTORE_MS / 60000} minutes — no purchase, just the timer.
       </p>
-      <button type="button" onClick={onRetry} className="mt-8 h-12 w-full max-w-sm rounded-2xl bg-[#146C43] text-[16px] font-semibold text-white">
-        Try the lesson again
-      </button>
-      <button type="button" onClick={onExit} className="mt-3 h-12 w-full max-w-sm rounded-2xl text-[16px] font-medium text-secondary">
-        Back to the path
-      </button>
+      {label ? (
+        <p className="mt-4 inline-flex items-center gap-1.5 text-[18px] font-semibold tabular-nums text-ink" aria-live="polite">
+          <Icon as={Clock3} size="sm" className="text-secondary" />
+          {label}
+        </p>
+      ) : null}
+      {canRetry ? (
+        <button type="button" onClick={onRetry} className="mt-8 h-12 w-full max-w-sm rounded-2xl bg-success text-[16px] font-semibold text-white">
+          Try the lesson again
+        </button>
+      ) : (
+        <button type="button" onClick={onExit} className="mt-8 h-12 w-full max-w-sm rounded-2xl bg-blue text-[16px] font-semibold text-white">
+          Back to the path
+        </button>
+      )}
+      {canRetry ? (
+        <button type="button" onClick={onExit} className="mt-3 h-12 w-full max-w-sm rounded-2xl text-[16px] font-medium text-secondary">
+          Back to the path
+        </button>
+      ) : null}
     </div>
   );
 }
 
 function Stat({ label, value }) {
   return (
-    <div className="rounded-2xl bg-white px-2 py-4 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+    <div className="rounded-2xl bg-surface px-2 py-4 shadow-soft">
       <dt className="text-[12px] text-secondary">{label}</dt>
       <dd className="mt-1 text-[20px] font-semibold">{value}</dd>
     </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PAIRS } from "../data.js";
 import { DRILLS, analyze } from "../gloss.js";
-import { ExternalLink, Feedback, Pill, Sheet } from "../components/ui.jsx";
+import { ExternalLink, Feedback, GraphicSlot, Pill, Sheet } from "../components/ui.jsx";
 
 export function Practice() {
   return (
@@ -12,6 +12,7 @@ export function Practice() {
         <p className="mt-4 text-[16px] leading-7 text-secondary">
           The builder on the grammar desk shows a model. Here the model stays hidden until you ask, or until the sentence holds.
         </p>
+        <GraphicSlot id="practice-desk" className="mt-6" />
       </header>
       <Translate />
       <Pairs />
@@ -49,7 +50,7 @@ function Translate() {
                 type="button"
                 onClick={() => load(itemIndex)}
                 className={`w-full rounded-xl px-3 py-2 text-left text-[14px] ${
-                  itemIndex === index ? "bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)]" : "text-secondary"
+                  itemIndex === index ? "bg-surface shadow-soft" : "text-secondary"
                 }`}
               >
                 {item.title}
@@ -143,7 +144,7 @@ function Pairs() {
             return (
               <label
                 key={option.id}
-                className={`flex cursor-pointer items-start gap-3 rounded-2xl bg-white px-4 py-3 shadow-[0_2px_8px_rgba(0,0,0,0.08)] ${
+                className={`flex cursor-pointer items-start gap-3 rounded-2xl bg-surface px-4 py-3 shadow-soft ${
                   locked && correct ? "ring-2 ring-blue" : ""
                 }`}
               >

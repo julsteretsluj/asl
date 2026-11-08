@@ -4,7 +4,7 @@ import { spellGloss, spellLetters } from "../gloss.js";
 import { useAccess, useQuietMotion } from "../access.jsx";
 import { HandDiagram } from "../components/Hand.jsx";
 import { LessonPlayer } from "../components/Player.jsx";
-import { ExternalLink, Pill, Prose, Sheet } from "../components/ui.jsx";
+import { ExternalLink, GraphicSlot, Pill, Prose, Sheet } from "../components/ui.jsx";
 
 export function Basics() {
   const { access } = useAccess();
@@ -71,6 +71,7 @@ export function Basics() {
             A gloss writes the sign, not the English spelling. BOOK is one sign. <span className="whitespace-nowrap">DON&apos;T-KNOW</span> is one sign made of two English words. <span className="whitespace-nowrap">J-U-L-E-S</span> is fingerspelling, with a hyphen between letters. <span className="whitespace-nowrap">SAFE++</span> repeats the sign for intensity or a plural sense.
           </p>
         </Prose>
+        <GraphicSlot id="basics-desk" className="mt-6" />
       </header>
 
       <section className="grid items-start gap-6 lg:grid-cols-12">
@@ -84,11 +85,11 @@ export function Basics() {
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <h2 className="text-[22px] font-semibold tracking-[-0.02em]">Alphabet studio</h2>
-              <p className="mt-1 text-[14px] text-secondary">Choose a letter, or type one. Diagrams are schematic.</p>
+              <p className="mt-1 text-[14px] text-secondary">Choose a handshape, or type a letter.</p>
             </div>
             <ExternalLink href={ALPHABET_PAGE}>Filmed alphabet on Lifeprint</ExternalLink>
           </div>
-          <div className="mt-4 grid grid-cols-7 gap-1.5 sm:grid-cols-9" role="group" aria-label="Manual alphabet">
+          <div className="mt-4 grid grid-cols-7 gap-1.5 sm:grid-cols-9" role="group" aria-label="Handshapes">
             {LETTERS.map((item) => (
               <button
                 key={item.letter}
@@ -99,9 +100,9 @@ export function Basics() {
                   setPlayKey((value) => value + 1);
                   setSpelling(false);
                 }}
-                className={`h-11 rounded-xl text-[15px] font-medium ${
-                  item.letter === letter ? "bg-ink text-white" : "bg-[#f2f2f7] text-ink hover:bg-[#e8e8ed]"
-                }`}
+                className={`h-11 rounded-xl px-1 font-medium whitespace-nowrap ${
+                  item.letter.length > 8 ? "col-span-3 text-[13px]" : item.letter.length > 1 ? "col-span-2 text-[13px]" : "text-[15px]"
+                } ${item.letter === letter ? "bg-ink text-white" : "bg-muted text-ink hover:bg-line"}`}
               >
                 {item.letter}
               </button>

@@ -309,7 +309,65 @@ function Shape({ letter }) {
   }
 }
 
+const HAND_ART = {
+  A: "/hands/a.png",
+  "Open A": "/hands/open-a.png",
+  B: "/hands/b.png",
+  "Open B": "/hands/open-b.png",
+  "Bent B": "/hands/bent-b.png",
+  C: "/hands/c.png",
+  D: "/hands/d.png",
+  E: "/hands/e.png",
+  F: "/hands/f.png",
+  G: "/hands/g.png",
+  H: "/hands/h.png",
+  I: "/hands/i.png",
+  J: "/hands/j.png",
+  K: "/hands/k.png",
+  L: "/hands/l.png",
+  M: "/hands/m.png",
+  N: "/hands/n.png",
+  O: "/hands/o.png",
+  "Flat O": "/hands/flat-o.png",
+  P: "/hands/p.png",
+  Q: "/hands/q.png",
+  R: "/hands/r.png",
+  S: "/hands/s.png",
+  T: "/hands/t.png",
+  U: "/hands/u.png",
+  V: "/hands/v.png",
+  "Bent V": "/hands/bent-v.png",
+  W: "/hands/w.png",
+  X: "/hands/x.png",
+  Y: "/hands/y.png",
+  Z: "/hands/z.png",
+  "I love you": "/hands/ily.png",
+  1: "/hands/1.png",
+  3: "/hands/3.png",
+  "Bent 3": "/hands/bent-3.png",
+  4: "/hands/4.png",
+  5: "/hands/5.png",
+  "Bent 5": "/hands/bent-5.png",
+  8: "/hands/8.png",
+  "Open 8": "/hands/open-8.png",
+};
+
+function HandArt({ src }) {
+  return (
+    <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-2xl">
+      <img
+        src={src}
+        alt=""
+        draggable="false"
+        className="max-h-full max-w-full object-contain"
+      />
+    </div>
+  );
+}
+
 export function HandDiagram({ letter, playKey = 0, speed = 1, quiet = false }) {
+  const art = HAND_ART[letter];
+  if (art) return <HandArt src={art} />;
   const motion = letter === "J" ? "j" : letter === "Z" ? "z" : null;
   return (
     <svg viewBox="0 0 180 210" className="h-full w-full" aria-hidden="true">

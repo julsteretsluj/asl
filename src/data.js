@@ -1,3 +1,4 @@
+import { applyEmbeds } from "./embeds.js";
 import { TOPIC_CATEGORIES, TOPIC_NOTES, TOPIC_VOCAB } from "./topics.js";
 
 const lp = (path) => `https://www.lifeprint.com/asl101/pages-signs/${path}`;
@@ -26,9 +27,24 @@ export const LETTERS = [
     watch: "S uses the same fist, with the thumb crossed in front of the fingers.",
   },
   {
+    letter: "Open A",
+    summary: "Four fingers point up and stay together. The thumb extends to the side. The palm faces out.",
+    watch: "B folds that thumb across the palm. Open A leaves it out.",
+  },
+  {
     letter: "B",
     summary: "Four fingers point up and stay together. The thumb folds across the palm.",
     watch: "The fingers touch. A spread hand is a different handshape.",
+  },
+  {
+    letter: "Open B",
+    summary: "All five digits spread. The four fingers are apart and the thumb extends to the side. The palm faces out.",
+    watch: "B keeps the fingers together and folds the thumb across the palm.",
+  },
+  {
+    letter: "Bent B",
+    summary: "The four fingers curl in at the knuckles. The thumb extends out to the side. The palm faces out.",
+    watch: "Open B keeps those fingers straight and spread.",
   },
   {
     letter: "C",
@@ -97,6 +113,11 @@ export const LETTERS = [
     watch: "C is the same family of curve, held open.",
   },
   {
+    letter: "Flat O",
+    summary: "The fingers stay together and flatten against the thumb. The shape is closed and tapered.",
+    watch: "O leaves a round opening. Flat O closes that opening.",
+  },
+  {
     letter: "P",
     summary: "The K handshape, aimed downward. The palm faces down.",
     watch: "If the fingers swing up, the letter becomes K.",
@@ -132,6 +153,11 @@ export const LETTERS = [
     watch: "The gap between the fingers is the whole difference from U.",
   },
   {
+    letter: "Bent V",
+    summary: "The index and middle fingers point up like V, bent at the knuckles.",
+    watch: "V keeps those two fingers straight. Bent 3 bends three fingers, not these two.",
+  },
+  {
     letter: "W",
     summary: "The index, middle, and ring fingers point up and spread. The pinky is folded, and the thumb crosses it.",
     watch: "Three fingers, with space between them.",
@@ -151,6 +177,51 @@ export const LETTERS = [
     summary: "The index finger points out and traces a Z. The other fingers stay closed.",
     watch: "Like J, the handshape holds still and the path carries the letter.",
     motion: "z",
+  },
+  {
+    letter: "I love you",
+    summary: "The thumb, index, and pinky point out. The middle and ring fingers stay closed.",
+    watch: "Y uses the thumb and pinky only. I love you adds the index finger.",
+  },
+  {
+    letter: "1",
+    summary: "The index finger points straight up. The other fingers close into a fist, and the thumb lies across them.",
+    watch: "D keeps a small oval where the other fingers meet the thumb. Number 1 lays the thumb across the fist.",
+  },
+  {
+    letter: "3",
+    summary: "The index, middle, and ring fingers point up. The thumb and pinky stay closed.",
+    watch: "W spreads those three fingers and crosses the thumb. Number 3 holds the thumb in.",
+  },
+  {
+    letter: "Bent 3",
+    summary: "The index, middle, and ring fingers bend forward at the knuckles. The thumb and pinky stay closed.",
+    watch: "Number 3 keeps those same three fingers straight.",
+  },
+  {
+    letter: "4",
+    summary: "Four fingers spread and point up. The thumb folds across the palm.",
+    watch: "B keeps those four fingers together. Number 5 opens the thumb as well.",
+  },
+  {
+    letter: "5",
+    summary: "All five digits spread open. The palm faces out.",
+    watch: "Number 4 folds the thumb across the palm. Bent 5 curves every digit.",
+  },
+  {
+    letter: "Bent 5",
+    summary: "All five digits curve inward, like a claw.",
+    watch: "Number 5 keeps those digits straight and spread.",
+  },
+  {
+    letter: "8",
+    summary: "The middle finger bends down to meet the thumb. The index, ring, and pinky stay up.",
+    watch: "F makes its circle with the index finger. Open 8 leaves this thumb open.",
+  },
+  {
+    letter: "Open 8",
+    summary: "The middle finger bends down toward the thumb. The index, ring, and pinky stay up, and the thumb points out.",
+    watch: "Number 8 pinches that middle finger against the thumb. Open 8 leaves the thumb open.",
   },
 ];
 
@@ -193,7 +264,7 @@ export const CATEGORY_NOTES = {
   ...TOPIC_NOTES,
 };
 
-export const VOCAB = [
+export const VOCAB = applyEmbeds([
   {
     term: "Hello",
     gloss: "HELLO",
@@ -211,6 +282,7 @@ export const VOCAB = [
     manual: "An open hand, fingers together, closes and opens once or twice.",
     params: "Open hand, palm out, wrist bends so the fingers wave.",
     href: lp("g/goodbye.htm"),
+    youtubeId: "4e14uNAn2Ao",
   },
   {
     term: "Thank you",
@@ -220,6 +292,7 @@ export const VOCAB = [
     manual: "Flat hand moves forward from the chin. One clear path is enough.",
     params: "Flat hand, fingertips at the chin, moves forward toward the person you are thanking.",
     href: lp("t/thankyou.htm"),
+    youtubeId: "2W0BDFUjsG0",
   },
   {
     term: "Please",
@@ -229,6 +302,7 @@ export const VOCAB = [
     manual: "Keep the circle steady and mid-sized.",
     params: "Open hand, palm on the chest, circles once.",
     href: lp("p/please.htm"),
+    youtubeId: "rnb9FxPO7is",
   },
   {
     term: "Sorry",
@@ -247,6 +321,7 @@ export const VOCAB = [
     manual: "GOOD, then MORNING. No extra English words between them.",
     params: "GOOD is a flat hand leaving the chin. MORNING is the non-dominant forearm flat, with the dominant forearm rising.",
     href: lp("m/morning.htm"),
+    youtubeId: "iH8N44QMh7c",
   },
   {
     term: "How are you?",
@@ -256,6 +331,7 @@ export const VOCAB = [
     manual: "Sign HOW YOU, or add the manual tag QUESTION if you want the ask to be unmistakable in the hands.",
     params: "HOW: knuckles of both bent hands touch and turn out. YOU: index points forward.",
     href: lp("h/how.htm"),
+    youtubeId: "BaPzB4Xsq9Y",
   },
   {
     term: "I'm fine",
@@ -265,6 +341,7 @@ export const VOCAB = [
     manual: "I, then FINE. The copula is, am, are is omitted.",
     params: "FINE is a 5-hand, thumb on the chest.",
     href: lp("f/fine.htm"),
+    youtubeId: "YSTnrscx1UY",
   },
   {
     term: "Nice to meet you",
@@ -274,6 +351,7 @@ export const VOCAB = [
     manual: "NICE, MEET, YOU. The English to is omitted.",
     params: "NICE slides one palm across the other. MEET brings two index fingers together.",
     href: lp("m/meet.htm"),
+    youtubeId: "FC1R9kyegJY",
   },
   {
     term: "Excuse me",
@@ -283,6 +361,7 @@ export const VOCAB = [
     manual: "Fingertips of a flat hand brush the other palm.",
     params: "Flat dominant hand sweeps across the non-dominant palm.",
     href: lp("e/excuse.htm"),
+    youtubeId: "Su9IpBN3W08",
   },
   {
     term: "I / me",
@@ -301,6 +380,7 @@ export const VOCAB = [
     manual: "Index finger points to the person.",
     params: "1-hand, aimed forward, palm to the side.",
     href: lp("y/you.htm"),
+    youtubeId: "JyB2t9Gkzos",
   },
   {
     term: "We",
@@ -310,6 +390,7 @@ export const VOCAB = [
     manual: "The index finger moves from your chest out toward the group and back, or sweeps an arc that includes you.",
     params: "1-hand, an arc that includes the signer.",
     href: lp("w/we.htm"),
+    youtubeId: "DJU9Vnthfqk",
   },
   {
     term: "She / he / they",
@@ -319,6 +400,7 @@ export const VOCAB = [
     manual: "Index the left or the right. The point is the pronoun. It does not encode gender.",
     params: "1-hand aimed at a locus you have already established. Gloss it [index-left] or [index-right].",
     href: lp("t/they.htm"),
+    youtubeId: "13kQeMdVEqg",
   },
   {
     term: "Happy",
@@ -328,6 +410,7 @@ export const VOCAB = [
     manual: "Open hands brush up the chest. Repeat, HAPPY++, when you want a larger feeling without a bigger face.",
     params: "Flat or open hands, palms in, brush upward on the chest once or twice.",
     href: lp("h/happy.htm"),
+    youtubeId: "ZXHHO_DY6_A",
   },
   {
     term: "Sad",
@@ -337,6 +420,7 @@ export const VOCAB = [
     manual: "Sign SAD. A smaller, slower path can carry the tone. The face can stay at rest.",
     params: "Open 5-hands in front of the face, palms in, drop down.",
     href: lp("s/sad.htm"),
+    youtubeId: "zfkQYQhrZ6Q",
   },
   {
     term: "Angry",
@@ -346,6 +430,7 @@ export const VOCAB = [
     manual: "Claw hands pull up from the waist. A sharper, larger movement reads as stronger. You can also fingerspell the tone if you and your partner have agreed on a tag.",
     params: "Claw hands, palms in, start at the waist and move up toward the chest.",
     href: lp("a/angry.htm"),
+    youtubeId: "IqfyrDn89iY",
   },
   {
     term: "Tired",
@@ -355,6 +440,7 @@ export const VOCAB = [
     manual: "Bent hands drop from the shoulders. Slow the drop to show how tired.",
     params: "Bent hands, fingertips on the upper chest or shoulders, drop and relax.",
     href: lp("t/tired.htm"),
+    youtubeId: "iZ6EeQqzZl0",
   },
   {
     term: "Love",
@@ -364,6 +450,7 @@ export const VOCAB = [
     manual: "Two fists cross on the chest and hug in.",
     params: "S-hands, crossed at the wrists, pressed to the chest.",
     href: lp("l/love.htm"),
+    youtubeId: "DAZB0eVf5t0",
   },
   {
     term: "Scared",
@@ -382,6 +469,7 @@ export const VOCAB = [
     manual: "Middle fingers circle up the chest, alternating. Faster circles read as more energy.",
     params: "Open-8 or bent middle fingers, alternating circles on the chest, moving upward.",
     href: lp("e/excited.htm"),
+    youtubeId: "7jVM-HlaCUQ",
   },
   {
     term: "Now",
@@ -391,6 +479,7 @@ export const VOCAB = [
     manual: "Both Y hands, or bent hands, drop in front of the waist.",
     params: "Two hands at about waist height drop once, palms up.",
     href: lp("n/now.htm"),
+    youtubeId: "g2j70neQ_lI",
   },
   {
     term: "Today",
@@ -400,6 +489,7 @@ export const VOCAB = [
     manual: "A compound: NOW joined to DAY. It still moves to the front of a sentence.",
     params: "NOW, then DAY: the non-dominant forearm flat, dominant arm moves across it like a sun traveling.",
     href: lp("t/today.htm"),
+    youtubeId: "3BxRfKvfnpU",
   },
   {
     term: "Tomorrow",
@@ -409,6 +499,7 @@ export const VOCAB = [
     manual: "Thumb on the cheek, then an arc forward.",
     params: "A-hand or thumb-up, thumb on the cheekbone, moves forward.",
     href: lp("t/tomorrow.htm"),
+    youtubeId: "6gFOZMDptIk",
   },
   {
     term: "Yesterday",
@@ -418,6 +509,7 @@ export const VOCAB = [
     manual: "Thumb on the cheek, then back toward the ear or shoulder.",
     params: "Thumb-up hand touches the cheek and moves backward.",
     href: lp("y/yesterday.htm"),
+    youtubeId: "BrSb83b9kbY",
   },
   {
     term: "Morning",
@@ -427,6 +519,7 @@ export const VOCAB = [
     manual: "Non-dominant arm lies flat. The dominant forearm rises, like a sun coming up.",
     params: "Forearm rises from the crook of the non-dominant arm.",
     href: lp("m/morning.htm"),
+    youtubeId: "iH8N44QMh7c",
   },
   {
     term: "Night",
@@ -436,6 +529,7 @@ export const VOCAB = [
     manual: "The dominant wrist bends down over the non-dominant forearm, like a sun setting.",
     params: "Bent dominant hand drops over the horizontal non-dominant arm.",
     href: lp("n/night.htm"),
+    youtubeId: "hDcREO5I4Ps",
   },
   {
     term: "Week",
@@ -445,6 +539,7 @@ export const VOCAB = [
     manual: "The index finger slides along the non-dominant palm, from the heel toward the fingers.",
     params: "1-hand draws a line across the opposite palm.",
     href: lp("w/week.htm"),
+    youtubeId: "N6giWOcMj2U",
   },
   {
     term: "Later",
@@ -454,6 +549,7 @@ export const VOCAB = [
     manual: "L handshape. The thumb starts on the palm and twists forward.",
     params: "L hand, thumb against the palm, rotates out.",
     href: lp("l/later.htm"),
+    youtubeId: "X4003aEoiWo",
   },
   {
     term: "Who",
@@ -463,6 +559,7 @@ export const VOCAB = [
     manual: "Index finger circles in front of the lips, or the thumb of an L rests on the chin. Regional forms differ. The furrowed brow, or a clear final WHO, carries the question.",
     params: "Question word. Pair it with [wh-q], usually in final position.",
     href: lp("w/who.htm"),
+    youtubeId: "wKl26BsEAoc",
   },
   {
     term: "What",
@@ -472,6 +569,7 @@ export const VOCAB = [
     manual: "Open hands, palms up, can shake slightly. Keep the wh-mark, in the face or as a clearly placed WHAT.",
     params: "Wh-sign at the end of the sentence, brows down.",
     href: lp("w/what.htm"),
+    youtubeId: "bnnE_k7BYOI",
   },
   {
     term: "Where",
@@ -481,6 +579,7 @@ export const VOCAB = [
     manual: "Index finger shakes from side to side.",
     params: "1-hand, repeated small side-to-side movement, usually last.",
     href: lp("w/where.htm"),
+    youtubeId: "HS0SXS-GHYY",
   },
   {
     term: "When",
@@ -490,6 +589,7 @@ export const VOCAB = [
     manual: "Index fingers circle each other, then touch. Regional variants exist.",
     params: "Two 1-hands. The movement ends with the fingers meeting.",
     href: lp("w/when.htm"),
+    youtubeId: "YWxvqP__qos",
   },
   {
     term: "Why",
@@ -499,6 +599,7 @@ export const VOCAB = [
     manual: "Touch the forehead and change to a Y hand as it moves out. The same sign serves a real question and a rhetorical one. The brows, or the fact that you answer next, tell those uses apart.",
     params: "Forehead to Y hand, moving forward.",
     href: lp("w/why.htm"),
+    youtubeId: "K0yp2v6Atxs",
   },
   {
     term: "How",
@@ -508,9 +609,10 @@ export const VOCAB = [
     manual: "Bent hands, knuckles together, roll forward so the palms turn up.",
     params: "Two bent hands start back-to-back and open.",
     href: lp("h/how.htm"),
+    youtubeId: "BaPzB4Xsq9Y",
   },
   ...TOPIC_VOCAB,
-];
+]);
 
 export const PAIRS = [
   {
