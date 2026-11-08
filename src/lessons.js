@@ -1,5 +1,13 @@
 import { analyze, normalizeToken, tokenize } from "./gloss.js";
 import { TOPIC_UNITS } from "./topics.js";
+import {
+  exercisesForVariant,
+  resolveLessonVariants,
+  shuffleExercises,
+  variantCount,
+} from "./variants.js";
+
+export { exercisesForVariant, resolveLessonVariants, shuffleExercises, variantCount };
 
 function choice(prompt, options, answer, explain, extra = {}) {
   return {
@@ -807,16 +815,24 @@ export function lessonList() {
   const list = [];
   for (const unit of UNITS) {
     for (const lesson of unit.lessons) {
+      const variants = resolveLessonVariants(lesson);
       list.push({
         ...lesson,
         unitId: unit.id,
         unitTitle: unit.title,
         guide: unit.guide,
         guideLabel: unit.guideLabel,
+        variants,
+        exercises: variants[0] || [],
       });
     }
   }
   return list;
+}
+
+/** Active exercise list for an attempt: variant index, then caller may shuffle. */
+export function lessonExercises(lesson, variantIndex = 0) {
+  return exercisesForVariant(lesson, variantIndex);
 }
 
 export function findLesson(id) {

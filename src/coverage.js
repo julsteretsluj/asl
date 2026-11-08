@@ -115,11 +115,13 @@ function wordItem(gloss) {
 }
 
 export function itemsInExercise(lesson, exercise) {
-  const index = lesson.exercises.indexOf(exercise);
+  // Prefer the unshuffled variant list so concept indices stay stable after deck shuffle.
+  const source = Array.isArray(lesson.variantExercises) ? lesson.variantExercises : lesson.exercises;
+  const index = source.indexOf(exercise);
   const concepts = (SPECIFIC[lesson.id] || [])
     .filter((row) => row[0] === index)
     .map((row) => concept(lesson, row[1], row[2]));
-  if (!SPECIFIC[lesson.id] && lesson.tip && (index === 0 || index === lesson.exercises.length - 1)) {
+  if (!SPECIFIC[lesson.id] && lesson.tip && (index === 0 || index === source.length - 1)) {
     concepts.push(concept(lesson, lesson.id, lesson.tip));
   }
   const words = [...new Set(glossesIn(exerciseText(exercise)))].map(wordItem);

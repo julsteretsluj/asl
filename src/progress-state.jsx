@@ -2,8 +2,10 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 import { useAccount } from "./account.jsx";
 import {
   applyAward,
+  applyBuyHearts,
   applyComfort,
   applyExercise,
+  applyLessonVariant,
   applySpendHeart,
   emptyProgress,
   loadProgress,
@@ -11,7 +13,9 @@ import {
   normalizeProgress,
   saveProgress,
 } from "./progress.js";
+import { syncModels } from "./model-sync.js";
 import { pullProgress, pushProgress } from "./sync.js";
+import { nextVariantIndex, variantCount } from "./variants.js";
 
 const ProgressContext = createContext(null);
 
@@ -71,6 +75,8 @@ export function ProgressProvider({ children }) {
       .catch(() => {
         if (!cancel) setSyncState("error");
       });
+    // Personal sign media: merge IndexedDB with Firestore chunked models.
+    syncModels(uid).catch(() => {});
     return () => {
       cancel = true;
     };
@@ -83,11 +89,27 @@ export function ProgressProvider({ children }) {
     spendHeart() {
       return commit(applySpendHeart(progressRef.current));
     },
+    buyHearts(packHearts) {
+      return commit(applyBuyHearts(progressRef.current, packHearts));
+    },
     recordExercise(lesson, exercise, ok) {
       return commit(applyExercise(progressRef.current, lesson, exercise, ok));
     },
-    finishLesson(lessonId, score) {
-      return commit(applyAward(progressRef.current, lessonId, score));
+    finishLesson(lessonId, score, lesson) {
+      let next = applyAward(progressRef.current, lessonId, score);
+      if (lessonId) {
+        const count = variantCount(lesson || { id: lessonId, exercises: [] });
+        const used = Number(progressRef.current.variantByLesson?.[lessonId]) || 0;
+        next = applyLessonVariant(next, lessonId, nextVariantIndex(used, count));
+      }
+      return commit(next);
+    },
+    /** After a failed attempt, rotate so retry / next open uses the next variant. */
+    rotateLessonVariant(lesson) {
+      if (!lesson?.id) return progressRef.current;
+      const count = variantCount(lesson);
+      const used = Number(progressRef.current.variantByLesson?.[lesson.id]) || 0;
+      return commit(applyLessonVariant(progressRef.current, lesson.id, nextVariantIndex(used, count)));
     },
     setComfort(id, level) {
       return commit(applyComfort(progressRef.current, id, level));

@@ -1,11 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useAccount } from "../account.jsx";
 import { wordId } from "../comfort.js";
 import { MediaEditor } from "../components/MediaEditor.jsx";
 import { SignPlayer } from "../components/Player.jsx";
 import { Camera, Icon, ImageOff, Search, Upload, Video } from "../components/icons.jsx";
 import { ComfortControl, GraphicSlot, Pill } from "../components/ui.jsx";
 import { CATEGORIES, CATEGORY_NOTES, VOCAB } from "../data.js";
-import { modelKey, readModel, writeModel } from "../models.js";
+import { clearModelMedia, saveModelMedia } from "../model-sync.js";
+import {
+  MODEL_TOO_LARGE,
+  MAX_MODEL_BYTES,
+  assertModelSize,
+  modelKey,
+  readModel,
+} from "../models.js";
 import { useProgress } from "../progress-state.jsx";
 
 function useBlobUrl(blob) {
@@ -32,6 +40,7 @@ function cameraMessage(error) {
 }
 
 export function Dictionary() {
+  const { user } = useAccount();
   const { progress, setComfort } = useProgress();
   const [category, setCategory] = useState("All");
   const [query, setQuery] = useState("");
@@ -108,14 +117,29 @@ export function Dictionary() {
     setCameraError("");
     setEditor(null);
     releaseCamera();
-    readModel(signKey)
-      .then((row) => {
-        if (request === requestRef.current) setModel(row);
-      })
-      .catch(() => {
-        if (request === requestRef.current) setStoreError("Saved clips could not be read on this device.");
-      });
-    return undefined;
+
+    function load() {
+      readModel(signKey)
+        .then((row) => {
+          if (request === requestRef.current) setModel(row);
+        })
+        .catch(() => {
+          if (request === requestRef.current) setStoreError("Saved clips could not be read on this device.");
+        });
+    }
+
+    load();
+    const onSync = () => load();
+    const onNote = (event) => {
+      const message = event?.detail?.message;
+      if (message && request === requestRef.current) setStoreError(message);
+    };
+    window.addEventListener("signspace-models-changed", onSync);
+    window.addEventListener("signspace-models-sync-note", onNote);
+    return () => {
+      window.removeEventListener("signspace-models-changed", onSync);
+      window.removeEventListener("signspace-models-sync-note", onNote);
+    };
   }, [signKey]);
 
   useEffect(() => {
@@ -126,18 +150,6 @@ export function Dictionary() {
     video.play().catch(() => {});
     return undefined;
   }, [cameraMode]);
-
-  async function persist(patch) {
-    if (!sign) return;
-    const key = modelKey(sign);
-    const request = ++requestRef.current;
-    try {
-      const next = await writeModel(key, patch);
-      if (mounted.current && request === requestRef.current) setModel(next);
-    } catch {
-      if (mounted.current && request === requestRef.current) setStoreError("The clip could not be saved in this browser.");
-    }
-  }
 
   async function openCamera(mode) {
     setCameraError("");
@@ -171,7 +183,10 @@ export function Dictionary() {
     const mimeType = preferred.find((type) => MediaRecorder.isTypeSupported(type)) || "";
     let recorder;
     try {
-      recorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+      const options = mimeType
+        ? { mimeType, videoBitsPerSecond: 900_000 }
+        : { videoBitsPerSecond: 900_000 };
+      recorder = new MediaRecorder(stream, options);
     } catch {
       setCameraError("This browser could not record video. You can still take a snapshot or upload a file.");
       return;
@@ -221,7 +236,7 @@ export function Dictionary() {
         beginEdit(blob, "image");
       },
       "image/jpeg",
-      0.85,
+      0.8,
     );
   }
 
@@ -229,6 +244,10 @@ export function Dictionary() {
     const file = event.target.files?.[0];
     event.target.value = "";
     if (!file) return;
+    if (file.size > MAX_MODEL_BYTES) {
+      setCameraError(MODEL_TOO_LARGE);
+      return;
+    }
     if (file.type.startsWith("image/")) {
       beginEdit(file, "image");
       setCameraError("");
@@ -244,6 +263,10 @@ export function Dictionary() {
 
   function beginEdit(blob, slot) {
     if (!blob) return;
+    if (blob.size > MAX_MODEL_BYTES) {
+      setCameraError(MODEL_TOO_LARGE);
+      return;
+    }
     releaseCamera();
     setEditor({ blob, kind: slot === "image" ? "image" : "video", slot });
     setCameraError("");
@@ -251,19 +274,30 @@ export function Dictionary() {
 
   async function applyEdit(nextBlob) {
     if (!sign || !editor) throw new Error("save");
-    const key = modelKey(sign);
+    assertModelSize(nextBlob);
     const slot = editor.slot;
     const request = ++requestRef.current;
-    const next = await writeModel(key, { [slot]: nextBlob });
+    const { model: next, cloudNote } = await saveModelMedia(user?.uid || null, sign, slot, nextBlob);
     if (!mounted.current || request !== requestRef.current) return;
     setModel(next);
     setEditor(null);
-    setStoreError("");
+    setStoreError(cloudNote);
   }
 
-  function removeSlot(slot) {
+  async function removeSlot(slot) {
+    if (!sign) return;
     if (editor?.slot === slot) setEditor(null);
-    persist({ [slot]: null });
+    const request = ++requestRef.current;
+    try {
+      const { model: next, cloudNote } = await clearModelMedia(user?.uid || null, sign, slot);
+      if (!mounted.current || request !== requestRef.current) return;
+      setModel(next);
+      setStoreError(cloudNote);
+    } catch {
+      if (mounted.current && request === requestRef.current) {
+        setStoreError("The clip could not be saved in this browser.");
+      }
+    }
   }
 
   function choose(item) {
@@ -282,7 +316,8 @@ export function Dictionary() {
         </p>
         <h1 className="mt-1 text-[34px] font-semibold tracking-[-0.03em]">Dictionary</h1>
         <p className="mt-3 text-[15px] leading-6 text-secondary">
-          Every sign on the path, with the parameters written out. Lifeprint keeps the filmed citation. A photo or clip you add stays in this browser.
+          Every sign on the path, with the parameters written out. Lifeprint keeps the filmed citation. A photo or clip you add stays on this device
+          {user ? ", and on your account when you are signed in" : ""}.
         </p>
         <GraphicSlot id="dictionary-hero" className="mt-5" />
       </header>
@@ -379,7 +414,110 @@ export function Dictionary() {
                   />
                 </div>
               </div>
-              <dl className="mt-6 space-y-5">
+
+              <div className="mt-8 border-t border-line pt-6">
+                <h3 className="text-[20px] font-semibold tracking-[-0.02em]">Your model</h3>
+                <p className="mt-2 max-w-[34rem] text-[15px] leading-6 text-secondary">
+                  Record a clip, grab one frame, or upload a photo or video of this sign. Trim a video or crop the picture, preview it, then apply. It stays on this device for {sign.term}
+                  {user
+                    ? ", and is saved to your account so it follows you on other devices."
+                    : ". Sign in to keep it on your account across devices."}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Pill type="button" onClick={() => openCamera("record")} disabled={recording} className="gap-1.5">
+                    <Icon as={Video} size="xs" />
+                    Record video
+                  </Pill>
+                  <Pill type="button" onClick={() => openCamera("snapshot")} disabled={recording} className="gap-1.5">
+                    <Icon as={Camera} size="xs" />
+                    Take a snapshot
+                  </Pill>
+                  <Pill type="button" onClick={() => fileRef.current?.click()} disabled={recording} className="gap-1.5">
+                    <Icon as={Upload} size="xs" />
+                    Upload image or video
+                  </Pill>
+                  <input
+                    ref={fileRef}
+                    type="file"
+                    accept="image/*,video/*"
+                    tabIndex={-1}
+                    className="sr-only"
+                    onChange={onUpload}
+                  />
+                </div>
+                {cameraError ? <p className="mt-3 text-[14px] leading-6 text-secondary">{cameraError}</p> : null}
+                {storeError ? <p className="mt-3 text-[14px] leading-6 text-secondary">{storeError}</p> : null}
+                {editor ? (
+                  <MediaEditor blob={editor.blob} kind={editor.kind} onCancel={() => setEditor(null)} onApply={applyEdit} />
+                ) : null}
+                {cameraMode ? (
+                  <div className="mt-4">
+                    <div className="overflow-hidden rounded-xl bg-black">
+                      <video ref={videoRef} className="aspect-video w-full" autoPlay muted playsInline />
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {cameraMode === "record" && !recording ? (
+                        <Pill type="button" primary onClick={startRecording}>
+                          Start recording
+                        </Pill>
+                      ) : null}
+                      {recording ? (
+                        <Pill type="button" primary onClick={stopRecording}>
+                          Stop
+                        </Pill>
+                      ) : null}
+                      {cameraMode === "snapshot" ? (
+                        <Pill type="button" primary onClick={captureFrame}>
+                          Use this frame
+                        </Pill>
+                      ) : null}
+                      <Pill type="button" onClick={releaseCamera} disabled={recording}>
+                        Close camera
+                      </Pill>
+                    </div>
+                  </div>
+                ) : null}
+                {imageUrl || videoUrl ? (
+                  <div className="mt-5 grid gap-4">
+                    {imageUrl ? (
+                      <figure>
+                        <img src={imageUrl} alt={`Your snapshot of ${sign.term}`} className="max-h-80 w-full rounded-xl object-contain bg-muted" />
+                        <figcaption className="mt-2 flex items-center justify-between gap-3">
+                          <span className="text-[13px] text-secondary">Your snapshot</span>
+                          <span className="flex gap-4">
+                            <button type="button" className="text-[14px] font-medium text-blue" onClick={() => beginEdit(model.image, "image")}>
+                              Crop snapshot
+                            </button>
+                            <button type="button" className="text-[14px] font-medium text-blue" onClick={() => removeSlot("image")}>
+                              Remove snapshot
+                            </button>
+                          </span>
+                        </figcaption>
+                      </figure>
+                    ) : null}
+                    {videoUrl ? (
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <span className="text-[15px] leading-6 text-secondary">Your video plays in the citation film below.</span>
+                        <span className="flex gap-4">
+                          <button type="button" className="min-h-11 text-base font-medium text-blue" onClick={() => beginEdit(model.video, "video")}>
+                            Trim or crop
+                          </button>
+                          <button type="button" className="min-h-11 text-base font-medium text-blue" onClick={() => removeSlot("video")}>
+                            Remove video
+                          </button>
+                        </span>
+                      </div>
+                    ) : null}
+                  </div>
+                ) : (
+                  <p className="mt-5 inline-flex items-center gap-1.5 text-[14px] leading-6 text-secondary">
+                    <Icon as={ImageOff} size="xs" />
+                    No snapshot or video saved for this sign yet.
+                  </p>
+                )}
+              </div>
+
+              <dl className="mt-8 space-y-5 border-t border-line pt-6">
                 <div>
                   <dt className="text-[13px] font-medium text-secondary">Parameters</dt>
                   <dd className="mt-1 text-[16px] leading-6">{sign.params}</dd>
@@ -398,107 +536,11 @@ export function Dictionary() {
               </div>
             </article>
 
-            <section className="rounded-[20px] bg-surface p-5 shadow-soft sm:ml-6 sm:p-8">
-              <h3 className="text-[20px] font-semibold tracking-[-0.02em]">Your model</h3>
-              <p className="mt-2 max-w-[34rem] text-[15px] leading-6 text-secondary">
-                Record a clip, grab one frame, or upload a photo or video of this sign. Trim a video or crop the picture, preview it, then apply. It stays on this device for {sign.term}, and it is not sent to a server.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <Pill type="button" onClick={() => openCamera("record")} disabled={recording} className="gap-1.5">
-                  <Icon as={Video} size="xs" />
-                  Record video
-                </Pill>
-                <Pill type="button" onClick={() => openCamera("snapshot")} disabled={recording} className="gap-1.5">
-                  <Icon as={Camera} size="xs" />
-                  Take a snapshot
-                </Pill>
-                <Pill type="button" onClick={() => fileRef.current?.click()} disabled={recording} className="gap-1.5">
-                  <Icon as={Upload} size="xs" />
-                  Upload image or video
-                </Pill>
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/*,video/*"
-                  tabIndex={-1}
-                  className="sr-only"
-                  onChange={onUpload}
-                />
+            {!imageUrl && !videoUrl ? (
+              <div className="sm:ml-6">
+                <GraphicSlot id="dictionary-model" />
               </div>
-              {cameraError ? <p className="mt-3 text-[14px] leading-6 text-secondary">{cameraError}</p> : null}
-              {storeError ? <p className="mt-3 text-[14px] leading-6 text-secondary">{storeError}</p> : null}
-              {editor ? (
-                <MediaEditor blob={editor.blob} kind={editor.kind} onCancel={() => setEditor(null)} onApply={applyEdit} />
-              ) : null}
-              {cameraMode ? (
-                <div className="mt-4">
-                  <div className="overflow-hidden rounded-xl bg-black">
-                    <video ref={videoRef} className="aspect-video w-full" autoPlay muted playsInline />
-                  </div>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {cameraMode === "record" && !recording ? (
-                      <Pill type="button" primary onClick={startRecording}>
-                        Start recording
-                      </Pill>
-                    ) : null}
-                    {recording ? (
-                      <Pill type="button" primary onClick={stopRecording}>
-                        Stop
-                      </Pill>
-                    ) : null}
-                    {cameraMode === "snapshot" ? (
-                      <Pill type="button" primary onClick={captureFrame}>
-                        Use this frame
-                      </Pill>
-                    ) : null}
-                    <Pill type="button" onClick={releaseCamera} disabled={recording}>
-                      Close camera
-                    </Pill>
-                  </div>
-                </div>
-              ) : null}
-              {imageUrl || videoUrl ? (
-                <div className="mt-5 grid gap-4">
-                  {imageUrl ? (
-                    <figure>
-                      <img src={imageUrl} alt={`Your snapshot of ${sign.term}`} className="max-h-80 w-full rounded-xl object-contain bg-muted" />
-                      <figcaption className="mt-2 flex items-center justify-between gap-3">
-                        <span className="text-[13px] text-secondary">Your snapshot</span>
-                        <span className="flex gap-4">
-                          <button type="button" className="text-[14px] font-medium text-blue" onClick={() => beginEdit(model.image, "image")}>
-                            Crop snapshot
-                          </button>
-                          <button type="button" className="text-[14px] font-medium text-blue" onClick={() => removeSlot("image")}>
-                            Remove snapshot
-                          </button>
-                        </span>
-                      </figcaption>
-                    </figure>
-                  ) : null}
-                  {videoUrl ? (
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <span className="text-[15px] leading-6 text-secondary">Your video plays in the sign player above.</span>
-                      <span className="flex gap-4">
-                        <button type="button" className="min-h-11 text-base font-medium text-blue" onClick={() => beginEdit(model.video, "video")}>
-                          Trim or crop
-                        </button>
-                        <button type="button" className="min-h-11 text-base font-medium text-blue" onClick={() => removeSlot("video")}>
-                          Remove video
-                        </button>
-                      </span>
-                    </div>
-                  ) : null}
-                </div>
-              ) : (
-                <div className="mt-5 space-y-3">
-                  <p className="inline-flex items-center gap-1.5 text-[14px] leading-6 text-secondary">
-                    <Icon as={ImageOff} size="xs" />
-                    No snapshot or video saved for this sign yet.
-                  </p>
-                  <GraphicSlot id="dictionary-model" />
-                </div>
-              )}
-            </section>
+            ) : null}
           </div>
         ) : null}
       </div>

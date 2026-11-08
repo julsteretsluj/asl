@@ -5,8 +5,17 @@ const KEY = "signspace-path";
 
 /** Shared heart pool: lessons spend these; home shows the same count. */
 export const MAX_HEARTS = 5;
-/** One heart returns every 5 minutes while below max. */
-export const HEART_RESTORE_MS = 5 * 60 * 1000;
+/** One heart returns every 3 minutes while below max. */
+export const HEART_RESTORE_MS = 3 * 60 * 1000;
+/**
+ * XP heart packs — fixed prices; grant min(pack, room). Disabled when full or XP too low.
+ * Tuned vs ~10–25 XP per lesson.
+ */
+export const HEART_PACKS = [
+  { hearts: 1, xp: 15 },
+  { hearts: 3, xp: 40 },
+  { hearts: 5, xp: 60 },
+];
 
 export function emptyProgress() {
   return {
@@ -18,8 +27,21 @@ export function emptyProgress() {
     comfort: {},
     hearts: MAX_HEARTS,
     nextHeartAt: null,
+    variantByLesson: {},
     owner: null,
   };
+}
+
+function sanitizeVariantByLesson(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const next = {};
+  for (const [id, index] of Object.entries(value)) {
+    if (!id || typeof id !== "string") continue;
+    const n = Math.floor(Number(index));
+    if (!Number.isFinite(n) || n < 0) continue;
+    next[id] = n;
+  }
+  return next;
 }
 
 export function resolveHearts(progress, now = Date.now()) {
@@ -56,6 +78,51 @@ export function applySpendHeart(progress, now = Date.now()) {
   const hearts = current.hearts - 1;
   const nextHeartAt = hearts >= MAX_HEARTS ? null : current.nextHeartAt || now + HEART_RESTORE_MS;
   return normalizeProgress({ ...current, hearts, nextHeartAt }, now);
+}
+
+/** Hearts that still fit under the max pool. */
+export function heartRoom(progress, now = Date.now()) {
+  const { hearts } = resolveHearts(progress, now);
+  return Math.max(0, MAX_HEARTS - hearts);
+}
+
+/** UI helper: cost, how many hearts this pack would add, and why it may be disabled. */
+export function heartPackStatus(progress, packHearts, now = Date.now()) {
+  const current = normalizeProgress(progress, now);
+  const pack = HEART_PACKS.find((entry) => entry.hearts === packHearts);
+  if (!pack) {
+    return { cost: 0, gained: 0, room: 0, disabled: true, reason: "invalid" };
+  }
+  const room = Math.max(0, MAX_HEARTS - current.hearts);
+  const gained = Math.min(pack.hearts, room);
+  if (room <= 0) {
+    return { cost: pack.xp, gained: 0, room, disabled: true, reason: "full" };
+  }
+  if (current.xp < pack.xp) {
+    return { cost: pack.xp, gained, room, disabled: true, reason: "xp" };
+  }
+  return { cost: pack.xp, gained, room, disabled: false, reason: null };
+}
+
+/**
+ * Spend XP for a heart pack. Charges the fixed pack price; adds min(pack, room).
+ * Clears nextHeartAt only when the pool reaches max.
+ */
+export function applyBuyHearts(progress, packHearts, now = Date.now()) {
+  const current = normalizeProgress(progress, now);
+  const status = heartPackStatus(current, packHearts, now);
+  if (status.disabled || status.gained <= 0) return current;
+  const hearts = current.hearts + status.gained;
+  const nextHeartAt = hearts >= MAX_HEARTS ? null : current.nextHeartAt || now + HEART_RESTORE_MS;
+  return normalizeProgress(
+    {
+      ...current,
+      xp: current.xp - status.cost,
+      hearts,
+      nextHeartAt,
+    },
+    now,
+  );
 }
 
 export function formatHeartCountdown(ms) {
@@ -116,6 +183,7 @@ export function normalizeProgress(parsed, now = Date.now()) {
     comfort,
     hearts: hearts.hearts,
     nextHeartAt: hearts.nextHeartAt,
+    variantByLesson: sanitizeVariantByLesson(parsed.variantByLesson),
     owner: typeof parsed.owner === "string" ? parsed.owner : null,
   };
 }
@@ -187,6 +255,27 @@ export function applyAward(progress, lessonId, { correct, total }) {
   return { ...next, xpGain, perfect, firstTime };
 }
 
+/** Remember which variant index was used; next open/retry advances. */
+export function applyLessonVariant(progress, lessonId, variantIndex) {
+  const current = normalizeProgress(progress);
+  if (!lessonId || typeof lessonId !== "string") return current;
+  const index = Math.max(0, Math.floor(Number(variantIndex)) || 0);
+  return {
+    ...current,
+    variantByLesson: {
+      ...(current.variantByLesson || {}),
+      [lessonId]: index,
+    },
+  };
+}
+
+export function lessonVariantIndex(progress, lessonId) {
+  const current = normalizeProgress(progress);
+  const raw = current.variantByLesson?.[lessonId];
+  const index = Math.floor(Number(raw));
+  return Number.isFinite(index) && index >= 0 ? index : 0;
+}
+
 export function mergeProgress(local, remote) {
   const left = normalizeProgress(local);
   const right = normalizeProgress(remote);
@@ -222,6 +311,11 @@ export function mergeProgress(local, remote) {
   }
   const now = Date.now();
   const hearts = pickHeartMerge(left, right, now);
+  const variantByLesson = { ...(right.variantByLesson || {}) };
+  for (const [id, index] of Object.entries(left.variantByLesson || {})) {
+    const other = variantByLesson[id];
+    if (other === undefined || index > other) variantByLesson[id] = index;
+  }
   return normalizeProgress({
     xp: Math.max(left.xp, right.xp),
     streak,
@@ -231,6 +325,7 @@ export function mergeProgress(local, remote) {
     comfort,
     hearts: hearts.hearts,
     nextHeartAt: hearts.nextHeartAt,
+    variantByLesson,
     owner: left.owner,
   }, now);
 }

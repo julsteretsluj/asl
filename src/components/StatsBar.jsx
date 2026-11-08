@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { MAX_HEARTS, nextHeartLabel } from "../progress.js";
 import { useProgress } from "../progress-state.jsx";
+import { BuyHeartsControl } from "./BuyHearts.jsx";
 import { Flame, Icon, Zap } from "./icons.jsx";
 import { HeartGlyphs } from "./ui.jsx";
 
@@ -26,36 +27,37 @@ export function StatsBar({ className = "" }) {
   return (
     <div
       className={`min-w-0 rounded-[12px] border border-line bg-surface/90 px-3 py-1.5 shadow-soft sm:px-3.5 ${className}`}
-      role="status"
-      aria-live="polite"
       aria-label="Progress"
     >
       <div className="flex items-center justify-end gap-3 sm:gap-4">
-        <dl className="flex min-w-0 items-center gap-3 sm:gap-4">
-          <Stat
-            label="Streak"
-            value={streakLabel}
-            icon={<Icon as={Flame} size="xs" className="text-[#FF8D28]" />}
-          />
-          <Stat
-            label="XP"
-            value={String(progress.xp)}
-            icon={<Icon as={Zap} size="xs" className="text-blue" />}
-          />
-          <div className="min-w-0">
-            <dt className="text-[10px] font-medium leading-3 tracking-[-0.02em] text-secondary sm:text-[11px] sm:leading-4">
-              Hearts
-            </dt>
-            <dd className="mt-0.5 leading-none">
-              <HeartGlyphs count={progress.hearts} className="text-[14px] sm:text-[15px]" />
-            </dd>
-          </div>
-        </dl>
-        {waitLabel ? (
-          <p className="hidden shrink-0 text-right text-[11px] font-medium leading-4 tracking-[-0.02em] text-secondary sm:block sm:text-[12px]">
-            {waitLabel}
-          </p>
-        ) : null}
+        <div role="status" aria-live="polite" className="flex min-w-0 items-center gap-3 sm:gap-4">
+          <dl className="flex min-w-0 items-center gap-3 sm:gap-4">
+            <Stat
+              label="Streak"
+              value={streakLabel}
+              icon={<Icon as={Flame} size="xs" className="text-[#FF8D28]" />}
+            />
+            <Stat
+              label="XP"
+              value={String(progress.xp)}
+              icon={<Icon as={Zap} size="xs" className="text-blue" />}
+            />
+            <div className="min-w-0">
+              <dt className="text-[10px] font-medium leading-3 tracking-[-0.02em] text-secondary sm:text-[11px] sm:leading-4">
+                Hearts
+              </dt>
+              <dd className="mt-0.5 leading-none">
+                <HeartGlyphs count={progress.hearts} className="text-[14px] sm:text-[15px]" />
+              </dd>
+            </div>
+          </dl>
+          {waitLabel ? (
+            <p className="hidden shrink-0 text-right text-[11px] font-medium leading-4 tracking-[-0.02em] text-secondary sm:block sm:text-[12px]">
+              {waitLabel}
+            </p>
+          ) : null}
+        </div>
+        <BuyHeartsControl />
       </div>
       {waitLabel ? (
         <p className="mt-1 text-right text-[11px] font-medium leading-3 tracking-[-0.02em] text-secondary sm:hidden">

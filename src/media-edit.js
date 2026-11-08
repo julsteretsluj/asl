@@ -228,8 +228,9 @@ function pickRecorder(stream) {
       return false;
     }
   });
-  if (mimeType) return new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 2_000_000 });
-  return new MediaRecorder(stream);
+  // Keep exports lean for Firestore chunk sync (~2.5 MB free-account cap).
+  if (mimeType) return new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 900_000 });
+  return new MediaRecorder(stream, { videoBitsPerSecond: 900_000 });
 }
 
 export async function renderImage(blob, crop) {
@@ -253,9 +254,8 @@ export async function renderImage(blob, crop) {
     canvas.height = Math.max(1, Math.round(frame.h * scale));
     const ctx = canvas.getContext("2d");
     ctx.drawImage(image, frame.x, frame.y, frame.w, frame.h, 0, 0, canvas.width, canvas.height);
-    const type = blob.type === "image/png" || blob.type === "image/webp" ? blob.type : "image/jpeg";
     const out = await new Promise((resolve, reject) => {
-      canvas.toBlob((next) => (next ? resolve(next) : reject(new Error("crop"))), type, 0.92);
+      canvas.toBlob((next) => (next ? resolve(next) : reject(new Error("crop"))), "image/jpeg", 0.82);
     });
     return out;
   } finally {
@@ -275,7 +275,7 @@ export async function renderVideo(video, selection) {
   const startAt = clamp(selection.start || 0, 0, Math.max(0, duration - 0.1));
   const endAt = clamp(selection.end ?? duration, startAt + 0.1, duration);
   const frame = normalizeCrop(selection.crop, width, height);
-  const maxEdge = 1280;
+  const maxEdge = 960;
   const scale = Math.min(1, maxEdge / Math.max(frame.w, frame.h));
   const canvas = document.createElement("canvas");
   canvas.width = even(frame.w * scale);

@@ -36,6 +36,9 @@ export async function pullProgress(uid) {
     // Omit hearts when absent so normalizeProgress migrates to a full pool.
     ...(data.hearts !== undefined && data.hearts !== null ? { hearts: data.hearts } : {}),
     ...(typeof data.nextHeartAt === "number" ? { nextHeartAt: data.nextHeartAt } : {}),
+    ...(data.variantByLesson && typeof data.variantByLesson === "object" && !Array.isArray(data.variantByLesson)
+      ? { variantByLesson: data.variantByLesson }
+      : {}),
   };
 }
 
@@ -52,6 +55,7 @@ export async function pushProgress(uid, email, progress) {
       comfort,
       hearts: progress.hearts,
       nextHeartAt: progress.nextHeartAt == null ? null : progress.nextHeartAt,
+      variantByLesson: progress.variantByLesson || {},
       updatedAt: new Date().toISOString(),
     },
     { merge: true },

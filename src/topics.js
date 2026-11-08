@@ -44,8 +44,21 @@ function match(prompt, pairs) {
   };
 }
 
-function lesson(id, title, tip, exercises) {
-  return { id, title, tip, exercises };
+function lesson(id, title, tip, ...rest) {
+  if (rest.length > 1 && rest.every((entry) => Array.isArray(entry))) {
+    return { id, title, tip, variants: rest };
+  }
+  const first = rest[0];
+  if (
+    Array.isArray(first) &&
+    first.length > 0 &&
+    Array.isArray(first[0]) &&
+    first[0][0] &&
+    typeof first[0][0].type === "string"
+  ) {
+    return { id, title, tip, variants: first };
+  }
+  return { id, title, tip, exercises: first };
 }
 
 function unit(id, title, guide, lessons) {

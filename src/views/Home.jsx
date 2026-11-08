@@ -3,8 +3,8 @@ import { summarize } from "../coverage.js";
 import { Check, ChevronRight, Icon, Lock, Map, Play } from "../components/icons.jsx";
 import { GraphicSlot } from "../components/ui.jsx";
 import { UNIT_GRAPHIC_IDS } from "../graphics.js";
-import { findLesson, lessonList, previousLessonId, UNITS } from "../lessons.js";
-import { HEART_RESTORE_MS, isLessonDone, MAX_HEARTS, nextHeartLabel } from "../progress.js";
+import { exercisesForVariant, findLesson, lessonList, previousLessonId, UNITS } from "../lessons.js";
+import { HEART_RESTORE_MS, isLessonDone, lessonVariantIndex, MAX_HEARTS, nextHeartLabel } from "../progress.js";
 import { useProgress } from "../progress-state.jsx";
 
 export function Home() {
@@ -126,7 +126,8 @@ export function Home() {
             </h2>
             <p className="mt-3 text-[15px] leading-6">{pickedLesson.tip}</p>
             <p className="mt-2 text-[13px] text-secondary">
-              {pickedLesson.exercises.length} exercises · {progress.hearts} of {MAX_HEARTS} hearts
+              {exercisesForVariant(pickedLesson, lessonVariantIndex(progress, pickedLesson.id)).length} exercises ·{" "}
+              {progress.hearts} of {MAX_HEARTS} hearts
               {waitLabel ? ` · ${waitLabel}` : ""}
             </p>
             {progress.hearts <= 0 ? (

@@ -321,8 +321,8 @@ export function MediaEditor({ blob, kind = "video", onCancel, onApply }) {
     setFailed("");
     try {
       await onApply(previewBlob);
-    } catch {
-      setFailed(SAVE_ERROR);
+    } catch (error) {
+      setFailed(error?.code === "model/too-large" && error?.message ? error.message : SAVE_ERROR);
       setSaving(false);
     }
   }

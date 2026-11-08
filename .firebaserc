@@ -1,5 +1,7 @@
 {
   "projects": {
     "default": "signspace-aslguide"
-  }
+  },
+  "targets": {},
+  "etags": {}
 }

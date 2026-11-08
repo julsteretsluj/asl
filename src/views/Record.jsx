@@ -1,9 +1,12 @@
 import { useMemo, useState } from "react";
 import { useAccount } from "../account.jsx";
 import { COMFORT_LEVELS, comfortCounts } from "../comfort.js";
-import { CheckCircle2, ClipboardList, Filter as FilterIcon, Icon, LogIn, Star, User } from "../components/icons.jsx";
-import { ComfortControl, GraphicSlot } from "../components/ui.jsx";
+import { ModelPresence, SignModelCapture } from "../components/SignModelCapture.jsx";
+import { CheckCircle2, ClipboardList, Filter as FilterIcon, Icon, LogIn, Star, Upload, User, Video } from "../components/icons.jsx";
+import { ComfortControl, GraphicSlot, Pill } from "../components/ui.jsx";
 import { itemId, statusOf, summarize } from "../coverage.js";
+import { VOCAB } from "../data.js";
+import { modelKey } from "../models.js";
 import { useProgress } from "../progress-state.jsx";
 
 const STATUS = {
@@ -11,12 +14,24 @@ const STATUS = {
   practicing: { label: "Practicing", className: "bg-muted text-ink", icon: CheckCircle2 },
 };
 
+/** Map a covered word row to the dictionary sign used for personal models. */
+export function signFromRecordItem(item) {
+  if (!item || item.kind !== "word" || !item.gloss) return null;
+  const matches = VOCAB.filter((entry) => entry.gloss === item.gloss);
+  if (matches.length === 1) return matches[0];
+  if (matches.length > 1) {
+    return matches.find((entry) => entry.term === item.label) || matches[0];
+  }
+  return { gloss: item.gloss, term: item.label || item.gloss, category: item.category || "Signs" };
+}
+
 export function Record() {
   const { user } = useAccount();
   const { progress, syncState, setComfort } = useProgress();
   const [kind, setKind] = useState("all");
   const [level, setLevel] = useState("all");
   const [comfort, setComfortFilter] = useState("all");
+  const [captureKey, setCaptureKey] = useState("");
   const stats = summarize(progress);
   const totals = comfortCounts(progress.comfort);
   const groups = useMemo(() => groupItems(progress, kind, level, comfort), [progress, kind, level, comfort]);
@@ -40,6 +55,8 @@ export function Record() {
       <p className="mt-4 max-w-[38rem] text-[16px] leading-7 text-secondary">
         A sign or idea is covered once you check it in a lesson. It is mastered after two correct checks, with more correct than missed.
         Comfort — Not comfortable, Learning, Comfortable, or Confident — stays where you set it when a check is recorded.
+        Add your own model on any sign below; it stays on this device
+        {user ? ", and on your account when you are signed in" : ""}.
         {syncState === "saved" ? " This copy is in your account." : " On this device it stays even before you sign in."}
       </p>
       <GraphicSlot id="record-hero" className="mt-5" />
@@ -92,19 +109,25 @@ export function Record() {
               <ul className="mt-2 divide-y divide-line overflow-hidden rounded-2xl bg-surface shadow-soft">
                 {group.items.map((item) => {
                   const status = STATUS[statusOf(item)];
+                  const sign = signFromRecordItem(item);
+                  const key = sign ? modelKey(sign) : "";
+                  const capturing = key && captureKey === key;
                   return (
                     <li key={`${item.kind}:${item.key}`} className="px-4 py-3">
                       <div className="flex items-center justify-between gap-3">
-                        <div>
+                        <div className="min-w-0">
                           <p className="text-[16px] font-medium">{item.label}</p>
                           <p className="text-[13px] text-secondary">
                             {item.kind === "word" ? item.gloss : "Concept"} · {item.correct || 0} correct · {item.miss || 0} missed
                           </p>
                         </div>
-                        <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-[12px] font-semibold ${status.className}`}>
-                          <Icon as={status.icon} size={12} />
-                          {status.label}
-                        </span>
+                        <div className="flex shrink-0 items-center gap-2">
+                          {sign ? <ModelPresence sign={sign} /> : null}
+                          <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-[12px] font-semibold ${status.className}`}>
+                            <Icon as={status.icon} size={12} />
+                            {status.label}
+                          </span>
+                        </div>
                       </div>
                       {item.kind === "word" ? (
                         <div className="mt-3">
@@ -113,6 +136,32 @@ export function Record() {
                             value={progress.comfort?.[itemId(item)] || ""}
                             onChange={(next) => setComfort(itemId(item), next)}
                           />
+                        </div>
+                      ) : null}
+                      {sign ? (
+                        <div className="mt-3">
+                          {capturing ? (
+                            <SignModelCapture sign={sign} compact onClose={() => setCaptureKey("")} />
+                          ) : (
+                            <div className="flex flex-wrap items-center gap-2">
+                              <Pill
+                                type="button"
+                                className="gap-1.5 !px-3 !py-1.5 !text-[13px]"
+                                onClick={() => setCaptureKey(key)}
+                              >
+                                <Icon as={Video} size="xs" />
+                                Record
+                              </Pill>
+                              <Pill
+                                type="button"
+                                className="gap-1.5 !px-3 !py-1.5 !text-[13px]"
+                                onClick={() => setCaptureKey(key)}
+                              >
+                                <Icon as={Upload} size="xs" />
+                                Upload
+                              </Pill>
+                            </div>
+                          )}
                         </div>
                       ) : null}
                     </li>

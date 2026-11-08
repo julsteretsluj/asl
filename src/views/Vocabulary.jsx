@@ -91,15 +91,23 @@ export function Vocabulary() {
     if (!currentKey) return undefined;
     let cancel = false;
     setModel(null);
-    readModel(currentKey)
-      .then((row) => {
-        if (!cancel) setModel(row);
-      })
-      .catch(() => {
-        if (!cancel) setModel(null);
-      });
+
+    function load() {
+      readModel(currentKey)
+        .then((row) => {
+          if (!cancel) setModel(row);
+        })
+        .catch(() => {
+          if (!cancel) setModel(null);
+        });
+    }
+
+    load();
+    const onSync = () => load();
+    window.addEventListener("signspace-models-changed", onSync);
     return () => {
       cancel = true;
+      window.removeEventListener("signspace-models-changed", onSync);
     };
   }, [currentKey]);
 

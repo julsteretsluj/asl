@@ -2,9 +2,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useAccess } from "../access.jsx";
 import { HandDiagram } from "../components/Hand.jsx";
 import { ArrowRight, Check, Clock3, Icon, Settings2, Sparkles, X } from "../components/icons.jsx";
+import { BuyHeartsPacks } from "../components/BuyHearts.jsx";
 import { GraphicSlot, HeartGlyphs } from "../components/ui.jsx";
-import { gradeAttempt } from "../lessons.js";
-import { HEART_RESTORE_MS, nextHeartLabel } from "../progress.js";
+import { exercisesForVariant, gradeAttempt, shuffleExercises } from "../lessons.js";
+import { HEART_RESTORE_MS, lessonVariantIndex, nextHeartLabel } from "../progress.js";
 import { useProgress } from "../progress-state.jsx";
 
 function shuffle(list, seed) {
@@ -18,9 +19,22 @@ function shuffle(list, seed) {
   return copy;
 }
 
+function startDeck(lesson, variantIndex) {
+  const variant = exercisesForVariant(lesson, variantIndex);
+  return {
+    variantIndex,
+    variantExercises: variant,
+    deck: shuffleExercises(variant),
+  };
+}
+
 export function Lesson({ lesson, onExit }) {
   const { setOpen } = useAccess();
-  const { progress, spendHeart, refreshHearts, recordExercise, finishLesson } = useProgress();
+  const { progress, spendHeart, refreshHearts, recordExercise, finishLesson, rotateLessonVariant } = useProgress();
+  // Bootstrap once on mount: pick persisted variant, then shuffle that list for this attempt only.
+  const [variantIndex, setVariantIndex] = useState(() => lessonVariantIndex(progress, lesson.id));
+  const [variantExercises, setVariantExercises] = useState(() => exercisesForVariant(lesson, lessonVariantIndex(progress, lesson.id)));
+  const [deck, setDeck] = useState(() => shuffleExercises(exercisesForVariant(lesson, lessonVariantIndex(progress, lesson.id))));
   const [index, setIndex] = useState(0);
   const [results, setResults] = useState([]);
   const [phase, setPhase] = useState("ask");
@@ -29,10 +43,31 @@ export function Lesson({ lesson, onExit }) {
   const [leaving, setLeaving] = useState(false);
   const [attempt, setAttempt] = useState(null);
   const hearts = progress.hearts;
-  const exercise = lesson.exercises[index];
+  const exercise = deck[index];
   const ready = isReady(exercise, attempt);
   const busy = useRef(false);
   const checked = useRef(false);
+  const rotatedOnFail = useRef(false);
+  const trackingLesson = useMemo(
+    () => ({ ...lesson, exercises: deck, variantExercises }),
+    [lesson, deck, variantExercises],
+  );
+
+  function beginAttempt(nextVariantIndex) {
+    const started = startDeck(lesson, nextVariantIndex);
+    setVariantIndex(started.variantIndex);
+    setVariantExercises(started.variantExercises);
+    setDeck(started.deck);
+    setIndex(0);
+    setResults([]);
+    setSummary(null);
+    setAttempt(null);
+    setGrade(null);
+    setPhase("ask");
+    busy.current = false;
+    checked.current = false;
+    rotatedOnFail.current = false;
+  }
 
   useEffect(() => {
     setAttempt(null);
@@ -46,6 +81,12 @@ export function Lesson({ lesson, onExit }) {
     if (phase !== "ask" || hearts > 0) return;
     setPhase("hearts");
   }, [phase, hearts]);
+
+  useEffect(() => {
+    if (phase !== "hearts" || rotatedOnFail.current) return;
+    rotatedOnFail.current = true;
+    rotateLessonVariant(lesson);
+  }, [phase, lesson, rotateLessonVariant]);
 
   useEffect(() => {
     const onKey = (event) => {
@@ -71,7 +112,7 @@ export function Lesson({ lesson, onExit }) {
     checked.current = true;
     const payload = exercise.type === "bank" ? (attempt || []).map((tile) => tile.label) : attempt;
     const result = gradeAttempt(exercise, payload);
-    recordExercise(lesson, exercise, result.ok);
+    recordExercise(trackingLesson, exercise, result.ok);
     if (!result.ok) spendHeart();
     setGrade(result);
     setPhase("feedback");
@@ -87,10 +128,10 @@ export function Lesson({ lesson, onExit }) {
       setPhase("hearts");
       return;
     }
-    if (index + 1 >= lesson.exercises.length) {
+    if (index + 1 >= deck.length) {
       const score = nextResults.filter(Boolean).length;
       setResults(nextResults);
-      setSummary(finishLesson(lesson.id, { correct: score, total: lesson.exercises.length }));
+      setSummary(finishLesson(lesson.id, { correct: score, total: deck.length }, lesson));
       setPhase("done");
       return;
     }
@@ -107,7 +148,7 @@ export function Lesson({ lesson, onExit }) {
         lesson={lesson}
         summary={summary}
         correct={results.filter(Boolean).length}
-        total={lesson.exercises.length}
+        total={deck.length}
         onExit={onExit}
       />
     );
@@ -121,13 +162,7 @@ export function Lesson({ lesson, onExit }) {
         onRetry={() => {
           const next = refreshHearts();
           if ((next?.hearts ?? 0) <= 0) return;
-          setIndex(0);
-          setResults([]);
-          setSummary(null);
-          setAttempt(null);
-          setGrade(null);
-          setPhase("ask");
-          busy.current = false;
+          beginAttempt(lessonVariantIndex(next, lesson.id));
         }}
         onExit={onExit}
         refreshHearts={refreshHearts}
@@ -153,13 +188,13 @@ export function Lesson({ lesson, onExit }) {
             className="h-3 flex-1 overflow-hidden rounded-full bg-muted"
             role="progressbar"
             aria-valuemin={0}
-            aria-valuemax={lesson.exercises.length}
+            aria-valuemax={deck.length}
             aria-valuenow={index}
             aria-label="Lesson progress"
           >
             <div
               className="h-full rounded-full bg-success"
-              style={{ width: `${(index / lesson.exercises.length) * 100}%` }}
+              style={{ width: `${(index / deck.length) * 100}%` }}
             />
           </div>
           <p className="text-[13px] font-medium text-secondary">
@@ -174,7 +209,7 @@ export function Lesson({ lesson, onExit }) {
 
       <main id="content" className="mx-auto w-full max-w-[640px] flex-1 px-5 py-6 sm:px-6">
         <Exercise
-          key={index}
+          key={`${variantIndex}-${index}-${exercise?.prompt || index}`}
           exercise={exercise}
           attempt={attempt}
           setAttempt={setAttempt}
@@ -525,7 +560,8 @@ function HeartsOut({ correct, total, onRetry, onExit, refreshHearts }) {
       <h1 className="mt-4 text-[34px] font-semibold tracking-[-0.03em]">No hearts left</h1>
       <GraphicSlot id="hearts-out" className="mt-5 w-full max-w-sm" />
       <p className="mt-3 max-w-sm text-[16px] leading-7 text-secondary">
-        This attempt stops at {correct} correct of {total} so far. One heart returns every {HEART_RESTORE_MS / 60000} minutes — no purchase, just the timer.
+        This attempt stops at {correct} correct of {total} so far. One heart returns every{" "}
+        {HEART_RESTORE_MS / 60000} minutes, or spend XP below — no real money.
       </p>
       {label ? (
         <p className="mt-4 inline-flex items-center gap-1.5 text-[18px] font-semibold tabular-nums text-ink" aria-live="polite">
@@ -533,6 +569,12 @@ function HeartsOut({ correct, total, onRetry, onExit, refreshHearts }) {
           {label}
         </p>
       ) : null}
+
+      <div className="mt-6 w-full max-w-sm rounded-[16px] border border-line bg-surface p-4 shadow-soft">
+        <p className="text-[13px] font-medium text-secondary">{progress.xp} XP available</p>
+        <BuyHeartsPacks className="mt-3" />
+      </div>
+
       {canRetry ? (
         <button type="button" onClick={onRetry} className="mt-8 h-12 w-full max-w-sm rounded-2xl bg-success text-[16px] font-semibold text-white">
           Try the lesson again
