@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { authMessage, useAccount } from "../account.jsx";
 import { ClipboardList, Icon, LogIn, LogOut, Mail, User } from "../components/icons.jsx";
+import { ProgressReset } from "../components/ProgressReset.jsx";
 import { GraphicSlot } from "../components/ui.jsx";
 import { useProgress } from "../progress-state.jsx";
 
@@ -71,6 +72,7 @@ export function Account() {
             Sign out
           </button>
         </div>
+        <ProgressReset />
       </div>
     );
   }
@@ -139,6 +141,7 @@ export function Account() {
       >
         {mode === "create" ? "I already have an account" : "Create an account"}
       </button>
+      <ProgressReset />
     </div>
   );
 }

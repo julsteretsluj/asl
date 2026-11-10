@@ -276,6 +276,29 @@ export function lessonVariantIndex(progress, lessonId) {
   return Number.isFinite(index) && index >= 0 ? index : 0;
 }
 
+/** Wipe path, XP, hearts, comfort, and item stats. Keeps account owner if signed in. */
+export function applyResetAll(progress) {
+  const owner = typeof progress?.owner === "string" ? progress.owner : null;
+  return { ...emptyProgress(), owner };
+}
+
+/**
+ * Clear completion for the given lesson ids (and their variants).
+ * Use for “restart from this unit onward” — later lessons unlock again after earlier ones are redone.
+ */
+export function applyResetLessons(progress, lessonIds) {
+  const current = normalizeProgress(progress);
+  const ids = [...new Set((Array.isArray(lessonIds) ? lessonIds : []).filter((id) => typeof id === "string" && id))];
+  if (!ids.length) return current;
+  const completed = { ...current.completed };
+  const variantByLesson = { ...(current.variantByLesson || {}) };
+  for (const id of ids) {
+    delete completed[id];
+    delete variantByLesson[id];
+  }
+  return { ...current, completed, variantByLesson };
+}
+
 export function mergeProgress(local, remote) {
   const left = normalizeProgress(local);
   const right = normalizeProgress(remote);

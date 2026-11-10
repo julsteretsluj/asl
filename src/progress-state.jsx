@@ -6,6 +6,8 @@ import {
   applyComfort,
   applyExercise,
   applyLessonVariant,
+  applyResetAll,
+  applyResetLessons,
   applySpendHeart,
   emptyProgress,
   loadProgress,
@@ -113,6 +115,11 @@ export function ProgressProvider({ children }) {
     },
     setComfort(id, level) {
       return commit(applyComfort(progressRef.current, id, level));
+    },
+    /** Full path wipe, or clear completion from a set of lesson ids onward. */
+    resetProgress({ scope = "all", lessonIds = [] } = {}) {
+      if (scope === "all") return commit(applyResetAll(progressRef.current));
+      return commit(applyResetLessons(progressRef.current, lessonIds));
     },
   };
 

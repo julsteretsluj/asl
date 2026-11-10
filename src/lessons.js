@@ -881,6 +881,23 @@ export function nextLessonId(id) {
   return list[index + 1].id;
 }
 
+/** Units for reset UI: id, title, and lesson ids from that unit through the end of the path. */
+export function unitsForReset() {
+  return UNITS.map((unit, index) => ({
+    id: unit.id,
+    title: unit.title,
+    index,
+    lessonCount: unit.lessons.length,
+    lessonIdsFromHere: UNITS.slice(index).flatMap((entry) => entry.lessons.map((lesson) => lesson.id)),
+  }));
+}
+
+export function lessonIdsFromUnitOnward(unitId) {
+  const units = unitsForReset();
+  const match = units.find((unit) => unit.id === unitId);
+  return match ? [...match.lessonIdsFromHere] : [];
+}
+
 export function canonical(input) {
   return tokenize(input)
     .map((token) => {

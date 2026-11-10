@@ -46,6 +46,11 @@ export function Home() {
           <Icon as={ChevronRight} size="sm" />
         </a>
       </p>
+      <p className="mt-2 text-[14px]">
+        <a href="#/account" className="font-medium text-blue">
+          Reset path — start over from the beginning, this unit, or a unit you choose
+        </a>
+      </p>
 
       <div className="relative mx-auto mt-10 max-w-[440px]">
         <div className="absolute top-6 bottom-6 left-1/2 w-px -translate-x-1/2 bg-line" aria-hidden="true" />

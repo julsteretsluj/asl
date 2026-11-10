@@ -30,6 +30,7 @@ export {
   Mic,
   Moon,
   Play,
+  RotateCcw,
   Search,
   Settings2,
   Sparkles,
