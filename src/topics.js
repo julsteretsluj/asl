@@ -1,3 +1,4 @@
+import { clarifyPrompt } from "./exerciseCopy.js";
 import { applyEmbeds } from "./embeds.js";
 import { ADVANCED_CATEGORIES, ADVANCED_NOTES, ADVANCED_UNITS, ADVANCED_VOCAB } from "./topics-advanced.js";
 import { MORE_CATEGORIES, MORE_NOTES, MORE_UNITS, MORE_VOCAB } from "./topics-more.js";
@@ -18,7 +19,7 @@ function sign(term, gloss, category, face, manual, params, page, film) {
 }
 
 function choice(prompt, options, answer, explain, extra = {}) {
-  return {
+  const exercise = {
     type: "choice",
     prompt,
     options: options.map((label) => ({ id: label, label })),
@@ -26,24 +27,32 @@ function choice(prompt, options, answer, explain, extra = {}) {
     explain,
     ...extra,
   };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 function blank(prompt, before, after, options, answer, explain, extra = {}) {
-  return { type: "blank", prompt, before, after, options, answer, explain, ...extra };
+  const exercise = { type: "blank", prompt, before, after, options, answer, explain, ...extra };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 function bank(prompt, tiles, answer, explain, extra = {}) {
-  return { type: "bank", prompt, tiles, answer, explain, ...extra };
+  const exercise = { type: "bank", prompt, tiles, answer, explain, ...extra };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 function match(prompt, pairs, extra = {}) {
-  return {
+  const exercise = {
     type: "match",
     prompt,
     pairs: pairs.map(([a, b], index) => ({ id: String(index), a, b })),
-    explain: "Each English idea has one gloss.",
+    explain: "Each English idea has one matching ASL gloss.",
     ...extra,
   };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 function lesson(id, title, tip, ...rest) {

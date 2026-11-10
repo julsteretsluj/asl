@@ -1,3 +1,4 @@
+import { clarifyPrompt } from "./exerciseCopy.js";
 import { normalizeEmbed } from "./video.js";
 
 const lp = (path) => `https://www.lifeprint.com/asl101/pages-signs/${path}`;
@@ -15,30 +16,38 @@ function sign(term, gloss, category, face, manual, params, page, film) {
 }
 
 function choice(prompt, options, answer, explain) {
-  return {
+  const exercise = {
     type: "choice",
     prompt,
     options: options.map((label) => ({ id: label, label })),
     answer,
     explain,
   };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 function blank(prompt, before, after, options, answer, explain) {
-  return { type: "blank", prompt, before, after, options, answer, explain };
+  const exercise = { type: "blank", prompt, before, after, options, answer, explain };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 function bank(prompt, tiles, answer, explain) {
-  return { type: "bank", prompt, tiles, answer, explain };
+  const exercise = { type: "bank", prompt, tiles, answer, explain };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 function match(prompt, pairs) {
-  return {
+  const exercise = {
     type: "match",
     prompt,
     pairs: pairs.map(([a, b], index) => ({ id: String(index), a, b })),
-    explain: "Each English idea has one gloss.",
+    explain: "Each English idea has one matching ASL gloss.",
   };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 function lesson(id, title, tip, ...rest) {

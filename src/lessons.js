@@ -1,3 +1,4 @@
+import { clarifyPrompt } from "./exerciseCopy.js";
 import { analyze, normalizeToken, tokenize } from "./gloss.js";
 import { TOPIC_UNITS } from "./topics.js";
 import {
@@ -10,7 +11,7 @@ import {
 export { exercisesForVariant, resolveLessonVariants, shuffleExercises, variantCount };
 
 function choice(prompt, options, answer, explain, extra = {}) {
-  return {
+  const exercise = {
     type: "choice",
     prompt,
     options: options.map((label) => ({ id: label, label })),
@@ -18,28 +19,38 @@ function choice(prompt, options, answer, explain, extra = {}) {
     explain,
     ...extra,
   };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 function blank(prompt, before, after, options, answer, explain, extra = {}) {
-  return { type: "blank", prompt, before, after, options, answer, explain, ...extra };
+  const exercise = { type: "blank", prompt, before, after, options, answer, explain, ...extra };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 function bank(prompt, tiles, answer, explain, extra = {}) {
-  return { type: "bank", prompt, tiles, answer, explain, ...extra };
+  const exercise = { type: "bank", prompt, tiles, answer, explain, ...extra };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 function typed(prompt, drillId, model, explain, extra = {}) {
-  return { type: "type", prompt, drillId, model, explain, ...extra };
+  const exercise = { type: "type", prompt, drillId, model, explain, ...extra };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 function match(prompt, pairs, extra = {}) {
-  return {
+  const exercise = {
     type: "match",
     prompt,
     pairs: pairs.map(([a, b], index) => ({ id: String(index), a, b })),
-    explain: "Each English idea has one gloss.",
+    explain: "Each English idea has one matching ASL gloss.",
     ...extra,
   };
+  exercise.prompt = clarifyPrompt(exercise);
+  return exercise;
 }
 
 export const UNITS = [

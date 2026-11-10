@@ -6,6 +6,7 @@ import { ArrowRight, Check, Clock3, Icon, Settings2, Sparkles, X } from "../comp
 import { BuyHeartsPacks } from "../components/BuyHearts.jsx";
 import { ModelPresence, SignModelCapture } from "../components/SignModelCapture.jsx";
 import { GraphicSlot, HeartGlyphs } from "../components/ui.jsx";
+import { presentExercise } from "../exerciseCopy.js";
 import { signsForExercise } from "../lesson-model.js";
 import { exercisesForVariant, gradeAttempt, shuffleExercises } from "../lessons.js";
 import { modelKey } from "../models.js";
@@ -58,7 +59,7 @@ export function Lesson({ lesson, onExit }) {
   const [leaving, setLeaving] = useState(false);
   const [attempt, setAttempt] = useState(null);
   const hearts = progress.hearts;
-  const exercise = deck[index];
+  const exercise = presentExercise(deck[index]);
   const focusSigns = useMemo(() => signsForExercise(exercise), [exercise]);
   const ready = isReady(exercise, attempt);
   const busy = useRef(false);
@@ -368,7 +369,7 @@ function WatchStep({ signs }) {
         {signs.length === 1 ? `See ${signs[0].gloss}` : "See these signs"}
       </h1>
       <p className="mt-2 text-[15px] leading-6 text-secondary">
-        Play the model before you answer. Recording comes after you check.
+        Watch the filmed model first so the next question is clear. Then continue — you will answer, check, and can record after.
       </p>
       <div className="mt-5 space-y-5">
         {signs.map((sign) => (
@@ -450,7 +451,11 @@ function Exercise({ exercise, attempt, setAttempt, revealed, correctId }) {
           <HandDiagram letter={exercise.letter} quiet />
         </div>
       ) : null}
-      <h1 className="text-[26px] font-semibold leading-8 tracking-[-0.03em]">{exercise.prompt}</h1>
+      <p className="text-[13px] font-medium uppercase tracking-[0.04em] text-secondary">Your task</p>
+      <h1 className="mt-2 text-[26px] font-semibold leading-8 tracking-[-0.03em]">{exercise.prompt}</h1>
+      {exercise.brief ? (
+        <p className="mt-3 text-[15px] leading-6 text-secondary">{exercise.brief}</p>
+      ) : null}
       <div className="mt-6">
         {exercise.type === "choice" ? (
           <Choice exercise={exercise} attempt={attempt} setAttempt={setAttempt} revealed={revealed} correctId={correctId} />
@@ -507,12 +512,14 @@ function Choice({ exercise, attempt, setAttempt, revealed, correctId }) {
 function Blank({ exercise, attempt, setAttempt, revealed, correctId }) {
   return (
     <div>
-      <p className="text-[20px] font-medium tracking-[0.03em]">
+      <p className="text-[13px] font-medium text-secondary">Gloss with one piece missing</p>
+      <p className="mt-2 text-[20px] font-medium tracking-[0.03em]">
         {exercise.before ? <span>{exercise.before} </span> : null}
         <span className="inline-block min-w-16 border-b-2 border-ink px-2 text-blue">{attempt || " "}</span>
         {exercise.after ? <span> {exercise.after}</span> : null}
       </p>
-      <div className="mt-6 flex flex-wrap gap-2">
+      <p className="mt-4 text-[13px] font-medium text-secondary">Tap the piece that belongs in the gap</p>
+      <div className="mt-3 flex flex-wrap gap-2">
         {exercise.options.map((option) => {
           const selected = attempt === option;
           const showRight = revealed && option === correctId;
@@ -553,7 +560,9 @@ function Bank({ exercise, attempt, setAttempt }) {
       <div className="min-h-24 rounded-2xl border border-dashed border-line bg-surface p-3">
         {attempt.length === 0 ? (
           <p className="text-[15px] text-secondary">
-            {need > 1 ? `Tap ${need} tiles in order.` : "Tap the signs in order."}
+            {need > 1
+              ? `Your gloss goes here. Tap ${need} signs below, in order from first to last.`
+              : "Your gloss goes here. Tap the signs below in order from first to last."}
           </p>
         ) : (
           <div className="flex flex-wrap gap-2">
@@ -599,7 +608,7 @@ function TypeAnswer({ attempt, setAttempt, revealed }) {
       disabled={revealed}
       spellCheck={false}
       aria-label="ASL gloss"
-      placeholder="Type the gloss"
+      placeholder="Example: BOOK RED I WANT"
       className="min-h-32 w-full rounded-2xl border border-line bg-surface px-4 py-3 text-[18px] tracking-[0.04em]"
     />
   );
@@ -637,31 +646,37 @@ function Match({ exercise, setAttempt, revealed }) {
   }
 
   return (
-    <div className={`grid grid-cols-2 gap-3 ${shake ? "shake" : ""}`}>
-      {[
-        ["a", left],
-        ["b", right],
-      ].map(([side, column]) => (
-        <div key={side} className="space-y-3">
-          {column.map((pair) => {
-            const hidden = gone.includes(pair.id);
-            const selected = picked?.side === side && picked.id === pair.id;
-            return (
-              <button
-                key={pair.id}
-                type="button"
-                disabled={hidden || revealed}
-                onClick={() => tap(side, pair.id)}
-                className={`h-14 w-full rounded-2xl border text-[15px] font-medium ${
-                  hidden ? "border-transparent bg-transparent text-transparent" : selected ? "border-blue bg-select-soft" : "border-line bg-surface"
-                }`}
-              >
-                {side === "a" ? pair.a : pair.b}
-              </button>
-            );
-          })}
-        </div>
-      ))}
+    <div className={shake ? "shake" : ""}>
+      <div className="mb-3 grid grid-cols-2 gap-3">
+        <p className="text-[13px] font-medium text-secondary">English</p>
+        <p className="text-[13px] font-medium text-secondary">ASL gloss</p>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        {[
+          ["a", left],
+          ["b", right],
+        ].map(([side, column]) => (
+          <div key={side} className="space-y-3">
+            {column.map((pair) => {
+              const hidden = gone.includes(pair.id);
+              const selected = picked?.side === side && picked.id === pair.id;
+              return (
+                <button
+                  key={pair.id}
+                  type="button"
+                  disabled={hidden || revealed}
+                  onClick={() => tap(side, pair.id)}
+                  className={`h-14 w-full rounded-2xl border text-[15px] font-medium ${
+                    hidden ? "border-transparent bg-transparent text-transparent" : selected ? "border-blue bg-select-soft" : "border-line bg-surface"
+                  }`}
+                >
+                  {side === "a" ? pair.a : pair.b}
+                </button>
+              );
+            })}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

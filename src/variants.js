@@ -4,57 +4,67 @@
  * Otherwise derive alternate lists from a single exercises array.
  */
 
+import { clarifyPrompt } from "./exerciseCopy.js";
+
 const CHOICE_PROMPT_ALTS = [
   [(p) => p, (p) => p],
   [
-    [/Which gloss matches [“"](.+?)[”"]\??/i, 'Pick the classroom gloss for “$1.”'],
-    [/“(.+?)” glosses as…?/i, 'How do you gloss “$1”?'],
-    [/(.+?) is signed at the…/i, 'Where is $1 produced?'],
-    [/(.+?) uses…/i, 'What does $1 use?'],
-    [/What does (.+?) (ask|tell|mean|add|show|stand)/i, 'In this lesson, $1 — what does it $2?'],
+    [/Which gloss matches [“"](.+?)[”"]\??/i, 'Choose the ASL gloss for “$1.”'],
+    [/Choose the ASL gloss for [“"](.+?)[”"]\.?/i, 'Pick the classroom gloss for “$1.”'],
+    [/“(.+?)” glosses as…?/i, 'How do you gloss “$1”? Choose one.'],
+    [/How is ([A-Z][A-Z0-9+_-]*) produced\?/i, 'What does the form of $1 look like?'],
+    [/(.+?) is signed at the…/i, 'Where is $1 produced? Choose the place.'],
+    [/(.+?) uses…/i, 'What does $1 use? Choose one.'],
+    [/What does (.+?) (ask|tell|mean|add|show|stand)/i, 'In this lesson, what does $1 $2?'],
     [/Which (word|tile|letter|sign) /i, 'Pick which $1 '],
     [/Where does (.+?) go/i, 'In the gloss, where do you put $1?'],
-    [/Tap the matching pairs\./i, 'Match each idea to its gloss.'],
-    [/Match the pairs\./i, 'Connect each English idea to the gloss.'],
+    [/Tap the matching pairs\./i, 'Match each English idea with its ASL gloss.'],
+    [/Match the pairs\./i, 'Match each English idea with its ASL gloss.'],
   ],
   [
-    [/Which gloss matches [“"](.+?)[”"]\??/i, '“$1” is written as…'],
-    [/“(.+?)” glosses as…?/i, 'Choose the gloss for “$1.”'],
-    [/(.+?) is signed at the…/i, 'The place for $1 is the…'],
+    [/Which gloss matches [“"](.+?)[”"]\??/i, 'Choose the ASL gloss for “$1.”'],
+    [/Choose the ASL gloss for [“"](.+?)[”"]\.?/i, 'Which gloss writes “$1”?'],
+    [/“(.+?)” glosses as…?/i, 'Choose the ASL gloss for “$1.”'],
+    [/How is ([A-Z][A-Z0-9+_-]*) produced\?/i, 'Pick the best description of how $1 is produced.'],
+    [/(.+?) is signed at the…/i, 'Where do you produce $1?'],
     [/(.+?) uses…/i, 'Pick what $1 is built from.'],
     [/What does (.+?) (ask|tell|mean|add|show|stand)/i, 'What is $1 doing when it $2s?'],
     [/Which (word|tile|letter|sign) /i, 'Which $1 fits here? '],
     [/Where does (.+?) go/i, 'Place $1 in the sentence — where?'],
-    [/Tap the matching pairs\./i, 'Pair each English cue with its gloss.'],
-    [/Match the pairs\./i, 'Find the matching gloss for each line.'],
+    [/Tap the matching pairs\./i, 'Match each English idea with its ASL gloss.'],
+    [/Match the pairs\./i, 'Match each English idea with its ASL gloss.'],
   ],
 ];
 
 const BANK_PROMPT_ALTS = [
   (p) => p,
   (p) => {
-    if (/^Build /i.test(p)) return p.replace(/^Build /i, "Assemble ");
-    if (/^Tap /i.test(p)) return p.replace(/^Tap /i, "Choose in order: ");
-    if (/\?$/.test(p) || /[.!]$/.test(p)) return `Gloss this in signs: ${p}`;
-    return `Put the signs in order. ${p}`;
+    if (/^Build the ASL gloss for /i.test(p)) return p.replace(/^Build the ASL gloss for /i, "Assemble the ASL gloss for ");
+    if (/^Build /i.test(p)) return p.replace(/^Build /i, "Assemble the gloss for ");
+    if (/^Tap /i.test(p)) return p.replace(/^Tap /i, "Choose signs in order for: ");
+    if (/\?$/.test(p) || /[.!]$/.test(p)) return `Build the ASL gloss for this English: ${p}`;
+    return `Build the ASL gloss in order. ${p}`;
   },
   (p) => {
-    if (/^Build /i.test(p)) return p.replace(/^Build /i, "Lay out ");
-    if (/^Tap /i.test(p)) return p.replace(/^Tap /i, "Order the signs — ");
-    if (/\?$/.test(p) || /[.!]$/.test(p)) return `Signs only — gloss: ${p}`;
-    return `Tile the gloss. ${p}`;
+    if (/^Build the ASL gloss for /i.test(p)) return p.replace(/^Build the ASL gloss for /i, "Lay out the ASL gloss for ");
+    if (/^Build /i.test(p)) return p.replace(/^Build /i, "Lay out the gloss for ");
+    if (/^Tap /i.test(p)) return p.replace(/^Tap /i, "Order the signs for: ");
+    if (/\?$/.test(p) || /[.!]$/.test(p)) return `Build the ASL gloss, signs only, for: ${p}`;
+    return `Put these signs in gloss order. ${p}`;
   },
 ];
 
 const BLANK_PROMPT_ALTS = [
   (p) => p,
   (p) => {
+    if (/^Pick the gloss for this form:/i.test(p)) return p.replace(/^Pick the gloss for this form:/i, "Choose the gloss that matches this form:");
     if (/^Fill /i.test(p)) return p.replace(/^Fill /i, "Complete ");
     if (/^Mark /i.test(p)) return p.replace(/^Mark /i, "Choose the marker for ");
-    if (/^Gloss /i.test(p)) return p.replace(/^Gloss /i, "Write the gloss piece for ");
-    return `Fill what is missing. ${p}`;
+    if (/^Gloss /i.test(p)) return p.replace(/^Gloss /i, "Pick the gloss piece for ");
+    return `Fill the missing gloss piece. ${p}`;
   },
   (p) => {
+    if (/^Pick the gloss for this form:/i.test(p)) return p.replace(/^Pick the gloss for this form:/i, "Name the gloss for this form:");
     if (/^Fill /i.test(p)) return p.replace(/^Fill /i, "Supply ");
     if (/^Mark /i.test(p)) return p.replace(/^Mark /i, "Pick the tag for ");
     if (/^Gloss /i.test(p)) return p.replace(/^Gloss /i, "Name the gloss for ");
@@ -63,9 +73,9 @@ const BLANK_PROMPT_ALTS = [
 ];
 
 const MATCH_PROMPTS = [
-  "Match the pairs.",
-  "Link each English idea to its gloss.",
-  "Pair each cue with the classroom gloss.",
+  "Match each English idea with its ASL gloss.",
+  "Link each English idea to its ASL gloss.",
+  "Pair each English cue with the matching ASL gloss.",
 ];
 
 function applyRegexAlts(prompt, rules) {
@@ -76,8 +86,8 @@ function applyRegexAlts(prompt, rules) {
       break;
     }
   }
-  if (next === prompt && !/…$/.test(prompt)) {
-    next = `${prompt.replace(/\?$/, "")} — pick carefully.`;
+  if (next === prompt && !/…$/.test(prompt) && !/^Choose |^Pick |^Build |^Match |^How |^What |^Where /i.test(prompt)) {
+    next = `${prompt.replace(/\?$/, "")}? Choose the best answer.`;
   }
   return next;
 }
@@ -167,14 +177,15 @@ function rewriteChoice(exercise, salt, pool) {
     labels.push(extra);
   }
   const rules = CHOICE_PROMPT_ALTS[salt] || CHOICE_PROMPT_ALTS[1];
+  const basePrompt = clarifyPrompt(exercise);
   let prompt =
-    typeof rules[0] === "function" ? rules[0](exercise.prompt) : applyRegexAlts(exercise.prompt, rules);
-  if (salt > 0 && prompt === exercise.prompt) {
-    prompt = salt === 1 ? `Check this again: ${exercise.prompt}` : `Try this angle: ${exercise.prompt}`;
+    typeof rules[0] === "function" ? rules[0](basePrompt) : applyRegexAlts(basePrompt, rules);
+  if (salt > 0 && prompt === basePrompt) {
+    prompt = salt === 1 ? `Choose again carefully: ${basePrompt}` : `Another way to ask: ${basePrompt}`;
   }
   return {
     type: "choice",
-    prompt,
+    prompt: clarifyPrompt({ ...exercise, prompt }),
     options: choiceOptions(labels),
     answer,
     explain: exercise.explain,
@@ -193,13 +204,14 @@ function rewriteBlank(exercise, salt, pool) {
     if (!options.includes(label)) options.push(label);
   }
   const promptFn = BLANK_PROMPT_ALTS[salt] || BLANK_PROMPT_ALTS[1];
-  let prompt = promptFn(exercise.prompt);
-  if (salt > 0 && prompt === exercise.prompt) {
-    prompt = salt === 1 ? `Gap check: ${exercise.prompt}` : `Missing piece: ${exercise.prompt}`;
+  const basePrompt = clarifyPrompt(exercise);
+  let prompt = promptFn(basePrompt);
+  if (salt > 0 && prompt === basePrompt) {
+    prompt = salt === 1 ? `Fill the gap: ${basePrompt}` : `Missing gloss piece: ${basePrompt}`;
   }
   return {
     type: "blank",
-    prompt,
+    prompt: clarifyPrompt({ ...exercise, prompt }),
     before: exercise.before,
     after: exercise.after,
     options,
@@ -223,13 +235,14 @@ function rewriteBank(exercise, salt, pool) {
     if (!tiles.includes(tile)) tiles.push(tile);
   }
   const promptFn = BANK_PROMPT_ALTS[salt] || BANK_PROMPT_ALTS[1];
-  let prompt = promptFn(exercise.prompt);
-  if (salt > 0 && prompt === exercise.prompt) {
-    prompt = salt === 1 ? `Order the signs: ${exercise.prompt}` : `Sign order: ${exercise.prompt}`;
+  const basePrompt = clarifyPrompt(exercise);
+  let prompt = promptFn(basePrompt);
+  if (salt > 0 && prompt === basePrompt) {
+    prompt = salt === 1 ? `Build the gloss in order: ${basePrompt}` : `Put the signs in gloss order: ${basePrompt}`;
   }
   return {
     type: "bank",
-    prompt,
+    prompt: clarifyPrompt({ ...exercise, prompt }),
     tiles,
     answer,
     explain: exercise.explain,
@@ -262,14 +275,15 @@ function rewriteMatch(exercise, salt, allPairs) {
 }
 
 function rewriteTyped(exercise, salt) {
+  const basePrompt = clarifyPrompt(exercise);
   const prompts = [
-    exercise.prompt,
-    exercise.prompt.replace(/^Type /i, "Enter "),
-    exercise.prompt.replace(/^Type /i, "Write "),
+    basePrompt,
+    basePrompt.replace(/^Type /i, "Enter "),
+    basePrompt.replace(/^Type /i, "Write "),
   ];
   return {
     type: "type",
-    prompt: prompts[salt] || prompts[0],
+    prompt: clarifyPrompt({ ...exercise, prompt: prompts[salt] || prompts[0] }),
     drillId: exercise.drillId,
     model: exercise.model,
     explain: exercise.explain,
