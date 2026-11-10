@@ -190,7 +190,7 @@ export function Record() {
       ) : null}
 
       <div className="mt-6 flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center gap-1 text-[12px] font-medium text-secondary">
+        <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-ink">
           <Icon as={FilterIcon} size="xs" />
           Filters
         </span>
@@ -326,18 +326,23 @@ function Stat({ label, value }) {
 
 function Filter({ value, onChange, options }) {
   return (
-    <div className="flex flex-wrap gap-1 rounded-full bg-surface p-1 shadow-soft">
-      {options.map(([id, label]) => (
-        <button
-          key={id}
-          type="button"
-          aria-pressed={value === id}
-          onClick={() => onChange(id)}
-          className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${value === id ? "bg-ink text-white" : "text-secondary"}`}
-        >
-          {label}
-        </button>
-      ))}
+    <div className="flex flex-wrap gap-1 rounded-full border border-line bg-surface p-1 shadow-soft">
+      {options.map(([id, label]) => {
+        const on = value === id;
+        return (
+          <button
+            key={id}
+            type="button"
+            aria-pressed={on}
+            onClick={() => onChange(id)}
+            className={`rounded-full px-3 py-1.5 text-[13px] font-semibold ${
+              on ? "bg-ink text-white" : "border border-transparent text-ink hover:bg-muted"
+            }`}
+          >
+            {label}
+          </button>
+        );
+      })}
     </div>
   );
 }

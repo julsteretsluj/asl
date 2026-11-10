@@ -10,7 +10,7 @@
   --color-cream: #fdfff6;
   --color-surface: #ffffff;
   --color-ink: #0a0a0a;
-  --color-secondary: #5c5c5c;
+  --color-secondary: #6e6e73;
   --color-line: #e9e8ea;
   --color-blue: #0b66d1;
   --color-blue-hover: #0957b3;
@@ -38,7 +38,7 @@ html.dark {
   --color-cream: #2a2926;
   --color-surface: #2c2b28;
   --color-ink: #f4f1ea;
-  --color-secondary: #a8a49c;
+  --color-secondary: #c7c2b8;
   --color-line: #3f3e3a;
   --color-blue: #5aadff;
   --color-blue-hover: #7abcff;

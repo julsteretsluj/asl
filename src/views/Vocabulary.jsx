@@ -146,8 +146,10 @@ export function Vocabulary() {
                 type="button"
                 aria-pressed={category === item}
                 onClick={() => chooseCategory(item)}
-                className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${
-                  category === item ? "bg-ink text-white" : "bg-muted text-ink"
+                className={`rounded-full border px-3 py-1.5 text-[13px] font-semibold ${
+                  category === item
+                    ? "border-ink bg-ink text-white"
+                    : "border-line bg-surface text-ink hover:bg-muted"
                 }`}
               >
                 {item}
