@@ -2255,7 +2255,7 @@ export const EMBED_BY_GLOSS = {
   },
   "DON'T-KNOW": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/don't.mp4",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/dont-know.mp4",
     "source": "SignASL"
   },
   "DOUBT": {
