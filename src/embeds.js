@@ -379,9 +379,9 @@ export const EMBED_BY_GLOSS = {
     "source": "Lifeprint / ASL University"
   },
   "SORRY": {
-    "provider": "file",
-    "src": "https://projects.lib.rochester.edu/lsf-asl/wp-content/uploads/sorry.m4v",
-    "source": "Rochester LSF–ASL project"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/sorry.mp4",
+    "source": "SignASL"
   },
   "GRANDMOTHER": {
     "provider": "file",
