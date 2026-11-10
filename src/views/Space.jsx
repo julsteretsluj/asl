@@ -55,9 +55,7 @@ export function Space() {
                       type="button"
                       aria-pressed={loci[slot] === name}
                       onClick={() => setLoci((current) => ({ ...current, [slot]: current[slot] === name ? "" : name }))}
-                      className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${
-                        loci[slot] === name ? "bg-ink text-white" : "bg-muted text-ink"
-                      }`}
+                      className={`ss-chip ${loci[slot] === name ? "ss-chip-on" : "ss-chip-off"}`}
                     >
                       {name}
                     </button>
@@ -74,9 +72,7 @@ export function Space() {
                 type="button"
                 aria-pressed={verb === item.id}
                 onClick={() => setVerb(item.id)}
-                className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${
-                  verb === item.id ? "bg-ink text-white" : "bg-muted text-ink"
-                }`}
+                className={`ss-chip ${verb === item.id ? "ss-chip-on" : "ss-chip-off"}`}
               >
                 {item.label}
               </button>
@@ -102,8 +98,8 @@ export function Space() {
               type="button"
               aria-pressed={direction === "toward-me"}
               onClick={() => setDirection("toward-me")}
-              className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${
-                direction === "toward-me" ? "bg-ink text-white" : "bg-muted"
+              className={`ss-chip px-4 py-2 text-[14px] font-medium ${
+                direction === "toward-me" ? "ss-chip-on" : "ss-chip-off"
               }`}
             >
               Toward me
@@ -112,8 +108,8 @@ export function Space() {
               type="button"
               aria-pressed={direction === "toward-them"}
               onClick={() => setDirection("toward-them")}
-              className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${
-                direction === "toward-them" ? "bg-ink text-white" : "bg-muted"
+              className={`ss-chip px-4 py-2 text-[14px] font-medium ${
+                direction === "toward-them" ? "ss-chip-on" : "ss-chip-off"
               }`}
             >
               Toward them

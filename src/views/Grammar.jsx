@@ -32,8 +32,8 @@ export function Grammar() {
             type="button"
             aria-pressed={item.id === drill.id}
             onClick={() => setDrillId(item.id)}
-            className={`rounded-full px-3 py-1.5 text-[13px] font-medium ${
-              item.id === drill.id ? "bg-ink text-white" : "bg-surface text-ink shadow-soft"
+            className={`ss-chip shadow-soft ${
+              item.id === drill.id ? "ss-chip-on" : "ss-chip-off"
             }`}
           >
             {item.title}
@@ -94,8 +94,8 @@ function SentenceStage({ drill }) {
                 setPlaying(false);
                 setStep(index);
               }}
-              className={`rounded-xl px-3 py-2 text-[14px] font-medium tracking-[0.04em] ${
-                index === step ? "bg-ink text-white" : "bg-muted text-ink"
+              className={`ss-chip rounded-xl px-3 py-2 text-[14px] font-medium tracking-[0.04em] ${
+                index === step ? "ss-chip-on" : "ss-chip-off"
               }`}
             >
               {item.gloss}

@@ -102,7 +102,7 @@ export function Basics() {
                 }}
                 className={`h-11 rounded-xl px-1 font-medium whitespace-nowrap ${
                   item.letter.length > 8 ? "col-span-3 text-[13px]" : item.letter.length > 1 ? "col-span-2 text-[13px]" : "text-[15px]"
-                } ${item.letter === letter ? "bg-ink text-white" : "bg-muted text-ink hover:bg-line"}`}
+                } ${item.letter === letter ? "ss-chip-on" : "ss-chip-off"} ss-chip`}
               >
                 {item.letter}
               </button>

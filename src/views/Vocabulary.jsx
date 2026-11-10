@@ -146,11 +146,7 @@ export function Vocabulary() {
                 type="button"
                 aria-pressed={category === item}
                 onClick={() => chooseCategory(item)}
-                className={`rounded-full border px-3 py-1.5 text-[13px] font-semibold ${
-                  category === item
-                    ? "border-ink bg-ink text-white"
-                    : "border-line bg-surface text-ink hover:bg-muted"
-                }`}
+                className={`ss-chip ${category === item ? "ss-chip-on" : "ss-chip-off"}`}
               >
                 {item}
               </button>

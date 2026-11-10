@@ -189,19 +189,32 @@ export function Record() {
         </section>
       ) : null}
 
-      <div className="mt-6 flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-ink">
-          <Icon as={FilterIcon} size="xs" />
+      <section className="ss-filter-bar mt-6 space-y-3 rounded-2xl p-4" aria-label="Record filters">
+        <p className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-ink">
+          <Icon as={FilterIcon} size="sm" />
           Filters
-        </span>
-        <Filter value={kind} onChange={setKind} options={[["all", "Everything"], ["word", "Signs"], ["concept", "Ideas"]]} />
-        <Filter value={level} onChange={setLevel} options={[["all", "Any stage"], ["mastered", "Mastered"], ["practicing", "Practicing"]]} />
-        <Filter
-          value={comfort}
-          onChange={setComfortFilter}
-          options={[["all", "Any comfort"], ...COMFORT_LEVELS.map((entry) => [entry.id, entry.label])]}
-        />
-      </div>
+        </p>
+        <div className="flex flex-col gap-3">
+          <Filter
+            label="Kind"
+            value={kind}
+            onChange={setKind}
+            options={[["all", "Everything"], ["word", "Signs"], ["concept", "Ideas"]]}
+          />
+          <Filter
+            label="Stage"
+            value={level}
+            onChange={setLevel}
+            options={[["all", "Any stage"], ["mastered", "Mastered"], ["practicing", "Practicing"]]}
+          />
+          <Filter
+            label="Comfort"
+            value={comfort}
+            onChange={setComfortFilter}
+            options={[["all", "Any comfort"], ...COMFORT_LEVELS.map((entry) => [entry.id, entry.label])]}
+          />
+        </div>
+      </section>
 
       {empty ? (
         <div className="mt-8 space-y-4">
@@ -324,25 +337,26 @@ function Stat({ label, value }) {
   );
 }
 
-function Filter({ value, onChange, options }) {
+function Filter({ label, value, onChange, options }) {
   return (
-    <div className="flex flex-wrap gap-1 rounded-full border border-line bg-surface p-1 shadow-soft">
-      {options.map(([id, label]) => {
-        const on = value === id;
-        return (
-          <button
-            key={id}
-            type="button"
-            aria-pressed={on}
-            onClick={() => onChange(id)}
-            className={`rounded-full px-3 py-1.5 text-[13px] font-semibold ${
-              on ? "bg-ink text-white" : "border border-transparent text-ink hover:bg-muted"
-            }`}
-          >
-            {label}
-          </button>
-        );
-      })}
+    <div>
+      {label ? <p className="mb-1.5 text-[12px] font-semibold uppercase tracking-[0.04em] text-ink">{label}</p> : null}
+      <div className="flex flex-wrap gap-1.5" role="group" aria-label={label || "Filter"}>
+        {options.map(([id, optionLabel]) => {
+          const on = value === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              aria-pressed={on}
+              onClick={() => onChange(id)}
+              className={`ss-chip ${on ? "ss-chip-on" : "ss-chip-off"}`}
+            >
+              {optionLabel}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

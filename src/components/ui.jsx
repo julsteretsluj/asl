@@ -100,7 +100,7 @@ export function ComfortControl({ value = "", onChange, label }) {
         event.preventDefault();
         move(event.key === "ArrowRight" ? 1 : -1);
       }}
-      className="inline-flex max-w-full flex-wrap gap-1 rounded-full border border-line bg-surface p-1"
+      className="inline-flex max-w-full flex-wrap gap-1.5"
     >
       {COMFORT_LEVELS.map((level, index) => {
         const selected = value === level.id;
@@ -112,9 +112,7 @@ export function ComfortControl({ value = "", onChange, label }) {
             aria-checked={selected}
             tabIndex={selected || (!value && index === 0) ? 0 : -1}
             onClick={() => onChange(selected ? "" : level.id)}
-            className={`rounded-full px-2.5 py-1.5 text-left text-[12px] font-semibold leading-5 ${
-              selected ? "bg-blue text-white" : "text-ink hover:bg-muted"
-            }`}
+            className={`ss-chip text-left ${selected ? "ss-chip-on" : "ss-chip-off"}`}
           >
             {level.label}
           </button>

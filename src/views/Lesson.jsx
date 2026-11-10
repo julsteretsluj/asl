@@ -530,7 +530,11 @@ function Blank({ exercise, attempt, setAttempt, revealed, correctId }) {
               disabled={revealed}
               onClick={() => setAttempt(option)}
               className={`rounded-full px-4 py-2 text-[15px] font-medium ${
-                showRight ? "bg-success text-white" : selected ? "bg-ink text-white" : "bg-surface text-ink shadow-soft"
+                showRight
+                  ? "bg-success text-surface"
+                  : selected
+                    ? "ss-chip ss-chip-on"
+                    : "bg-surface text-ink shadow-soft"
               }`}
             >
               {option}

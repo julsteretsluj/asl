@@ -338,8 +338,8 @@ function AccessDrawer() {
                   role="radio"
                   aria-checked={access.speed === speed}
                   onClick={() => patch({ speed })}
-                  className={`rounded-full px-4 py-2 text-[14px] font-medium ${
-                    access.speed === speed ? "bg-blue text-white" : "bg-muted text-ink"
+                  className={`ss-chip px-4 py-2 text-[14px] font-medium ${
+                    access.speed === speed ? "ss-chip-on" : "ss-chip-off"
                   }`}
                 >
                   {speed === 1 ? "1×" : `${speed}×`}

@@ -77,8 +77,8 @@ function SpeedRow() {
           type="button"
           aria-pressed={access.speed === speed}
           onClick={() => patch({ speed })}
-          className={`min-h-11 rounded-full px-4 text-base font-medium ${
-            access.speed === speed ? "bg-ink text-white" : "bg-muted text-ink"
+          className={`ss-chip min-h-11 px-4 text-base font-medium ${
+            access.speed === speed ? "ss-chip-on" : "ss-chip-off"
           }`}
         >
           {speed === 1 ? "1×" : `${speed}×`}
