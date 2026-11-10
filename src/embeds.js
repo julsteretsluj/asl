@@ -4,7 +4,7 @@
  * Do not invent ids. Blocked YouTube id PTZ4GpSTLkM stays blocked in video.js.
  */
 
-import { normalizeEmbed } from "./video.js";
+import { normalizeEmbed, preferReliableEmbed } from "./video.js";
 
 /** @type {Record<string, { provider: string, id?: string, src?: string, source?: string }>} */
 export const EMBED_BY_GLOSS = {
@@ -957,10 +957,10 @@ export function resolveEmbed(gloss) {
 export function applyEmbeds(list) {
   return list.map((sign) => {
     const fromMap = resolveEmbed(sign.gloss) || normalizeEmbed(EMBED_BY_GLOSS[sign.gloss]);
-    const existing =
-      normalizeEmbed(sign.video) ||
-      normalizeEmbed(sign.youtubeId ? { provider: "youtube", id: sign.youtubeId } : null);
-    const video = existing || fromMap;
+    const fromField = normalizeEmbed(sign.video);
+    const fromYoutube = normalizeEmbed(sign.youtubeId ? { provider: "youtube", id: sign.youtubeId } : null);
+    // Prefer SignASL / direct files over YouTube so filmed models play when YouTube iframes stall.
+    const video = preferReliableEmbed(fromField, fromMap, fromYoutube);
     if (!video) return sign;
     const next = { ...sign, video };
     if (video.provider === "youtube" && video.id && !next.youtubeId) next.youtubeId = video.id;

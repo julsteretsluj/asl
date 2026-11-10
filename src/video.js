@@ -163,13 +163,21 @@ function candidatesFromSign(sign) {
   return list;
 }
 
+/** Prefer direct MP4 / SignASL over YouTube — YouTube iframes often time out. */
+export function preferReliableEmbed(...embeds) {
+  const list = embeds.map((item) => normalizeEmbed(item)).filter(Boolean);
+  if (!list.length) return null;
+  const direct = list.find((item) => item.provider === "file" || item.provider === "signasl");
+  if (direct) return direct;
+  const vimeo = list.find((item) => item.provider === "vimeo");
+  if (vimeo) return vimeo;
+  return list[0];
+}
+
 /** Pick the first usable embed for a dictionary / topic sign. */
 export function resolveSignVideo(sign) {
-  for (const candidate of candidatesFromSign(sign)) {
-    const embed = normalizeEmbed(candidate);
-    if (embed) return embed;
-  }
-  return null;
+  const fromSign = candidatesFromSign(sign).map((candidate) => normalizeEmbed(candidate)).filter(Boolean);
+  return preferReliableEmbed(...fromSign);
 }
 
 /** Lesson films are YouTube ids today; still accept a full video object. */

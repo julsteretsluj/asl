@@ -8,7 +8,8 @@ import {
   modelKey,
   readModel,
 } from "../models.js";
-import { resolveSignVideo } from "../video.js";
+import { resolveEmbed } from "../embeds.js";
+import { preferReliableEmbed, resolveSignVideo } from "../video.js";
 import { MediaEditor } from "./MediaEditor.jsx";
 import { SignCitation, SignModelCompare } from "./Player.jsx";
 import { Camera, Icon, Upload, Video } from "./icons.jsx";
@@ -104,7 +105,9 @@ export function SignModelCapture({ sign, compact = false, snapshot = false, onSa
   const requestRef = useRef(0);
   const signKey = sign ? modelKey(sign) : "";
   const hasUserModel = Boolean(model?.image || model?.video);
-  const hasEmbed = Boolean(sign && resolveSignVideo(sign));
+  const hasEmbed = Boolean(
+    sign && preferReliableEmbed(resolveSignVideo(sign), resolveEmbed(sign.gloss)),
+  );
   const busy = Boolean(editor || cameraMode);
 
   function releaseCamera() {
