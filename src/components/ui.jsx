@@ -22,7 +22,7 @@ export function HeartGlyphs({ count, max = MAX_HEARTS, className = "", size = 15
 }
 
 /**
- * Quiet dashed slot for planned AI art — or the real image when `src` is set (slots 1–23).
+ * Quiet dashed slot for planned AI art — or the real image when `src` is set.
  * Prefer `id` from the global sequence in graphics.js (numbers 1..N).
  * Legacy: pass `n` + `label` (+ optional `ratio`) if a registry entry is not ready.
  */

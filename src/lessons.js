@@ -20,24 +20,25 @@ function choice(prompt, options, answer, explain, extra = {}) {
   };
 }
 
-function blank(prompt, before, after, options, answer, explain) {
-  return { type: "blank", prompt, before, after, options, answer, explain };
+function blank(prompt, before, after, options, answer, explain, extra = {}) {
+  return { type: "blank", prompt, before, after, options, answer, explain, ...extra };
 }
 
-function bank(prompt, tiles, answer, explain) {
-  return { type: "bank", prompt, tiles, answer, explain };
+function bank(prompt, tiles, answer, explain, extra = {}) {
+  return { type: "bank", prompt, tiles, answer, explain, ...extra };
 }
 
-function typed(prompt, drillId, model, explain) {
-  return { type: "type", prompt, drillId, model, explain };
+function typed(prompt, drillId, model, explain, extra = {}) {
+  return { type: "type", prompt, drillId, model, explain, ...extra };
 }
 
-function match(prompt, pairs) {
+function match(prompt, pairs, extra = {}) {
   return {
     type: "match",
     prompt,
     pairs: pairs.map(([a, b], index) => ({ id: String(index), a, b })),
     explain: "Each English idea has one gloss.",
+    ...extra,
   };
 }
 
@@ -237,7 +238,12 @@ export const UNITS = [
           choice("V, next to U, opens…", ["A gap between the two fingers", "The thumb across the fist", "A pinky path"], "A gap between the two fingers", "U keeps index and middle together. V separates them.", {"letter":"V"}),
           choice("Before the pinky traces a J, the handshape is…", ["I", "U", "S"], "I", "J keeps the I hand. The path is the letter.", {"letter":"I"}),
           blank("Fingerspell Sam.", "", "", ["S-A-M", "SAM", "S-A-M-M"], "S-A-M", "One hyphen between each letter."),
-          bank("Tap the fist with the thumb at the side, then the two fingers that stay together.", ["A", "U", "S", "J"], ["A", "U"], "A keeps the thumb beside the index. U holds two fingers together."),
+          bank(
+            "Build a two-letter sequence. First the fist with the thumb at the side. Next the two fingers held together.",
+            ["A", "U", "S", "J"],
+            ["A", "U"],
+            "A keeps the thumb beside the index. U holds two fingers together.",
+          ),
           match("Match the pairs.", [
             ["Thumb at the side", "A"],
             ["Thumb across the fingers", "S"],
@@ -259,29 +265,36 @@ export const UNITS = [
         title: "Greetings",
         tip: "A greeting can be one sign even when English uses two words. HOW YOU is a yes/no question.",
         exercises: [
-          match("Tap the matching pairs.", [
-            ["Hello", "HELLO"],
-            ["Thank you", "THANK-YOU"],
-            ["Please", "PLEASE"],
-            ["Sorry", "SORRY"],
-          ]),
+          match(
+            "Tap the matching pairs.",
+            [
+              ["Hello", "HELLO"],
+              ["Thank you", "THANK-YOU"],
+              ["Please", "PLEASE"],
+              ["Sorry", "SORRY"],
+            ],
+            { modelGloss: "HELLO", modelTerm: "Hello" },
+          ),
           choice(
             "“How are you?” glosses as…",
             ["HOW YOU [q]", "HOW ARE YOU", "YOU HOW?"],
             "HOW YOU [q]",
             "Raised eyebrows, or the manual tag QUESTION.",
+            { modelGloss: "HOW YOU [q]", modelTerm: "How are you?" },
           ),
           choice(
             "“I am fine” glosses as…",
             ["I FINE", "I AM FINE", "FINE YOU"],
             "I FINE",
             "The copula drops.",
+            { modelGloss: "I FINE", modelTerm: "I'm fine" },
           ),
           choice(
             "THANK-YOU is…",
             ["One sign", "Two signs", "Fingerspelling"],
             "One sign",
             "The flat hand moves forward from the chin.",
+            { modelGloss: "THANK-YOU", modelTerm: "Thank you" },
           ),
           choice(
             "NICE MEET YOU leaves out…",
@@ -290,16 +303,20 @@ export const UNITS = [
             "The English to is not a separate sign in this phrase.",
           ),
         
-          choice("PLEASE in this set is…", ["One sign", "Two signs", "Fingerspelling"], "One sign", "A greeting can be one sign."),
-          choice("“I am fine” leaves out…", ["am", "I", "FINE"], "am", "The copula drops. The gloss is I FINE."),
+          choice("PLEASE in this set is…", ["One sign", "Two signs", "Fingerspelling"], "One sign", "A greeting can be one sign.", { modelGloss: "PLEASE", modelTerm: "Please" }),
+          choice("“I am fine” leaves out…", ["am", "I", "FINE"], "am", "The copula drops. The gloss is I FINE.", { modelGloss: "I FINE", modelTerm: "I'm fine" }),
           blank("Mark the check-in.", "HOW YOU", "", ["[q]", "ARE", "FINE"], "[q]", "HOW YOU is a yes/no question."),
-          bank("Build “How are you?”", ["HOW", "YOU", "[q]", "ARE", "AM"], ["HOW", "YOU", "[q]"], "HOW YOU, then the raised-eyebrow marker. are drops."),
-          match("Match the pairs.", [
-            ["Hello", "HELLO"],
-            ["Please", "PLEASE"],
-            ["Sorry", "SORRY"],
-            ["I am fine", "I FINE"],
-          ]),
+          bank("Build “How are you?”", ["HOW", "YOU", "[q]", "ARE", "AM"], ["HOW", "YOU", "[q]"], "HOW YOU, then the raised-eyebrow marker. are drops.", { modelGloss: "HOW YOU [q]", modelTerm: "How are you?" }),
+          match(
+            "Match the pairs.",
+            [
+              ["Hello", "HELLO"],
+              ["Please", "PLEASE"],
+              ["Sorry", "SORRY"],
+              ["I am fine", "I FINE"],
+            ],
+            { modelGloss: "SORRY", modelTerm: "Sorry" },
+          ),
         ],
       },
       {
@@ -871,7 +888,10 @@ export function gradeAttempt(exercise, attempt) {
     };
   }
   if (exercise.type === "bank") {
-    const guess = Array.isArray(attempt) ? attempt.join(" ") : "";
+    const labels = Array.isArray(attempt)
+      ? attempt.map((tile) => (typeof tile === "string" ? tile : tile?.label)).filter(Boolean)
+      : [];
+    const guess = labels.join(" ");
     const correct = exercise.answer.join(" ");
     return {
       ok: canonical(guess) === canonical(correct),

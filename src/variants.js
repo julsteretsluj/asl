@@ -143,6 +143,13 @@ function choiceOptions(labels) {
   return labels.map((label) => ({ id: label, label }));
 }
 
+function keepModelFields(exercise) {
+  const next = {};
+  if (typeof exercise.modelGloss === "string" && exercise.modelGloss) next.modelGloss = exercise.modelGloss;
+  if (typeof exercise.modelTerm === "string" && exercise.modelTerm) next.modelTerm = exercise.modelTerm;
+  return next;
+}
+
 function rewriteChoice(exercise, salt, pool) {
   const answer = exercise.answer;
   const current = optionLabels(exercise);
@@ -172,6 +179,7 @@ function rewriteChoice(exercise, salt, pool) {
     answer,
     explain: exercise.explain,
     ...(exercise.letter ? { letter: exercise.letter } : {}),
+    ...keepModelFields(exercise),
   };
 }
 
@@ -197,6 +205,7 @@ function rewriteBlank(exercise, salt, pool) {
     options,
     answer,
     explain: exercise.explain,
+    ...keepModelFields(exercise),
   };
 }
 
@@ -224,6 +233,7 @@ function rewriteBank(exercise, salt, pool) {
     tiles,
     answer,
     explain: exercise.explain,
+    ...keepModelFields(exercise),
   };
 }
 
@@ -247,6 +257,7 @@ function rewriteMatch(exercise, salt, allPairs) {
     prompt: MATCH_PROMPTS[salt] || MATCH_PROMPTS[0],
     pairs: pairs.map(([a, b], index) => ({ id: String(index), a, b })),
     explain: exercise.explain || "Each English idea has one gloss.",
+    ...keepModelFields(exercise),
   };
 }
 
@@ -262,6 +273,7 @@ function rewriteTyped(exercise, salt) {
     drillId: exercise.drillId,
     model: exercise.model,
     explain: exercise.explain,
+    ...keepModelFields(exercise),
   };
 }
 

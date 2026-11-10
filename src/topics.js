@@ -17,30 +17,32 @@ function sign(term, gloss, category, face, manual, params, page, film) {
   return row;
 }
 
-function choice(prompt, options, answer, explain) {
+function choice(prompt, options, answer, explain, extra = {}) {
   return {
     type: "choice",
     prompt,
     options: options.map((label) => ({ id: label, label })),
     answer,
     explain,
+    ...extra,
   };
 }
 
-function blank(prompt, before, after, options, answer, explain) {
-  return { type: "blank", prompt, before, after, options, answer, explain };
+function blank(prompt, before, after, options, answer, explain, extra = {}) {
+  return { type: "blank", prompt, before, after, options, answer, explain, ...extra };
 }
 
-function bank(prompt, tiles, answer, explain) {
-  return { type: "bank", prompt, tiles, answer, explain };
+function bank(prompt, tiles, answer, explain, extra = {}) {
+  return { type: "bank", prompt, tiles, answer, explain, ...extra };
 }
 
-function match(prompt, pairs) {
+function match(prompt, pairs, extra = {}) {
   return {
     type: "match",
     prompt,
     pairs: pairs.map(([a, b], index) => ({ id: String(index), a, b })),
     explain: "Each English idea has one gloss.",
+    ...extra,
   };
 }
 
@@ -96,6 +98,7 @@ export const TOPIC_VOCAB = applyEmbeds([
   sign("Parents", "PARENTS", "Family", "None required.", "The thumb taps the forehead, then the chin.", "5-hand moves from the forehead to the chin.", "p/parents.htm", "jlqHVbCS4H0"),
   sign("Brother", "BROTHER", "Family", "None required.", "Touch the forehead, then bring the two index fingers together for SAME.", "A compound: the male place, then SAME.", "b/brother.htm", "G0fzmn3pQng"),
   sign("Sister", "SISTER", "Family", "None required.", "Touch the chin, then bring the two index fingers together.", "A compound: the female place, then SAME.", "s/sister.htm", "0z2_gcB5OJ8"),
+  sign("Same", "SAME", "Family", "None required.", "Two index fingers come together side by side.", "1-hands meet, tips pointing forward.", "s/same.htm"),
   sign("Grandmother", "GRANDMOTHER", "Family", "None required.", "Thumb on the chin, then two arcs forward.", "MOTHER’s hand, with two forward arcs.", "g/grandmother.htm"),
   sign("Grandfather", "GRANDFATHER", "Family", "None required.", "Thumb on the forehead, then two arcs forward.", "FATHER’s hand, with two forward arcs.", "g/grandfather.htm"),
   sign("Baby", "BABY", "Family", "None required.", "Fold the arms and rock them.", "Both arms cradle and rock.", "b/baby.htm", "UdYuyDhyzfI"),
@@ -122,6 +125,8 @@ export const TOPIC_VOCAB = applyEmbeds([
   sign("Gray", "GRAY", "Colors", "None required.", "Open hands pass through each other.", "Two 5-hands, fingers passing through in front of the chest.", "g/gray.htm"),
 
   sign("Apple", "APPLE", "Food", "None required.", "Twist the knuckle of a bent index finger on the cheek.", "X-hand twists on the cheek.", "a/apple.htm", "3wIiujOP6Ag"),
+  sign("Onion", "ONION", "Food", "None required.", "Twist an X hand at the corner of the eye, where tears start.", "X-hand twists at the eye corner.", "o/onion.htm"),
+  sign("Candy", "CANDY", "Food", "None required.", "Twist the tip of a straight index finger on the cheek.", "1-hand tip twists on the cheek.", "c/candy.htm"),
   sign("Banana", "BANANA", "Food", "None required.", "Mime peeling. One index finger pulls down from the other.", "The dominant index peels away from the non-dominant index.", "b/banana.htm", "rdIxbPqmlOQ"),
   sign("Orange (fruit)", "ORANGE", "Food", "None required.", "The squeeze at the mouth is the fruit and the color.", "Same squeeze as the color ORANGE.", "o/orange.htm", "SDnFN2Bsc-w"),
   sign("Grape", "GRAPE", "Food", "None required.", "A claw hand hops down the back of the other hand.", "Claw hand, short hops down the back of the hand.", "g/grape.htm"),
@@ -159,6 +164,16 @@ export const TOPIC_VOCAB = applyEmbeds([
   sign("Library", "LIBRARY", "School", "None required.", "An L hand circles.", "L-hand, a small circle.", "l/library.htm", "CSaOomMxWl4"),
   sign("College", "COLLEGE", "School", "None required.", "One palm claps upward onto the other palm.", "The dominant hand rises and lands on the non-dominant palm.", "c/college.htm", "G0IHRXJ8VVY"),
   sign("Desk", "DESK", "School", "None required.", "The forearm of one arm taps the forearm of the other, showing a surface.", "Forearms contact, like the top of a desk.", "d/desk.htm", "kmPYzPuPLWc"),
+  sign("Go", "GO", "School", "None required.", "Index fingers point forward and move out together.", "Two 1-hands move forward from near the body.", "g/go.htm"),
+  sign("Have", "HAVE", "School", "None required.", "Fingertips of both open hands tap the chest.", "Bent hands contact the chest.", "h/have.htm"),
+  sign("See", "SEE", "School", "None required.", "A V hand moves forward from under the eye.", "V-hand starts at the cheekbone and moves out.", "s/see.htm"),
+  sign("Give", "GIVE", "School", "None required. Aim the path from giver to receiver.", "Flat-O hands move along the path from one person to another.", "Flat-O or open hands travel from start locus to end locus.", "g/give.htm"),
+  sign("Help", "HELP", "School", "None required. Aim the path from helper to the person helped.", "A fist on an open palm rises and moves along a path.", "A-hand on the non-dominant palm; the whole stack moves.", "h/help.htm"),
+  sign("Not", "NOT", "School", "A headshake often travels with NOT.", "A thumb under the chin flicks forward.", "A-hand, thumb under the chin, flicks out.", "n/not.htm"),
+  sign("In", "IN", "School", "None required.", "Fingertips of one hand tuck into the other cupped hand.", "Dominant fingertips enter the non-dominant C or O.", "i/in.htm"),
+  sign("Party", "PARTY", "School", "None required.", "Both P hands swing side to side.", "P-hands swing at the wrists.", "p/party.htm"),
+  sign("Safe", "SAFE", "School", "None required.", "Crossed S hands at the wrists pull apart and open.", "S-hands uncross and open.", "s/safe.htm"),
+  sign("Bus", "BUS", "School", "None required.", "Follow the citation film for the form you use in class.", "Handshape and path per the film.", "b/bus.htm"),
 
   sign("Work", "WORK", "Jobs", "None required.", "Tap one wrist on the other, twice.", "Two S-hands. The dominant wrist taps the other wrist.", "w/work.htm", "mJrUYRjvrew"),
   sign("Doctor", "DOCTOR", "Jobs", "None required.", "An M or D hand taps the pulse.", "Letter hand taps the opposite wrist.", "d/doctor.htm", "IEVgcJA3JWk"),
@@ -175,11 +190,14 @@ export const TOPIC_VOCAB = applyEmbeds([
   sign("Room", "ROOM", "Home", "None required.", "Both flat hands show the walls of a box.", "Palms in, hands depict the sides of a room.", "r/room.htm", "ByET2PW3OrQ"),
   sign("Bed", "BED", "Home", "None required.", "Tilt the head onto the palm.", "Cheek rests on the open hand.", "b/bed.htm", "12eeoE4uG_k"),
   sign("Door", "DOOR", "Home", "None required.", "Two B hands stand together. One swings open.", "B-hands. The dominant hand hinges out.", "d/door.htm", "Knbs0MwdQvg"),
+  sign("Open", "OPEN", "Home", "None required.", "Two flat hands start together and swing open.", "B-hands hinge apart, like opening.", "o/open.htm"),
+  sign("Cup", "CUP", "Home", "None required.", "A C hand sits on the opposite palm, then can move like a cup.", "C-hand on the palm for the vessel.", "c/cup.htm"),
   sign("Window", "WINDOW", "Home", "None required.", "Two hands stack. The top one rises, like a sash.", "The upper hand moves up.", "w/window.htm"),
   sign("Kitchen", "KITCHEN", "Home", "None required.", "A K hand flips, palm up, like cooking.", "K-hand flips in place.", "k/kitchen.htm", "JC_rj5vboN0"),
   sign("Bathroom", "BATHROOM", "Home", "None required.", "A T hand shakes.", "T-hand, a small shake.", "b/bathroom.htm", "2xdhyJEgXdI"),
   sign("Table", "TABLE", "Home", "None required.", "Both arms pat down, showing the top.", "Forearms or flat hands pat a surface.", "t/table.htm"),
   sign("Chair", "CHAIR", "Home", "None required.", "Two fingers of one hand sit on two fingers of the other.", "A curved H hooks onto the other H.", "c/chair.htm", "xNrwgoCz9SU"),
+  sign("Sit", "SIT", "Home", "None required.", "Two fingers of one hand hook over two fingers of the other.", "Curved H sits on the non-dominant H.", "s/sit.htm"),
 
   sign("Shirt", "SHIRT", "Clothes", "None required.", "Pinch the fabric at the upper chest and tug.", "Thumb and index take the shirt.", "s/shirt.htm", "BLqzpaKkkk4"),
   sign("Pants", "PANTS", "Clothes", "None required.", "Both open hands slide up the thighs.", "Palms slide up the legs.", "p/pants.htm", "-V0Dkeyno2s"),
@@ -196,6 +214,7 @@ export const TOPIC_VOCAB = applyEmbeds([
   sign("Cow", "COW", "Animals", "None required.", "A Y hand at the temple twists out, the horn.", "Y-hand twists at the temple.", "c/cow.htm", "I2_nB2cXP58"),
 
   sign("Rain", "RAIN", "Weather", "None required.", "Claw hands wiggle as they drop.", "Bent 5-hands descend, fingers fluttering.", "r/rain.htm", "utTSQeTEDxk"),
+  sign("Summer", "SUMMER", "Weather", "None required.", "An index finger wipes across the forehead, then can flick out.", "1-hand wipes the forehead.", "s/summer.htm"),
   sign("Sun", "SUN", "Weather", "None required.", "The index finger draws a small circle beside the head.", "1-hand circles at the side of the head.", "s/sun.htm", "fnYd3XHdEPI"),
   sign("Snow", "SNOW", "Weather", "None required.", "Open fingers wiggle as the hands descend.", "5-hands flutter downward, palms down.", "s/snow.htm", "glF8fDZPiOc"),
   sign("Wind", "WIND", "Weather", "None required.", "Open hands sweep from side to side.", "Both hands wave sideways.", "w/wind.htm", "RA04zvXojYA"),
@@ -213,27 +232,35 @@ export const TOPIC_UNITS = [
       "Parents",
       "FATHER taps the forehead. MOTHER taps the chin. BROTHER and SISTER add SAME, the two index fingers coming together.",
       [
-        match("Tap the matching pairs.", [
-          ["Mother", "MOTHER"],
-          ["Father", "FATHER"],
-          ["Brother", "BROTHER"],
-          ["Sister", "SISTER"],
-        ]),
-        choice("FATHER is signed at the…", ["Forehead", "Chin", "Chest"], "Forehead", "The thumb of a 5-hand taps the forehead."),
-        choice("MOTHER is signed at the…", ["Chin", "Forehead", "Shoulder"], "Chin", "Same hand as FATHER. The place changes."),
-        choice("BROTHER adds which sign after the forehead?", ["SAME", "BABY", "COLOR"], "SAME", "The two index fingers come together."),
-        choice("SISTER starts at the…", ["Chin", "Forehead", "Ear"], "Chin", "Female place, then SAME."),
+        match(
+          "Tap the matching pairs.",
+          [
+            ["Mother", "MOTHER"],
+            ["Father", "FATHER"],
+            ["Brother", "BROTHER"],
+            ["Sister", "SISTER"],
+          ],
+          { modelGloss: "MOTHER", modelTerm: "Mother" },
+        ),
+        choice("FATHER is signed at the…", ["Forehead", "Chin", "Chest"], "Forehead", "The thumb of a 5-hand taps the forehead.", { modelGloss: "FATHER", modelTerm: "Father" }),
+        choice("MOTHER is signed at the…", ["Chin", "Forehead", "Shoulder"], "Chin", "Same hand as FATHER. The place changes.", { modelGloss: "MOTHER", modelTerm: "Mother" }),
+        choice("BROTHER adds which sign after the forehead?", ["SAME", "BABY", "COLOR"], "SAME", "The two index fingers come together.", { modelGloss: "BROTHER", modelTerm: "Brother" }),
+        choice("SISTER starts at the…", ["Chin", "Forehead", "Ear"], "Chin", "Female place, then SAME.", { modelGloss: "SISTER", modelTerm: "Sister" }),
       
-        choice("SAME, after the forehead, finishes…", ["BROTHER", "MOTHER", "SISTER"], "BROTHER", "BROTHER is the forehead, then the two index fingers together."),
-        choice("The chin, then SAME, is…", ["SISTER", "FATHER", "BROTHER"], "SISTER", "SISTER starts at the female place."),
-        blank("Gloss the forehead tap.", "", "", ["FATHER", "MOTHER", "SAME"], "FATHER", "The thumb taps the forehead."),
-        bank("Tap the chin sign, then the forehead sign.", ["MOTHER", "FATHER", "BROTHER", "SISTER", "SAME"], ["MOTHER", "FATHER"], "MOTHER is the chin. FATHER is the forehead."),
-        match("Match the pairs.", [
-          ["Chin", "MOTHER"],
-          ["Forehead", "FATHER"],
-          ["Forehead, then SAME", "BROTHER"],
-          ["Chin, then SAME", "SISTER"],
-        ]),
+        choice("SAME, after the forehead, finishes…", ["BROTHER", "MOTHER", "SISTER"], "BROTHER", "BROTHER is the forehead, then the two index fingers together.", { modelGloss: "BROTHER", modelTerm: "Brother" }),
+        choice("The chin, then SAME, is…", ["SISTER", "FATHER", "BROTHER"], "SISTER", "SISTER starts at the female place.", { modelGloss: "SISTER", modelTerm: "Sister" }),
+        blank("Gloss the forehead tap.", "", "", ["FATHER", "MOTHER", "SAME"], "FATHER", "The thumb taps the forehead.", { modelGloss: "FATHER", modelTerm: "Father" }),
+        bank("Tap the chin sign, then the forehead sign.", ["MOTHER", "FATHER", "BROTHER", "SISTER", "SAME"], ["MOTHER", "FATHER"], "MOTHER is the chin. FATHER is the forehead.", { modelGloss: "MOTHER", modelTerm: "Mother" }),
+        match(
+          "Match the pairs.",
+          [
+            ["Chin", "MOTHER"],
+            ["Forehead", "FATHER"],
+            ["Forehead, then SAME", "BROTHER"],
+            ["Chin, then SAME", "SISTER"],
+          ],
+          { modelGloss: "FATHER", modelTerm: "Father" },
+        ),
       ],
     ),
     lesson(
@@ -304,19 +331,23 @@ export const TOPIC_UNITS = [
       "Four colors",
       "RED brushes the lips. BLUE, GREEN, and YELLOW twist a letter hand.",
       [
-        match("Tap the matching pairs.", [
-          ["Red", "RED"],
-          ["Blue", "BLUE"],
-          ["Green", "GREEN"],
-          ["Yellow", "YELLOW"],
-        ]),
-        choice("RED uses…", ["An index finger on the lips", "A B hand twist", "A clap"], "An index finger on the lips", "The finger brushes down."),
-        choice("BLUE is…", ["A B hand twisting", "A brush down the cheek", "A roof"], "A B hand twisting", "The letter hand is the memory aid. The twist is the sign."),
-        choice("GREEN twists…", ["A G hand", "A Y hand", "An open 5"], "A G hand", "Same twist family as BLUE. The handshape changes."),
-        choice("YELLOW uses…", ["A Y hand", "A P hand on the lips", "Two fists"], "A Y hand", "Thumb and pinky out, then twist."),
+        match(
+          "Tap the matching pairs.",
+          [
+            ["Red", "RED"],
+            ["Blue", "BLUE"],
+            ["Green", "GREEN"],
+            ["Yellow", "YELLOW"],
+          ],
+          { modelGloss: "RED", modelTerm: "Red" },
+        ),
+        choice("RED uses…", ["An index finger on the lips", "A B hand twist", "A clap"], "An index finger on the lips", "The finger brushes down.", { modelGloss: "RED", modelTerm: "Red" }),
+        choice("BLUE is…", ["A B hand twisting", "A brush down the cheek", "A roof"], "A B hand twisting", "The letter hand is the memory aid. The twist is the sign.", { modelGloss: "BLUE", modelTerm: "Blue" }),
+        choice("GREEN twists…", ["A G hand", "A Y hand", "An open 5"], "A G hand", "Same twist family as BLUE. The handshape changes.", { modelGloss: "GREEN", modelTerm: "Green" }),
+        choice("YELLOW uses…", ["A Y hand", "A P hand on the lips", "Two fists"], "A Y hand", "Thumb and pinky out, then twist.", { modelGloss: "YELLOW", modelTerm: "Yellow" }),
       
-        choice("RED, BLUE, GREEN, and YELLOW. Which one brushes the lips?", ["RED", "BLUE", "GREEN"], "RED", "The index finger brushes down the lips. The others twist a letter hand."),
-        choice("BLUE and GREEN share a twist. GREEN changes the hand to…", ["A G hand", "A B hand", "A Y hand"], "A G hand", "Same twist family. The handshape is the letter."),
+        choice("RED, BLUE, GREEN, and YELLOW. Which one brushes the lips?", ["RED", "BLUE", "GREEN"], "RED", "The index finger brushes down the lips. The others twist a letter hand.", { modelGloss: "RED", modelTerm: "Red" }),
+        choice("BLUE and GREEN share a twist. GREEN changes the hand to…", ["A G hand", "A B hand", "A Y hand"], "A G hand", "Same twist family. The handshape is the letter.", { modelGloss: "GREEN", modelTerm: "Green" }),
         blank("Gloss the Y-hand twist.", "", "", ["YELLOW", "BLUE", "RED"], "YELLOW", "A Y hand twists at the wrist."),
         bank("Tap the lip brush, then the B-hand twist.", ["RED", "BLUE", "GREEN", "YELLOW"], ["RED", "BLUE"], "RED brushes the lips. BLUE twists a B hand."),
         match("Match the pairs.", [

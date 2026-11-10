@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useAccess } from "../access.jsx";
 import { HandDiagram } from "../components/Hand.jsx";
+import { SignCitation } from "../components/Player.jsx";
 import { ArrowRight, Check, Clock3, Icon, Settings2, Sparkles, X } from "../components/icons.jsx";
 import { BuyHeartsPacks } from "../components/BuyHearts.jsx";
+import { ModelPresence, SignModelCapture } from "../components/SignModelCapture.jsx";
 import { GraphicSlot, HeartGlyphs } from "../components/ui.jsx";
+import { signsForExercise } from "../lesson-model.js";
 import { exercisesForVariant, gradeAttempt, shuffleExercises } from "../lessons.js";
+import { modelKey } from "../models.js";
 import { HEART_RESTORE_MS, lessonVariantIndex, nextHeartLabel } from "../progress.js";
 import { useProgress } from "../progress-state.jsx";
 
@@ -28,22 +32,34 @@ function startDeck(lesson, variantIndex) {
   };
 }
 
+function openingPhase(exercise) {
+  return signsForExercise(exercise).length > 0 ? "watch" : "ask";
+}
+
 export function Lesson({ lesson, onExit }) {
   const { setOpen } = useAccess();
   const { progress, spendHeart, refreshHearts, recordExercise, finishLesson, rotateLessonVariant } = useProgress();
   // Bootstrap once on mount: pick persisted variant, then shuffle that list for this attempt only.
-  const [variantIndex, setVariantIndex] = useState(() => lessonVariantIndex(progress, lesson.id));
-  const [variantExercises, setVariantExercises] = useState(() => exercisesForVariant(lesson, lessonVariantIndex(progress, lesson.id)));
-  const [deck, setDeck] = useState(() => shuffleExercises(exercisesForVariant(lesson, lessonVariantIndex(progress, lesson.id))));
+  const boot = useMemo(() => {
+    const variantIndex0 = lessonVariantIndex(progress, lesson.id);
+    const variant0 = exercisesForVariant(lesson, variantIndex0);
+    const deck0 = shuffleExercises(variant0);
+    return { variantIndex0, variant0, deck0 };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount bootstrap only
+  }, []);
+  const [variantIndex, setVariantIndex] = useState(() => boot.variantIndex0);
+  const [variantExercises, setVariantExercises] = useState(() => boot.variant0);
+  const [deck, setDeck] = useState(() => boot.deck0);
   const [index, setIndex] = useState(0);
   const [results, setResults] = useState([]);
-  const [phase, setPhase] = useState("ask");
+  const [phase, setPhase] = useState(() => openingPhase(boot.deck0[0]));
   const [grade, setGrade] = useState(null);
   const [summary, setSummary] = useState(null);
   const [leaving, setLeaving] = useState(false);
   const [attempt, setAttempt] = useState(null);
   const hearts = progress.hearts;
   const exercise = deck[index];
+  const focusSigns = useMemo(() => signsForExercise(exercise), [exercise]);
   const ready = isReady(exercise, attempt);
   const busy = useRef(false);
   const checked = useRef(false);
@@ -63,7 +79,7 @@ export function Lesson({ lesson, onExit }) {
     setSummary(null);
     setAttempt(null);
     setGrade(null);
-    setPhase("ask");
+    setPhase(openingPhase(started.deck[0]));
     busy.current = false;
     checked.current = false;
     rotatedOnFail.current = false;
@@ -72,9 +88,11 @@ export function Lesson({ lesson, onExit }) {
   useEffect(() => {
     setAttempt(null);
     setGrade(null);
-    setPhase("ask");
+    setPhase(openingPhase(deck[index]));
     busy.current = false;
     checked.current = false;
+    // Only re-open watch/ask when the learner moves to another exercise.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
 
   useEffect(() => {
@@ -92,8 +110,10 @@ export function Lesson({ lesson, onExit }) {
     const onKey = (event) => {
       if (event.key !== "Enter" || event.repeat || leaving) return;
       if (event.target instanceof HTMLTextAreaElement || event.target instanceof HTMLButtonElement) return;
+      if (phase === "watch") setPhase("ask");
       if (phase === "ask" && ready) check();
-      if (phase === "feedback") advance();
+      if (phase === "feedback") continueAfterFeedback();
+      if (phase === "record") advance();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -118,6 +138,14 @@ export function Lesson({ lesson, onExit }) {
     setPhase("feedback");
   }
 
+  function continueAfterFeedback() {
+    if (focusSigns.length > 0) {
+      setPhase("record");
+      return;
+    }
+    advance();
+  }
+
   function advance() {
     if (busy.current) return;
     busy.current = true;
@@ -138,7 +166,6 @@ export function Lesson({ lesson, onExit }) {
     setResults(nextResults);
     setAttempt(null);
     setGrade(null);
-    setPhase("ask");
     setIndex((value) => value + 1);
   }
 
@@ -208,14 +235,22 @@ export function Lesson({ lesson, onExit }) {
       </header>
 
       <main id="content" className="mx-auto w-full max-w-[640px] flex-1 px-5 py-6 sm:px-6">
-        <Exercise
-          key={`${variantIndex}-${index}-${exercise?.prompt || index}`}
-          exercise={exercise}
-          attempt={attempt}
-          setAttempt={setAttempt}
-          revealed={phase === "feedback"}
-          correctId={grade?.correct}
-        />
+        {phase === "watch" ? (
+          <WatchStep key={`${variantIndex}-${index}-watch`} signs={focusSigns} />
+        ) : null}
+        {phase === "ask" || phase === "feedback" ? (
+          <Exercise
+            key={`${variantIndex}-${index}-${exercise?.prompt || index}`}
+            exercise={exercise}
+            attempt={attempt}
+            setAttempt={setAttempt}
+            revealed={phase === "feedback"}
+            correctId={grade?.correct}
+          />
+        ) : null}
+        {phase === "record" ? (
+          <RecordStep key={`${variantIndex}-${index}-record`} signs={focusSigns} />
+        ) : null}
       </main>
 
       <footer
@@ -224,6 +259,16 @@ export function Lesson({ lesson, onExit }) {
         }`}
       >
         <div className="mx-auto max-w-[640px]" aria-live="polite">
+          {phase === "watch" ? (
+            <button
+              type="button"
+              onClick={() => setPhase("ask")}
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-success text-[16px] font-semibold text-white"
+            >
+              Continue to question
+              <Icon as={ArrowRight} size="sm" className="text-white" />
+            </button>
+          ) : null}
           {phase === "feedback" && grade ? (
             <>
               <p className={`text-[20px] font-semibold ${grade.ok ? "text-success" : "text-danger"}`}>
@@ -234,7 +279,7 @@ export function Lesson({ lesson, onExit }) {
               </p>
               <button
                 type="button"
-                onClick={advance}
+                onClick={continueAfterFeedback}
                 className={`mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl text-[16px] font-semibold text-white ${
                   grade.ok ? "bg-success" : "bg-danger"
                 }`}
@@ -243,7 +288,27 @@ export function Lesson({ lesson, onExit }) {
                 <Icon as={ArrowRight} size="sm" className="text-white" />
               </button>
             </>
-          ) : (
+          ) : null}
+          {phase === "record" ? (
+            <div>
+              <button
+                type="button"
+                onClick={advance}
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-success text-[16px] font-semibold text-white"
+              >
+                Continue
+                <Icon as={ArrowRight} size="sm" className="text-white" />
+              </button>
+              <button
+                type="button"
+                onClick={advance}
+                className="mt-2 inline-flex h-11 w-full items-center justify-center text-[15px] font-medium text-secondary"
+              >
+                Skip recording
+              </button>
+            </div>
+          ) : null}
+          {phase === "ask" ? (
             <button
               type="button"
               disabled={!ready}
@@ -255,7 +320,7 @@ export function Lesson({ lesson, onExit }) {
               <Icon as={Check} size="sm" className={ready ? "text-white" : "text-secondary"} />
               Check
             </button>
-          )}
+          ) : null}
         </div>
       </footer>
 
@@ -286,10 +351,95 @@ export function Lesson({ lesson, onExit }) {
 function isReady(exercise, attempt) {
   if (!exercise) return false;
   if (exercise.type === "choice" || exercise.type === "blank") return Boolean(attempt);
-  if (exercise.type === "bank") return Array.isArray(attempt) && attempt.length > 0;
+  if (exercise.type === "bank") {
+    const need = Array.isArray(exercise.answer) ? exercise.answer.length : 0;
+    return Array.isArray(attempt) && need > 0 && attempt.length === need;
+  }
   if (exercise.type === "type") return typeof attempt === "string" && attempt.trim().length > 0;
   if (exercise.type === "match") return attempt === "done";
   return false;
+}
+
+function WatchStep({ signs }) {
+  return (
+    <div>
+      <p className="text-[13px] font-medium text-secondary">Watch first</p>
+      <h1 className="mt-1 text-[26px] font-semibold leading-8 tracking-[-0.03em]">
+        {signs.length === 1 ? `See ${signs[0].gloss}` : "See these signs"}
+      </h1>
+      <p className="mt-2 text-[15px] leading-6 text-secondary">
+        Play the model before you answer. Recording comes after you check.
+      </p>
+      <div className="mt-5 space-y-5">
+        {signs.map((sign) => (
+          <section key={modelKey(sign)} className="overflow-hidden rounded-2xl bg-surface shadow-soft">
+            <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
+              <div className="min-w-0">
+                <p className="truncate text-[16px] font-semibold tracking-[-0.02em]">{sign.term}</p>
+                <p className="text-[13px] text-secondary">{sign.gloss}</p>
+              </div>
+              <ModelPresence sign={sign} />
+            </div>
+            <div className="p-3 sm:p-4">
+              <SignCitation sign={sign} />
+            </div>
+          </section>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RecordStep({ signs }) {
+  const [openKey, setOpenKey] = useState(() => (signs[0] ? modelKey(signs[0]) : ""));
+
+  return (
+    <div>
+      <p className="text-[13px] font-medium text-secondary">Optional</p>
+      <h1 className="mt-1 text-[26px] font-semibold leading-8 tracking-[-0.03em]">Save your model</h1>
+      <p className="mt-2 text-[15px] leading-6 text-secondary">
+        Record or upload after the video and the check. Skip anytime — it will not block the next exercise.
+      </p>
+      <ul className="mt-5 space-y-4">
+        {signs.map((sign) => {
+          const key = modelKey(sign);
+          const open = openKey === key;
+          return (
+            <li key={key} className="rounded-2xl border border-line bg-surface p-4 shadow-soft">
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="truncate text-[16px] font-semibold tracking-[-0.02em]">
+                    Save your model of {sign.gloss}
+                  </p>
+                  <p className="text-[13px] text-secondary">{sign.term}</p>
+                </div>
+                <ModelPresence sign={sign} />
+              </div>
+              {open ? (
+                <SignModelCapture
+                  sign={sign}
+                  compact
+                  snapshot
+                  onClose={() => setOpenKey("")}
+                  onSaved={() => setOpenKey("")}
+                />
+              ) : (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setOpenKey(key)}
+                    className="inline-flex h-10 items-center rounded-full bg-muted px-3 text-[13px] font-medium text-ink"
+                  >
+                    Record / Upload
+                  </button>
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
 }
 
 function Exercise({ exercise, attempt, setAttempt, revealed, correctId }) {
@@ -390,9 +540,11 @@ function Bank({ exercise, attempt, setAttempt }) {
     () => shuffle(exercise.tiles.map((label, index) => ({ id: `${index}-${label}`, label })), exercise.prompt.length),
     [exercise],
   );
+  const need = Array.isArray(exercise.answer) ? exercise.answer.length : 0;
   const used = new Set(attempt.map((item) => item.id));
+  const full = need > 0 && attempt.length >= need;
   const add = (tile) => {
-    if (used.has(tile.id)) return;
+    if (used.has(tile.id) || full) return;
     setAttempt([...attempt, tile]);
   };
   const remove = (id) => setAttempt(attempt.filter((item) => item.id !== id));
@@ -400,7 +552,9 @@ function Bank({ exercise, attempt, setAttempt }) {
     <div>
       <div className="min-h-24 rounded-2xl border border-dashed border-line bg-surface p-3">
         {attempt.length === 0 ? (
-          <p className="text-[15px] text-secondary">Tap the signs in order.</p>
+          <p className="text-[15px] text-secondary">
+            {need > 1 ? `Tap ${need} tiles in order.` : "Tap the signs in order."}
+          </p>
         ) : (
           <div className="flex flex-wrap gap-2">
             {attempt.map((tile) => (
@@ -421,10 +575,12 @@ function Bank({ exercise, attempt, setAttempt }) {
           <button
             key={tile.id}
             type="button"
-            disabled={used.has(tile.id)}
+            disabled={used.has(tile.id) || (full && !used.has(tile.id))}
             onClick={() => add(tile)}
             className={`rounded-xl px-3 py-2 text-[15px] font-medium tracking-[0.03em] ${
-              used.has(tile.id) ? "bg-transparent text-line" : "bg-surface text-ink shadow-soft"
+              used.has(tile.id) || (full && !used.has(tile.id))
+                ? "bg-transparent text-line"
+                : "bg-surface text-ink shadow-soft"
             }`}
           >
             {tile.label}

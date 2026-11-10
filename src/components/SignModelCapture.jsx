@@ -8,7 +8,9 @@ import {
   modelKey,
   readModel,
 } from "../models.js";
+import { resolveSignVideo } from "../video.js";
 import { MediaEditor } from "./MediaEditor.jsx";
+import { SignCitation, SignModelCompare } from "./Player.jsx";
 import { Camera, Icon, Upload, Video } from "./icons.jsx";
 import { Pill } from "./ui.jsx";
 
@@ -82,10 +84,10 @@ export function ModelPresence({ sign, className = "" }) {
 }
 
 /**
- * Record / snapshot / upload + MediaEditor for one sign.
- * compact: Record + Upload (no snapshot button); used on the Record page list.
+ * Film first → Record / Upload / Snapshot → MediaEditor → side-by-side compare.
+ * compact: smaller pills (Record page / lesson). snapshot: keep Snapshot when compact.
  */
-export function SignModelCapture({ sign, compact = false, onSaved, onClose }) {
+export function SignModelCapture({ sign, compact = false, snapshot = false, onSaved, onClose }) {
   const { user } = useAccount();
   const [model, setModel] = useState(null);
   const [storeError, setStoreError] = useState("");
@@ -101,8 +103,9 @@ export function SignModelCapture({ sign, compact = false, onSaved, onClose }) {
   const mounted = useRef(true);
   const requestRef = useRef(0);
   const signKey = sign ? modelKey(sign) : "";
-  const imageUrl = useBlobUrl(model?.image || null);
-  const videoUrl = useBlobUrl(model?.video || null);
+  const hasUserModel = Boolean(model?.image || model?.video);
+  const hasEmbed = Boolean(sign && resolveSignVideo(sign));
+  const busy = Boolean(editor || cameraMode);
 
   function releaseCamera() {
     const recorder = recorderRef.current;
@@ -335,42 +338,70 @@ export function SignModelCapture({ sign, compact = false, onSaved, onClose }) {
 
   if (!sign) return null;
 
+  const showSnapshot = !compact || snapshot;
+
   return (
-    <div className={compact ? "mt-3 space-y-3" : "space-y-3"}>
-      <div className="flex flex-wrap items-center gap-2">
-        <Pill type="button" onClick={() => openCamera("record")} disabled={recording} className="gap-1.5 !px-3 !py-1.5 !text-[13px]">
-          <Icon as={Video} size="xs" />
-          {model?.video ? "Replace video" : "Record"}
-        </Pill>
-        {!compact ? (
-          <Pill type="button" onClick={() => openCamera("snapshot")} disabled={recording} className="gap-1.5">
-            <Icon as={Camera} size="xs" />
-            Take a snapshot
+    <div className={compact ? "mt-3 space-y-4" : "space-y-4"}>
+      {!busy ? (
+        hasUserModel ? (
+          <SignModelCompare sign={sign} model={model} />
+        ) : (
+          <div>
+            <p className="mb-2 text-[13px] font-medium text-secondary">Filmed model</p>
+            <SignCitation sign={sign} showSource={!compact} />
+            <p className="mt-3 text-[14px] leading-6 text-secondary">
+              {hasEmbed
+                ? "Watch the filmed model first, then record or upload your own."
+                : "No filmed model is available yet. You can still record or upload your own."}
+            </p>
+          </div>
+        )
+      ) : null}
+
+      {!editor ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <Pill type="button" onClick={() => openCamera("record")} disabled={recording} className="gap-1.5 !px-3 !py-1.5 !text-[13px]">
+            <Icon as={Video} size="xs" />
+            {model?.video ? "Replace video" : "Record"}
           </Pill>
-        ) : null}
-        <Pill type="button" onClick={() => fileRef.current?.click()} disabled={recording} className="gap-1.5 !px-3 !py-1.5 !text-[13px]">
-          <Icon as={Upload} size="xs" />
-          Upload
-        </Pill>
-        <input
-          ref={fileRef}
-          type="file"
-          accept="image/*,video/*"
-          tabIndex={-1}
-          className="sr-only"
-          onChange={onUpload}
-        />
-        {onClose ? (
-          <button type="button" className="text-[13px] font-medium text-secondary" onClick={onClose} disabled={recording}>
-            Close
-          </button>
-        ) : null}
-      </div>
+          {showSnapshot ? (
+            <Pill
+              type="button"
+              onClick={() => openCamera("snapshot")}
+              disabled={recording}
+              className={compact ? "gap-1.5 !px-3 !py-1.5 !text-[13px] max-[389px]:hidden" : "gap-1.5 !px-3 !py-1.5 !text-[13px]"}
+            >
+              <Icon as={Camera} size="xs" />
+              {compact ? "Snapshot" : "Take a snapshot"}
+            </Pill>
+          ) : null}
+          <Pill type="button" onClick={() => fileRef.current?.click()} disabled={recording} className="gap-1.5 !px-3 !py-1.5 !text-[13px]">
+            <Icon as={Upload} size="xs" />
+            Upload
+          </Pill>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*,video/*"
+            tabIndex={-1}
+            className="sr-only"
+            onChange={onUpload}
+          />
+          {onClose ? (
+            <button type="button" className="text-[13px] font-medium text-secondary" onClick={onClose} disabled={recording}>
+              Close
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+
       {cameraError ? <p className="text-[14px] leading-6 text-secondary">{cameraError}</p> : null}
       {storeError ? <p className="text-[14px] leading-6 text-secondary">{storeError}</p> : null}
+
       {editor ? (
         <MediaEditor blob={editor.blob} kind={editor.kind} onCancel={() => setEditor(null)} onApply={applyEdit} />
       ) : null}
+
       {cameraMode ? (
         <div>
           <div className="overflow-hidden rounded-xl bg-black">
@@ -398,40 +429,8 @@ export function SignModelCapture({ sign, compact = false, onSaved, onClose }) {
           </div>
         </div>
       ) : null}
-      {!compact && (imageUrl || videoUrl) ? (
-        <div className="grid gap-4">
-          {imageUrl ? (
-            <figure>
-              <img src={imageUrl} alt={`Your snapshot of ${sign.term}`} className="max-h-80 w-full rounded-xl object-contain bg-muted" />
-              <figcaption className="mt-2 flex items-center justify-between gap-3">
-                <span className="text-[13px] text-secondary">Your snapshot</span>
-                <span className="flex gap-4">
-                  <button type="button" className="text-[14px] font-medium text-blue" onClick={() => beginEdit(model.image, "image")}>
-                    Crop snapshot
-                  </button>
-                  <button type="button" className="text-[14px] font-medium text-blue" onClick={() => removeSlot("image")}>
-                    Remove snapshot
-                  </button>
-                </span>
-              </figcaption>
-            </figure>
-          ) : null}
-          {videoUrl ? (
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <span className="text-[15px] leading-6 text-secondary">Your video is saved for this sign.</span>
-              <span className="flex gap-4">
-                <button type="button" className="min-h-11 text-base font-medium text-blue" onClick={() => beginEdit(model.video, "video")}>
-                  Trim or crop
-                </button>
-                <button type="button" className="min-h-11 text-base font-medium text-blue" onClick={() => removeSlot("video")}>
-                  Remove video
-                </button>
-              </span>
-            </div>
-          ) : null}
-        </div>
-      ) : null}
-      {compact && (model?.image || model?.video) && !editor && !cameraMode ? (
+
+      {!busy && hasUserModel ? (
         <div className="flex flex-wrap gap-3 text-[13px]">
           {model.image ? (
             <button type="button" className="font-medium text-blue" onClick={() => beginEdit(model.image, "image")}>

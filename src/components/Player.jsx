@@ -207,28 +207,28 @@ export function LessonPlayer({ lesson }) {
   );
 }
 
-export function SignPlayer({ sign, model }) {
+/** Citation embed only — watch before recording. Empty frame when no film exists. */
+export function SignCitation({ sign, showSource = true, className = "" }) {
   const embed = resolveSignVideo(sign);
-  const ownVideo = userVideoBlob(model);
-  const ownUrl = useBlobUrl(ownVideo);
   const source = writtenSourceHref(sign?.href);
-  const hasFilm = Boolean(embed || ownUrl);
   const needsSpeed = embed && (embed.provider === "youtube" || embed.provider === "vimeo");
 
   return (
-    <div>
-      <div className="space-y-4">
-        {ownUrl ? <BlobFilm src={ownUrl} label={`Your video of ${sign.term}`} /> : null}
-        {embed ? <CitationFilm embed={embed} title={`${sign.term}, ${sign.gloss}`} /> : null}
-        {needsSpeed ? <SpeedRow /> : null}
-        {embed ? <Attribution embed={embed} /> : null}
-        {hasFilm ? null : (
-          <div className="flex aspect-video items-center rounded-2xl bg-muted px-6">
-            <p className="text-base leading-6 text-secondary">This sign has no in-page video yet.</p>
-          </div>
-        )}
-      </div>
-      {source ? (
+    <div className={className}>
+      {embed ? (
+        <CitationFilm embed={embed} title={`${sign.term}, ${sign.gloss}`} />
+      ) : (
+        <div className="flex aspect-video items-center rounded-2xl bg-muted px-6">
+          <p className="text-base leading-6 text-secondary">This sign has no in-page video yet.</p>
+        </div>
+      )}
+      {needsSpeed ? (
+        <div className="mt-3">
+          <SpeedRow />
+        </div>
+      ) : null}
+      {embed ? <Attribution embed={embed} /> : null}
+      {showSource && source ? (
         <p className="mt-3">
           <a href={source} target="_blank" rel="noreferrer" className="text-base font-medium text-blue hover:text-blue-hover">
             Lifeprint page for {sign.term}
@@ -238,4 +238,86 @@ export function SignPlayer({ sign, model }) {
       ) : null}
     </div>
   );
+}
+
+function UserModelFilm({ sign, model }) {
+  const ownVideo = userVideoBlob(model);
+  const videoUrl = useBlobUrl(ownVideo);
+  const imageUrl = useBlobUrl(model?.image && !ownVideo ? model.image : null);
+
+  if (videoUrl) {
+    return <BlobFilm src={videoUrl} label={`Your video of ${sign.term}`} />;
+  }
+  if (imageUrl) {
+    return (
+      <div className="overflow-hidden rounded-2xl bg-muted">
+        <img
+          src={imageUrl}
+          alt={`Your snapshot of ${sign.term}`}
+          className="aspect-video w-full object-contain"
+        />
+      </div>
+    );
+  }
+  return (
+    <div className="flex aspect-video items-center rounded-2xl bg-muted px-6">
+      <p className="text-base leading-6 text-secondary">No personal model saved yet.</p>
+    </div>
+  );
+}
+
+/**
+ * Side-by-side (md+) or stacked: filmed citation vs the learner’s saved model.
+ * If there is no embed, only the user model (or placeholder + user) is shown.
+ */
+export function SignModelCompare({ sign, model, className = "" }) {
+  const embed = resolveSignVideo(sign);
+  const hasUser = Boolean(userVideoBlob(model) || model?.image);
+
+  if (!embed && !hasUser) {
+    return (
+      <div className={`flex aspect-video items-center rounded-2xl bg-muted px-6 ${className}`}>
+        <p className="text-base leading-6 text-secondary">This sign has no in-page video yet.</p>
+      </div>
+    );
+  }
+
+  if (!embed && hasUser) {
+    return (
+      <div className={className}>
+        <p className="mb-2 text-[13px] font-medium text-secondary">Your model</p>
+        <UserModelFilm sign={sign} model={model} />
+      </div>
+    );
+  }
+
+  return (
+    <div className={`grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 ${className}`}>
+      <div className="min-w-0">
+        <p className="mb-2 text-[13px] font-medium text-secondary">Filmed model</p>
+        <SignCitation sign={sign} showSource={false} />
+      </div>
+      <div className="min-w-0">
+        <p className="mb-2 text-[13px] font-medium text-secondary">Your model</p>
+        {hasUser ? (
+          <UserModelFilm sign={sign} model={model} />
+        ) : (
+          <div className="flex aspect-video items-center rounded-2xl bg-muted px-6">
+            <p className="text-base leading-6 text-secondary">Save a recording or upload to compare here.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function SignPlayer({ sign, model }) {
+  const ownVideo = userVideoBlob(model);
+  const hasUser = Boolean(ownVideo || model?.image);
+
+  if (hasUser) {
+    return <SignModelCompare sign={sign} model={model} />;
+  }
+
+  return <SignCitation sign={sign} />;
 }

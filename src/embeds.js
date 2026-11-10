@@ -827,17 +827,140 @@ export const EMBED_BY_GLOSS = {
     "provider": "signasl",
     "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/worry.mp4",
     "source": "SignASL"
+  },
+  "BUS": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/bus.mp4",
+    "source": "SignASL"
+  },
+  "CANDY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/candy.mp4",
+    "source": "SignASL"
+  },
+  "CUP": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/cup.mp4",
+    "source": "SignASL"
+  },
+  "FINE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/fine.mp4",
+    "source": "SignASL"
+  },
+  "GIVE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/give.mp4",
+    "source": "SignASL"
+  },
+  "GO": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/go.mp4",
+    "source": "SignASL"
+  },
+  "HAVE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/have.mp4",
+    "source": "SignASL"
+  },
+  "HELP": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/help.mp4",
+    "source": "SignASL"
+  },
+  "I-LOVE-YOU": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/I%20love%20you.mp4",
+    "source": "SignASL"
+  },
+  "IN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/in.mp4",
+    "source": "SignASL"
+  },
+  "NICE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/nice.mp4",
+    "source": "SignASL"
+  },
+  "NOT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/not.mp4",
+    "source": "SignASL"
+  },
+  "ONION": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/onion.mp4",
+    "source": "SignASL"
+  },
+  "OPEN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/open.mp4",
+    "source": "SignASL"
+  },
+  "PARTY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/party.mp4",
+    "source": "SignASL"
+  },
+  "RIGHT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/right.mp4",
+    "source": "SignASL"
+  },
+  "SAFE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/safe.mp4",
+    "source": "SignASL"
+  },
+  "SAME": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/same.mp4",
+    "source": "SignASL"
+  },
+  "SEE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsignbank/mp4/SEE-538.mp4",
+    "source": "SignASL"
+  },
+  "SIT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/sit.mp4",
+    "source": "SignASL"
+  },
+  "SUMMER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/summer.mp4",
+    "source": "SignASL"
+  },
+  "UGLY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/ugly.mp4",
+    "source": "SignASL"
   }
 };
+
+/** Resolve a curated embed by gloss string (exact key in EMBED_BY_GLOSS). */
+export function resolveEmbed(gloss) {
+  if (typeof gloss !== "string" || !gloss.trim()) return null;
+  const key = gloss.trim();
+  const direct = normalizeEmbed(EMBED_BY_GLOSS[key]);
+  if (direct) return direct;
+  if (key.endsWith("++")) return resolveEmbed(key.slice(0, -2));
+  if (key.endsWith("?")) return resolveEmbed(key.slice(0, -1));
+  const directed = key.match(/^(?:me|left|right)-([A-Z][A-Z0-9+-]*)-(?:me|left|right)$/i);
+  if (directed) return resolveEmbed(directed[1].toUpperCase());
+  return null;
+}
 
 /** Attach a clear `video` object onto each sign; keep legacy youtubeId when present. */
 export function applyEmbeds(list) {
   return list.map((sign) => {
-    const fromMap = EMBED_BY_GLOSS[sign.gloss];
+    const fromMap = resolveEmbed(sign.gloss) || normalizeEmbed(EMBED_BY_GLOSS[sign.gloss]);
     const existing =
       normalizeEmbed(sign.video) ||
       normalizeEmbed(sign.youtubeId ? { provider: "youtube", id: sign.youtubeId } : null);
-    const video = existing || normalizeEmbed(fromMap);
+    const video = existing || fromMap;
     if (!video) return sign;
     const next = { ...sign, video };
     if (video.provider === "youtube" && video.id && !next.youtubeId) next.youtubeId = video.id;

@@ -1,12 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "../account.jsx";
 import { COMFORT_LEVELS, comfortCounts } from "../comfort.js";
 import { ModelPresence, SignModelCapture } from "../components/SignModelCapture.jsx";
-import { CheckCircle2, ClipboardList, Filter as FilterIcon, Icon, LogIn, Star, Upload, User, Video } from "../components/icons.jsx";
+import { AlertCircle, CheckCircle2, ClipboardList, Filter as FilterIcon, Icon, LogIn, Star, Upload, User, Video } from "../components/icons.jsx";
 import { ComfortControl, GraphicSlot, Pill } from "../components/ui.jsx";
 import { itemId, statusOf, summarize } from "../coverage.js";
 import { VOCAB } from "../data.js";
-import { modelKey } from "../models.js";
+import { listModels, modelKey } from "../models.js";
 import { useProgress } from "../progress-state.jsx";
 
 const STATUS = {
@@ -25,6 +25,45 @@ export function signFromRecordItem(item) {
   return { gloss: item.gloss, term: item.label || item.gloss, category: item.category || "Signs" };
 }
 
+function useModelKeys() {
+  const [keys, setKeys] = useState(() => new Set());
+
+  useEffect(() => {
+    let cancel = false;
+    function load() {
+      listModels()
+        .then((rows) => {
+          if (cancel) return;
+          const next = new Set();
+          for (const row of rows) {
+            if (row?.image || row?.video) next.add(row.id);
+          }
+          setKeys(next);
+        })
+        .catch(() => {
+          if (!cancel) setKeys(new Set());
+        });
+    }
+    load();
+    window.addEventListener("signspace-models-changed", load);
+    return () => {
+      cancel = true;
+      window.removeEventListener("signspace-models-changed", load);
+    };
+  }, []);
+
+  return keys;
+}
+
+function needsPersonalModel(item, modelKeys) {
+  if (item.kind !== "word") return false;
+  const status = statusOf(item);
+  if (status !== "mastered" && status !== "practicing") return false;
+  const sign = signFromRecordItem(item);
+  if (!sign) return false;
+  return !modelKeys.has(modelKey(sign));
+}
+
 export function Record() {
   const { user } = useAccount();
   const { progress, syncState, setComfort } = useProgress();
@@ -32,9 +71,17 @@ export function Record() {
   const [level, setLevel] = useState("all");
   const [comfort, setComfortFilter] = useState("all");
   const [captureKey, setCaptureKey] = useState("");
+  const modelKeys = useModelKeys();
   const stats = summarize(progress);
   const totals = comfortCounts(progress.comfort);
   const groups = useMemo(() => groupItems(progress, kind, level, comfort), [progress, kind, level, comfort]);
+  const urgent = useMemo(() => {
+    const items = Object.values(progress.items || {}).filter((item) => needsPersonalModel(item, modelKeys));
+    return items.sort((a, b) => {
+      const rank = (item) => (statusOf(item) === "mastered" ? 0 : 1);
+      return rank(a) - rank(b) || a.label.localeCompare(b.label);
+    });
+  }, [progress, modelKeys]);
   const empty = stats.words + stats.concepts === 0;
 
   return (
@@ -77,6 +124,71 @@ export function Record() {
         ))}
       </dl>
 
+      {urgent.length > 0 ? (
+        <section className="mt-8" aria-labelledby="needs-model-title">
+          <div className="flex items-center gap-2">
+            <span className="grid h-7 w-7 place-items-center rounded-full bg-danger-soft text-danger" aria-hidden="true">
+              <Icon as={AlertCircle} size={14} />
+            </span>
+            <h2 id="needs-model-title" className="text-[18px] font-semibold tracking-[-0.02em]">
+              Needs your model
+            </h2>
+          </div>
+          <p className="mt-1 text-[14px] leading-6 text-secondary">
+            Practicing or mastered signs that still need a personal recording or upload.
+          </p>
+          <ul className="mt-3 divide-y divide-line overflow-hidden rounded-2xl bg-surface shadow-soft">
+            {urgent.map((item) => {
+              const status = STATUS[statusOf(item)];
+              const sign = signFromRecordItem(item);
+              const key = sign ? modelKey(sign) : "";
+              const capturing = key && captureKey === key;
+              return (
+                <li key={`urgent:${item.kind}:${item.key}`} className="px-4 py-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="flex items-center gap-2 text-[16px] font-medium">
+                        <span className="inline-flex text-danger" title="Needs your model" aria-label="Needs your model">
+                          <Icon as={AlertCircle} size={16} />
+                        </span>
+                        <span className="truncate">{item.label}</span>
+                      </p>
+                      <p className="text-[13px] text-secondary">
+                        {item.gloss} · {status.label}
+                      </p>
+                    </div>
+                    {status ? (
+                      <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-[12px] font-semibold ${status.className}`}>
+                        <Icon as={status.icon} size={12} />
+                        {status.label}
+                      </span>
+                    ) : null}
+                  </div>
+                  {sign ? (
+                    <div className="mt-3">
+                      {capturing ? (
+                        <SignModelCapture sign={sign} compact snapshot onClose={() => setCaptureKey("")} />
+                      ) : (
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Pill type="button" className="gap-1.5 !px-3 !py-1.5 !text-[13px]" onClick={() => setCaptureKey(key)}>
+                            <Icon as={Video} size="xs" />
+                            Record
+                          </Pill>
+                          <Pill type="button" className="gap-1.5 !px-3 !py-1.5 !text-[13px]" onClick={() => setCaptureKey(key)}>
+                            <Icon as={Upload} size="xs" />
+                            Upload
+                          </Pill>
+                        </div>
+                      )}
+                    </div>
+                  ) : null}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ) : null}
+
       <div className="mt-6 flex flex-wrap items-center gap-2">
         <span className="inline-flex items-center gap-1 text-[12px] font-medium text-secondary">
           <Icon as={FilterIcon} size="xs" />
@@ -112,21 +224,31 @@ export function Record() {
                   const sign = signFromRecordItem(item);
                   const key = sign ? modelKey(sign) : "";
                   const capturing = key && captureKey === key;
+                  const urgentRow = needsPersonalModel(item, modelKeys);
                   return (
                     <li key={`${item.kind}:${item.key}`} className="px-4 py-3">
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="text-[16px] font-medium">{item.label}</p>
+                          <p className="flex items-center gap-2 text-[16px] font-medium">
+                            {urgentRow ? (
+                              <span className="inline-flex text-danger" title="Needs your model" aria-label="Needs your model">
+                                <Icon as={AlertCircle} size={16} />
+                              </span>
+                            ) : null}
+                            <span className="truncate">{item.label}</span>
+                          </p>
                           <p className="text-[13px] text-secondary">
                             {item.kind === "word" ? item.gloss : "Concept"} · {item.correct || 0} correct · {item.miss || 0} missed
                           </p>
                         </div>
                         <div className="flex shrink-0 items-center gap-2">
                           {sign ? <ModelPresence sign={sign} /> : null}
-                          <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-[12px] font-semibold ${status.className}`}>
-                            <Icon as={status.icon} size={12} />
-                            {status.label}
-                          </span>
+                          {status ? (
+                            <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-[12px] font-semibold ${status.className}`}>
+                              <Icon as={status.icon} size={12} />
+                              {status.label}
+                            </span>
+                          ) : null}
                         </div>
                       </div>
                       {item.kind === "word" ? (
@@ -141,22 +263,14 @@ export function Record() {
                       {sign ? (
                         <div className="mt-3">
                           {capturing ? (
-                            <SignModelCapture sign={sign} compact onClose={() => setCaptureKey("")} />
+                            <SignModelCapture sign={sign} compact snapshot onClose={() => setCaptureKey("")} />
                           ) : (
                             <div className="flex flex-wrap items-center gap-2">
-                              <Pill
-                                type="button"
-                                className="gap-1.5 !px-3 !py-1.5 !text-[13px]"
-                                onClick={() => setCaptureKey(key)}
-                              >
+                              <Pill type="button" className="gap-1.5 !px-3 !py-1.5 !text-[13px]" onClick={() => setCaptureKey(key)}>
                                 <Icon as={Video} size="xs" />
                                 Record
                               </Pill>
-                              <Pill
-                                type="button"
-                                className="gap-1.5 !px-3 !py-1.5 !text-[13px]"
-                                onClick={() => setCaptureKey(key)}
-                              >
+                              <Pill type="button" className="gap-1.5 !px-3 !py-1.5 !text-[13px]" onClick={() => setCaptureKey(key)}>
                                 <Icon as={Upload} size="xs" />
                                 Upload
                               </Pill>

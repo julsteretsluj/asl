@@ -3,9 +3,12 @@
  * Numbers (n) are stable: keep existing ids/n fixed; append new slots at the end.
  * Render with <GraphicSlot id="…" /> from components/ui.jsx.
  */
+/** Highest slot number that currently has a file under public/graphics/. */
+export const GRAPHIC_FILE_MAX = 31;
+
 /** Public URL for filled slots (graphicN.png → /graphics/N.png). */
 export function graphicPublicSrc(n) {
-  return n >= 1 && n <= 23 ? `/graphics/${n}.png` : null;
+  return n >= 1 && n <= GRAPHIC_FILE_MAX ? `/graphics/${n}.png` : null;
 }
 
 export const GRAPHICS = [
@@ -242,6 +245,7 @@ export const GRAPHICS = [
   {
     id: "vocab-desk",
     n: 24,
+    src: "/graphics/24.png",
     where: "#/vocab · desk header",
     why: "Gives the topic map a welcoming cover image.",
     suggest:
@@ -251,6 +255,7 @@ export const GRAPHICS = [
   {
     id: "grammar-desk",
     n: 25,
+    src: "/graphics/25.png",
     where: "#/grammar · desk header",
     why: "Visual for building gloss from tiles.",
     suggest:
@@ -260,6 +265,7 @@ export const GRAPHICS = [
   {
     id: "space-desk",
     n: 26,
+    src: "/graphics/26.png",
     where: "#/space · desk header",
     why: "Shows loci and directional space before the interactive map.",
     suggest:
@@ -269,6 +275,7 @@ export const GRAPHICS = [
   {
     id: "practice-desk",
     n: 27,
+    src: "/graphics/27.png",
     where: "#/practice · desk header",
     why: "Marks free practice as a quieter workspace.",
     suggest:
@@ -278,6 +285,7 @@ export const GRAPHICS = [
   {
     id: "account-welcome",
     n: 28,
+    src: "/graphics/28.png",
     where: "#/account · sign-in",
     why: "Welcomes sync without looking like a generic auth template.",
     suggest:
@@ -287,6 +295,7 @@ export const GRAPHICS = [
   {
     id: "record-hero",
     n: 29,
+    src: "/graphics/29.png",
     where: "#/record · page hero",
     why: "Gives the covered-signs record a quiet journal mood.",
     suggest:
@@ -296,6 +305,7 @@ export const GRAPHICS = [
   {
     id: "record-filter-empty",
     n: 30,
+    src: "/graphics/30.png",
     where: "#/record · empty filtered view",
     why: "Softens “nothing in this filter” without looking broken.",
     suggest:
@@ -305,6 +315,7 @@ export const GRAPHICS = [
   {
     id: "reference-hero",
     n: 31,
+    src: "/graphics/31.png",
     where: "#/reference · page hero",
     why: "Frames the quick-reference desk before handshapes begin.",
     suggest:

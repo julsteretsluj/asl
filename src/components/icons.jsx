@@ -1,6 +1,7 @@
 /** Shared Lucide icons — calm SF-style stroke, one set across SignSpace. */
 export {
   Accessibility,
+  AlertCircle,
   ArrowRight,
   BookOpen,
   BookMarked,
