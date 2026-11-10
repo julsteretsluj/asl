@@ -88,76 +88,41 @@ function SpeedRow() {
   );
 }
 
-// Prefer youtube.com — youtube-nocookie often stalls or times out in some networks.
-const YOUTUBE_HOSTS = ["www.youtube.com", "www.youtube-nocookie.com"];
+/** SignASL often mirrors Lifeprint/YouTube clips as playable MP4s — embed those in-page. */
+function signaslYoutubeMirror(videoId) {
+  if (!videoId) return "";
+  return `https://media.signbsl.com/videos/asl/youtube/mp4/${videoId}.mp4`;
+}
 
 function YouTubeEmbed({ videoId, title, framed = true }) {
   const frame = useRef(null);
-  const [hostIndex, setHostIndex] = useState(0);
-  const [timedOut, setTimedOut] = useState(false);
-  const host = YOUTUBE_HOSTS[hostIndex] || YOUTUBE_HOSTS[0];
+  const [mode, setMode] = useState("mirror"); // mirror | iframe
   useYouTubeRate(frame, videoId);
 
   useEffect(() => {
-    setHostIndex(0);
-    setTimedOut(false);
+    setMode("mirror");
   }, [videoId]);
-
-  useEffect(() => {
-    if (!videoId || timedOut) return undefined;
-    let settled = false;
-    const onLoad = () => {
-      settled = true;
-    };
-    const node = frame.current;
-    node?.addEventListener("load", onLoad);
-    // youtube-nocookie often stalls; flip to youtube.com, then show a plain open link.
-    const timer = window.setTimeout(() => {
-      if (settled) return;
-      if (hostIndex < YOUTUBE_HOSTS.length - 1) {
-        setHostIndex((index) => index + 1);
-      } else {
-        setTimedOut(true);
-      }
-    }, 4500);
-    return () => {
-      node?.removeEventListener("load", onLoad);
-      window.clearTimeout(timer);
-    };
-  }, [videoId, hostIndex, timedOut]);
 
   if (!videoId) return null;
 
-  if (timedOut) {
-    const watch = `https://www.youtube.com/watch?v=${videoId}`;
+  // Prefer a direct MP4 so filmed models stay embedded when YouTube iframes fail.
+  if (mode === "mirror") {
     return (
-      <div
-        className={`flex aspect-video flex-col items-center justify-center gap-3 bg-muted px-6 text-center ${
-          framed ? "rounded-2xl" : ""
-        }`}
-      >
-        <p className="text-base leading-6 text-secondary">
-          The filmed model could not load in this page. Open it on YouTube to watch.
-        </p>
-        <a
-          href={watch}
-          target="_blank"
-          rel="noreferrer"
-          className="ss-btn-primary inline-flex min-h-11 items-center justify-center px-5 text-base font-medium"
-        >
-          Open filmed model
-        </a>
-      </div>
+      <BlobFilm
+        src={signaslYoutubeMirror(videoId)}
+        label={title}
+        framed={framed}
+        onError={() => setMode("iframe")}
+      />
     );
   }
 
   return (
     <div className={`aspect-video overflow-hidden bg-[#1D1D1F] ${framed ? "rounded-2xl" : ""}`}>
       <iframe
-        key={host}
         ref={frame}
         className="h-full w-full"
-        src={`https://${host}/embed/${videoId}?enablejsapi=1&rel=0`}
+        src={`https://www.youtube.com/embed/${videoId}?enablejsapi=1&rel=0`}
         title={title}
         allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerPolicy="strict-origin-when-cross-origin"
@@ -185,7 +150,7 @@ function VimeoEmbed({ videoId, title, framed = true }) {
   );
 }
 
-function BlobFilm({ src, label, framed = true }) {
+function BlobFilm({ src, label, framed = true, onError }) {
   const node = useRef(null);
   const { access } = useAccess();
   const speed = useRef(access.speed);
@@ -205,6 +170,7 @@ function BlobFilm({ src, label, framed = true }) {
           playsInline
           className="aspect-video w-full"
           aria-label={label}
+          onError={onError}
           onLoadedMetadata={(event) => {
             event.currentTarget.playbackRate = speed.current;
           }}

@@ -9,369 +9,369 @@ import { normalizeEmbed, preferReliableEmbed } from "./video.js";
 /** @type {Record<string, { provider: string, id?: string, src?: string, source?: string }>} */
 export const EMBED_BY_GLOSS = {
   "GRAY": {
-    "provider": "youtube",
-    "id": "jvq-s7ZhhUE",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/gray.mp4",
+    "source": "SignASL"
   },
   "GRAPE": {
-    "provider": "youtube",
-    "id": "NZ68mfHiZa8",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/grape.mp4",
+    "source": "SignASL"
   },
   "HEAD": {
-    "provider": "youtube",
-    "id": "9HK6J9Hbt8o",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/head.mp4",
+    "source": "SignASL"
   },
   "P-A-R-K": {
-    "provider": "youtube",
-    "id": "jVvRN6qR6Ww",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/park.mp4",
+    "source": "SignASL"
   },
   "POINT": {
-    "provider": "youtube",
-    "id": "rB5jmbR8kGs",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/point.mp4",
+    "source": "SignASL"
   },
   "ACT": {
-    "provider": "youtube",
-    "id": "ZaxcUQkJ2a4",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/act.mp4",
+    "source": "SignASL"
   },
   "DESCRIBE": {
-    "provider": "youtube",
-    "id": "DX0BM9zZrEg",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/describe.mp4",
+    "source": "SignASL"
   },
   "CHARACTER": {
-    "provider": "youtube",
-    "id": "NkjPhszaj1M",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/character.mp4",
+    "source": "SignASL"
   },
   "HAPPEN": {
-    "provider": "youtube",
-    "id": "FsM-D-NCNdc",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/happen.mp4",
+    "source": "SignASL"
   },
   "IDEA": {
-    "provider": "youtube",
-    "id": "mM752iAos2w",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/idea.mp4",
+    "source": "SignASL"
   },
   "THINK": {
-    "provider": "youtube",
-    "id": "NdTKb3Kig88",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/think.mp4",
+    "source": "SignASL"
   },
   "THEORY": {
-    "provider": "youtube",
-    "id": "4m5MuYO0ppg",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/theory.mp4",
+    "source": "SignASL"
   },
   "MEAN": {
-    "provider": "youtube",
-    "id": "moMl2Po7R1o",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/mean.mp4",
+    "source": "SignASL"
   },
   "PROUD": {
-    "provider": "youtube",
-    "id": "v74BSmAB5Uk",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/proud.mp4",
+    "source": "SignASL"
   },
   "NERVOUS": {
-    "provider": "youtube",
-    "id": "FH4vSmX7SfU",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/nervous.mp4",
+    "source": "SignASL"
   },
   "EMBARRASSED": {
-    "provider": "youtube",
-    "id": "k8D2AzVJlVI",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/embarrass.mp4",
+    "source": "SignASL"
   },
   "FRUSTRATED": {
-    "provider": "youtube",
-    "id": "VMa7HT0xoXo",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/frustrated.mp4",
+    "source": "SignASL"
   },
   "BORED": {
-    "provider": "youtube",
-    "id": "6_5BxE7yBEo",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/bored.mp4",
+    "source": "SignASL"
   },
   "DISAPPOINT": {
-    "provider": "youtube",
-    "id": "JIJgW88jfVg",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/disappoint.mp4",
+    "source": "SignASL"
   },
   "SURPRISE": {
-    "provider": "youtube",
-    "id": "yI9TVB-bw-s",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/surprise.mp4",
+    "source": "SignASL"
   },
   "ANXIOUS": {
-    "provider": "youtube",
-    "id": "HCUx0LzZeTQ",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/anxious.mp4",
+    "source": "SignASL"
   },
   "JEALOUS": {
-    "provider": "youtube",
-    "id": "Kniz_YHJxp4",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/jealous.mp4",
+    "source": "SignASL"
   },
   "CURIOUS": {
-    "provider": "youtube",
-    "id": "8bSKteXE0ds",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/curious.mp4",
+    "source": "SignASL"
   },
   "HOPE": {
-    "provider": "youtube",
-    "id": "aOyZk0caisk",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/hope.mp4",
+    "source": "SignASL"
   },
   "PATIENCE": {
-    "provider": "youtube",
-    "id": "DAmZuOt9FnY",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/patience.mp4",
+    "source": "SignASL"
   },
   "SERIOUS": {
-    "provider": "youtube",
-    "id": "ynO66DC858s",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/serious.mp4",
+    "source": "SignASL"
   },
   "OPINION": {
-    "provider": "youtube",
-    "id": "Q7fu5OmLAsw",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/opinion.mp4",
+    "source": "SignASL"
   },
   "AGREE": {
-    "provider": "youtube",
-    "id": "mfgzZNvZo9w",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/agree.mp4",
+    "source": "SignASL"
   },
   "DISAGREE": {
-    "provider": "youtube",
-    "id": "_sQbTlIJZuc",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/disagree.mp4",
+    "source": "SignASL"
   },
   "BELIEVE": {
-    "provider": "youtube",
-    "id": "XVEPT0LvK7Y",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/believe.mp4",
+    "source": "SignASL"
   },
   "EXAMPLE": {
-    "provider": "youtube",
-    "id": "DnIb38DHk30",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/example.mp4",
+    "source": "SignASL"
   },
   "COMPARE": {
-    "provider": "youtube",
-    "id": "4OqSADr7ZtY",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/compare.mp4",
+    "source": "SignASL"
   },
   "IMPORTANT": {
-    "provider": "youtube",
-    "id": "2NEoRZDobDs",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/important.mp4",
+    "source": "SignASL"
   },
   "POSSIBLE": {
-    "provider": "youtube",
-    "id": "kPjFRjpaTm4",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/possible.mp4",
+    "source": "SignASL"
   },
   "IMPOSSIBLE": {
-    "provider": "youtube",
-    "id": "Qau2mlInMlA",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/impossible.mp4",
+    "source": "SignASL"
   },
   "ARGUE": {
-    "provider": "youtube",
-    "id": "8Z3hSIy8rv0",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/argue.mp4",
+    "source": "SignASL"
   },
   "DISCUSS": {
-    "provider": "youtube",
-    "id": "C14Fp4_CWOY",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/discuss.mp4",
+    "source": "SignASL"
   },
   "SUGGEST": {
-    "provider": "youtube",
-    "id": "eYHJPyjnrF4",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/suggest.mp4",
+    "source": "SignASL"
   },
   "ACCEPT": {
-    "provider": "youtube",
-    "id": "pHBb2dnUoEY",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/accept.mp4",
+    "source": "SignASL"
   },
   "REJECT": {
-    "provider": "youtube",
-    "id": "NRQTQZk7QQY",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/reject.mp4",
+    "source": "SignASL"
   },
   "COMPROMISE": {
-    "provider": "youtube",
-    "id": "iDBgJS7x0x8",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/compromise.mp4",
+    "source": "SignASL"
   },
   "NEGOTIATE": {
-    "provider": "youtube",
-    "id": "SbWQ4Kullt0",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/negotiate.mp4",
+    "source": "SignASL"
   },
   "DECIDE": {
-    "provider": "youtube",
-    "id": "yTG3xGGdp34",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/decide.mp4",
+    "source": "SignASL"
   },
   "MEETING": {
-    "provider": "youtube",
-    "id": "eE54fUNJYj4",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/meeting.mp4",
+    "source": "SignASL"
   },
   "EMAIL": {
-    "provider": "youtube",
-    "id": "QPKfFDenOPg",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/email.mp4",
+    "source": "SignASL"
   },
   "PROJECT": {
-    "provider": "youtube",
-    "id": "owElWnIFa8g",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/project.mp4",
+    "source": "SignASL"
   },
   "DEADLINE": {
-    "provider": "youtube",
-    "id": "bYZGYNudDlk",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/due.mp4",
+    "source": "SignASL"
   },
   "COMPANY": {
-    "provider": "youtube",
-    "id": "HhFub08UPjM",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/company.mp4",
+    "source": "SignASL"
   },
   "INTERVIEW": {
-    "provider": "youtube",
-    "id": "TbzxFG60_fo",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/interview.mp4",
+    "source": "SignASL"
   },
   "TEAM": {
-    "provider": "youtube",
-    "id": "5gTq_ttM6Qo",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/team.mp4",
+    "source": "SignASL"
   },
   "CLIENT": {
-    "provider": "youtube",
-    "id": "TexlaPhXLps",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/client.mp4",
+    "source": "SignASL"
   },
   "PLAN": {
-    "provider": "youtube",
-    "id": "GgrbUMCbHKQ",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/plan.mp4",
+    "source": "SignASL"
   },
   "GOAL": {
-    "provider": "youtube",
-    "id": "8t9-34ZHDAE",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/goal.mp4",
+    "source": "SignASL"
   },
   "SUCCESS": {
-    "provider": "youtube",
-    "id": "SrzPozIawec",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/succeed.mp4",
+    "source": "Lifeprint / ASL University"
   },
   "FAIL": {
-    "provider": "youtube",
-    "id": "9ot5XLpjI3A",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/fail.mp4",
+    "source": "SignASL"
   },
   "NEWS": {
-    "provider": "youtube",
-    "id": "8n5bVu0U2-k",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/8n5bVu0U2-k.mp4",
+    "source": "SignASL"
   },
   "NEWSPAPER": {
-    "provider": "youtube",
-    "id": "GdZpOlYWKnM",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/newspaper.mp4",
+    "source": "SignASL"
   },
   "VOTE": {
-    "provider": "youtube",
-    "id": "4jJq0AU7oXM",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/vote.mp4",
+    "source": "SignASL"
   },
   "LAW": {
-    "provider": "youtube",
-    "id": "OZy1ugYqyyc",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/law.mp4",
+    "source": "SignASL"
   },
   "INFORMATION": {
-    "provider": "youtube",
-    "id": "YA7ivlU-N2A",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/information.mp4",
+    "source": "SignASL"
   },
   "LIE": {
-    "provider": "youtube",
-    "id": "G9p7iePeqpE",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/lie.mp4",
+    "source": "SignASL"
   },
   "END": {
-    "provider": "youtube",
-    "id": "SiRvPUToJvw",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/end.mp4",
+    "source": "SignASL"
   },
   "UNDERSTAND": {
-    "provider": "youtube",
-    "id": "5N10dIavSYc",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/understand.mp4",
+    "source": "SignASL"
   },
   "MISUNDERSTAND": {
-    "provider": "youtube",
-    "id": "mFVyXLUcnEw",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/misunderstood.mp4",
+    "source": "SignASL"
   },
   "FORGET": {
-    "provider": "youtube",
-    "id": "1vXrp5awuHc",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/forget.mp4",
+    "source": "SignASL"
   },
   "IDIOM": {
-    "provider": "youtube",
-    "id": "oTI91eigNSo",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/idiom.mp4",
+    "source": "SignASL"
   },
   "FORMAL": {
-    "provider": "youtube",
-    "id": "ZRvT5EAkKkE",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/formal.mp4",
+    "source": "SignASL"
   },
   "CASUAL": {
-    "provider": "youtube",
-    "id": "JaDJ2pg8aJc",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/casual.mp4",
+    "source": "SignASL"
   },
   "REGISTER": {
-    "provider": "youtube",
-    "id": "GlNPrxYeGKM",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/register.mp4",
+    "source": "SignASL"
   },
   "CULTURE": {
-    "provider": "youtube",
-    "id": "AwKzqXd1isc",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/culture.mp4",
+    "source": "SignASL"
   },
   "COMMUNITY": {
-    "provider": "youtube",
-    "id": "hkLqlMTF9n4",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/community.mp4",
+    "source": "SignASL"
   },
   "INTERPRET": {
-    "provider": "youtube",
-    "id": "uhygNx8qHyY",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/interpret.mp4",
+    "source": "SignASL"
   },
   "AUDIENCE": {
-    "provider": "youtube",
-    "id": "xJgSeKFtLQA",
-    "source": "YouTube · ASL University (Lifeprint)"
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/audience.mp4",
+    "source": "SignASL"
   },
   "HELLO": {
     "provider": "file",
@@ -959,11 +959,10 @@ export function applyEmbeds(list) {
     const fromMap = resolveEmbed(sign.gloss) || normalizeEmbed(EMBED_BY_GLOSS[sign.gloss]);
     const fromField = normalizeEmbed(sign.video);
     const fromYoutube = normalizeEmbed(sign.youtubeId ? { provider: "youtube", id: sign.youtubeId } : null);
-    // Prefer SignASL / direct files over YouTube so filmed models play when YouTube iframes stall.
     const video = preferReliableEmbed(fromField, fromMap, fromYoutube);
     if (!video) return sign;
-    const next = { ...sign, video };
-    if (video.provider === "youtube" && video.id && !next.youtubeId) next.youtubeId = video.id;
-    return next;
+    const nextSign = { ...sign, video };
+    if (video.provider === "youtube" && video.id && !nextSign.youtubeId) nextSign.youtubeId = video.id;
+    return nextSign;
   });
 }
