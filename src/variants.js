@@ -157,6 +157,7 @@ function keepModelFields(exercise) {
   const next = {};
   if (typeof exercise.modelGloss === "string" && exercise.modelGloss) next.modelGloss = exercise.modelGloss;
   if (typeof exercise.modelTerm === "string" && exercise.modelTerm) next.modelTerm = exercise.modelTerm;
+  if (exercise.quizFromFilm) next.quizFromFilm = true;
   return next;
 }
 

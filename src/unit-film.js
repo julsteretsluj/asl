@@ -936,11 +936,16 @@ export function buildFilmLesson(id, title, tip, signs, factories) {
     }
     exercises.push(
       choice(
-        `Watch the film, then choose the gloss for “${sign.term}.”`,
+        "Watch the film, then choose the matching gloss.",
         [sign.gloss, ...distractors],
         sign.gloss,
-        `${sign.gloss} is the classroom gloss for ${sign.term}. Watch the filmed model before you answer.`,
-        { modelGloss: sign.gloss, modelTerm: sign.term },
+        `${sign.gloss} is the classroom gloss for ${sign.term}.`,
+        {
+          modelGloss: sign.gloss,
+          modelTerm: sign.term,
+          // Identify from film: show unlabeled video on the question, do not spoil the answer.
+          quizFromFilm: true,
+        },
       ),
     );
   }
@@ -982,7 +987,7 @@ export function withFilmLessons(units, vocabRows, factories) {
     const film = buildFilmLesson(
       filmId,
       `${unit.title} on film`,
-      `Watch every filmed model in this unit. Each prompt focuses on one sign so you can copy the citation form.`,
+      `Match English to gloss, then identify each sign from its film without the label shown.`,
       signs,
       factories,
     );

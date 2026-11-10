@@ -282,18 +282,17 @@ export function LessonPlayer({ lesson }) {
 }
 
 /** Citation embed only — watch before recording. Empty frame when no film exists. */
-export function SignCitation({ sign, showSource = true, className = "" }) {
+export function SignCitation({ sign, showSource = true, blind = false, className = "" }) {
   const embed = citationEmbed(sign);
   const source = writtenSourceHref(sign?.href);
   const needsSpeed = embed && (embed.provider === "youtube" || embed.provider === "vimeo");
   const youtubeFallbackId = normalizeYoutubeId(sign?.youtubeId || sign?.video?.id || "");
-
   return (
     <div className={className}>
       {embed ? (
         <CitationFilm
           embed={embed}
-          title={`${sign.term}, ${sign.gloss}`}
+          title={blind ? "Filmed ASL model" : `${sign.term}, ${sign.gloss}`}
           youtubeFallbackId={youtubeFallbackId}
         />
       ) : (
@@ -306,8 +305,8 @@ export function SignCitation({ sign, showSource = true, className = "" }) {
           <SpeedRow />
         </div>
       ) : null}
-      {embed ? <Attribution embed={embed} /> : null}
-      {showSource && source ? (
+      {embed && !blind ? <Attribution embed={embed} /> : null}
+      {showSource && !blind && source ? (
         <p className="mt-3">
           <a href={source} target="_blank" rel="noreferrer" className="text-base font-medium text-blue hover:text-blue-hover">
             Lifeprint page for {sign.term}

@@ -7,7 +7,7 @@ import { BuyHeartsPacks } from "../components/BuyHearts.jsx";
 import { ModelPresence, SignModelCapture } from "../components/SignModelCapture.jsx";
 import { GraphicSlot, HeartGlyphs } from "../components/ui.jsx";
 import { presentExercise } from "../exerciseCopy.js";
-import { signsForExercise } from "../lesson-model.js";
+import { signFromGlossTerm, signsForExercise } from "../lesson-model.js";
 import { exercisesForVariant, gradeAttempt, shuffleExercises } from "../lessons.js";
 import { modelKey } from "../models.js";
 import { HEART_RESTORE_MS, lessonVariantIndex, nextHeartLabel } from "../progress.js";
@@ -34,6 +34,8 @@ function startDeck(lesson, variantIndex) {
 }
 
 function openingPhase(exercise) {
+  // Film-identify quizzes show the unlabeled clip on the question itself.
+  if (exercise?.quizFromFilm) return "ask";
   return signsForExercise(exercise).length > 0 ? "watch" : "ask";
 }
 
@@ -444,6 +446,11 @@ function RecordStep({ signs }) {
 }
 
 function Exercise({ exercise, attempt, setAttempt, revealed, correctId }) {
+  const filmSign =
+    exercise.quizFromFilm && exercise.modelGloss
+      ? signFromGlossTerm(exercise.modelGloss, exercise.modelTerm || "")
+      : null;
+
   return (
     <div>
       {exercise.letter ? (
@@ -455,6 +462,13 @@ function Exercise({ exercise, attempt, setAttempt, revealed, correctId }) {
       <h1 className="mt-2 text-[26px] font-semibold leading-8 tracking-[-0.03em]">{exercise.prompt}</h1>
       {exercise.brief ? (
         <p className="mt-3 text-[15px] leading-6 text-secondary">{exercise.brief}</p>
+      ) : null}
+      {filmSign ? (
+        <div className="mt-5 overflow-hidden rounded-2xl bg-surface shadow-soft">
+          <div className="p-3 sm:p-4">
+            <SignCitation sign={filmSign} blind />
+          </div>
+        </div>
       ) : null}
       <div className="mt-6">
         {exercise.type === "choice" ? (

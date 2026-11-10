@@ -38,6 +38,9 @@ export function taskBrief(exercise) {
   if (!exercise || typeof exercise !== "object") return "Answer the question.";
   switch (exercise.type) {
     case "choice":
+      if (exercise.quizFromFilm) {
+        return "Play the film, then pick the gloss that matches. Tap Check when you are sure.";
+      }
       return "Choose one answer. Tap Check when you are sure.";
     case "blank":
       return "Fill the gap: tap the missing gloss piece below.";
