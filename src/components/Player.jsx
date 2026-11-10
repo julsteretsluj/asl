@@ -155,10 +155,31 @@ function BlobFilm({ src, label, framed = true, onError }) {
   const { access } = useAccess();
   const speed = useRef(access.speed);
   speed.current = access.speed;
+  const fail = useRef(onError);
+  fail.current = onError;
 
   useEffect(() => {
     if (node.current) node.current.playbackRate = access.speed;
   }, [access.speed, src]);
+
+  // Empty / stub MP4s often "load" without firing error — treat them as dead films.
+  useEffect(() => {
+    if (!src || !fail.current) return undefined;
+    let cancelled = false;
+    const timer = window.setTimeout(() => {
+      const video = node.current;
+      if (cancelled || !video || !fail.current) return;
+      const ready = video.readyState;
+      const duration = Number.isFinite(video.duration) ? video.duration : 0;
+      if (ready === 0 || (ready >= 1 && duration > 0 && duration < 0.35)) {
+        fail.current();
+      }
+    }, 2500);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [src]);
 
   return (
     <div>
@@ -170,9 +191,12 @@ function BlobFilm({ src, label, framed = true, onError }) {
           playsInline
           className="aspect-video w-full"
           aria-label={label}
-          onError={onError}
+          onError={() => fail.current?.()}
           onLoadedMetadata={(event) => {
-            event.currentTarget.playbackRate = speed.current;
+            const video = event.currentTarget;
+            video.playbackRate = speed.current;
+            const duration = Number.isFinite(video.duration) ? video.duration : 0;
+            if (duration > 0 && duration < 0.35) fail.current?.();
           }}
         />
       </div>
@@ -183,16 +207,34 @@ function BlobFilm({ src, label, framed = true, onError }) {
   );
 }
 
-function CitationFilm({ embed, title, framed = true }) {
+function CitationFilm({ embed, title, framed = true, youtubeFallbackId = "" }) {
+  const [failedDirect, setFailedDirect] = useState(false);
+  useEffect(() => {
+    setFailedDirect(false);
+  }, [embed?.src, embed?.id, embed?.provider]);
+
   if (!embed) return null;
-  if (embed.provider === "youtube") {
-    return <YouTubeEmbed videoId={embed.id} title={title} framed={framed} />;
+
+  if ((embed.provider === "file" || embed.provider === "signasl") && !failedDirect) {
+    return (
+      <BlobFilm
+        src={embed.src}
+        label={title}
+        framed={framed}
+        onError={() => setFailedDirect(true)}
+      />
+    );
+  }
+
+  const youtubeId =
+    embed.provider === "youtube"
+      ? normalizeYoutubeId(embed.id)
+      : normalizeYoutubeId(youtubeFallbackId);
+  if (youtubeId) {
+    return <YouTubeEmbed videoId={youtubeId} title={title} framed={framed} />;
   }
   if (embed.provider === "vimeo") {
     return <VimeoEmbed videoId={embed.id} title={title} framed={framed} />;
-  }
-  if (embed.provider === "file" || embed.provider === "signasl") {
-    return <BlobFilm src={embed.src} label={title} framed={framed} />;
   }
   return null;
 }
@@ -244,11 +286,16 @@ export function SignCitation({ sign, showSource = true, className = "" }) {
   const embed = citationEmbed(sign);
   const source = writtenSourceHref(sign?.href);
   const needsSpeed = embed && (embed.provider === "youtube" || embed.provider === "vimeo");
+  const youtubeFallbackId = normalizeYoutubeId(sign?.youtubeId || sign?.video?.id || "");
 
   return (
     <div className={className}>
       {embed ? (
-        <CitationFilm embed={embed} title={`${sign.term}, ${sign.gloss}`} />
+        <CitationFilm
+          embed={embed}
+          title={`${sign.term}, ${sign.gloss}`}
+          youtubeFallbackId={youtubeFallbackId}
+        />
       ) : (
         <div className="flex aspect-video items-center rounded-2xl bg-muted px-6">
           <p className="text-base leading-6 text-secondary">This sign has no in-page video yet.</p>

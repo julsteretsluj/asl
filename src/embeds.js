@@ -10,7 +10,7 @@ import { normalizeEmbed, preferReliableEmbed } from "./video.js";
 export const EMBED_BY_GLOSS = {
   "GRAY": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/gray.mp4",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/gray.mp4",
     "source": "SignASL"
   },
   "GRAPE": {
@@ -20,52 +20,52 @@ export const EMBED_BY_GLOSS = {
   },
   "HEAD": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/head.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/head.mp4",
     "source": "SignASL"
   },
   "P-A-R-K": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/park.mp4",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/park.mp4",
     "source": "SignASL"
   },
   "POINT": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/point.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/point.mp4",
     "source": "SignASL"
   },
   "ACT": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/act.mp4",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/act.mp4",
     "source": "SignASL"
   },
   "DESCRIBE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/describe.mp4",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/describe.mp4",
     "source": "SignASL"
   },
   "CHARACTER": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/character.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/character.mp4",
     "source": "SignASL"
   },
   "HAPPEN": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/happen.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/happen.mp4",
     "source": "SignASL"
   },
   "IDEA": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/idea.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/idea.mp4",
     "source": "SignASL"
   },
   "THINK": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/think.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/think.mp4",
     "source": "SignASL"
   },
   "THEORY": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/theory.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/theory.mp4",
     "source": "SignASL"
   },
   "MEAN": {
@@ -85,7 +85,7 @@ export const EMBED_BY_GLOSS = {
   },
   "EMBARRASSED": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/embarrass.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/embarrassed.mp4",
     "source": "SignASL"
   },
   "FRUSTRATED": {
@@ -100,7 +100,7 @@ export const EMBED_BY_GLOSS = {
   },
   "DISAPPOINT": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/disappoint.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/disappointed.mp4",
     "source": "SignASL"
   },
   "SURPRISE": {
@@ -110,47 +110,47 @@ export const EMBED_BY_GLOSS = {
   },
   "ANXIOUS": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/anxious.mp4",
+    "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/anxious.mp4",
     "source": "SignASL"
   },
   "JEALOUS": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/jealous.mp4",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/jealous.mp4",
     "source": "SignASL"
   },
   "CURIOUS": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/curious.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/curious.mp4",
     "source": "SignASL"
   },
   "HOPE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/hope.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/hope.mp4",
     "source": "SignASL"
   },
   "PATIENCE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/patience.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/patience.mp4",
     "source": "SignASL"
   },
   "SERIOUS": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/serious.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/serious.mp4",
     "source": "SignASL"
   },
   "OPINION": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/opinion.mp4",
+    "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/opinion.mp4",
     "source": "SignASL"
   },
   "AGREE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/agree.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/agree.mp4",
     "source": "SignASL"
   },
   "DISAGREE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/disagree.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/disagree.mp4",
     "source": "SignASL"
   },
   "BELIEVE": {
@@ -160,17 +160,17 @@ export const EMBED_BY_GLOSS = {
   },
   "EXAMPLE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/example.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/example.mp4",
     "source": "SignASL"
   },
   "COMPARE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/compare.mp4",
+    "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/compare.mp4",
     "source": "SignASL"
   },
   "IMPORTANT": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/important.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/important.mp4",
     "source": "SignASL"
   },
   "POSSIBLE": {
@@ -180,47 +180,47 @@ export const EMBED_BY_GLOSS = {
   },
   "IMPOSSIBLE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/impossible.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/impossible.mp4",
     "source": "SignASL"
   },
   "ARGUE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/argue.mp4",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/argue.mp4",
     "source": "SignASL"
   },
   "DISCUSS": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/discuss.mp4",
+    "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/discuss.mp4",
     "source": "SignASL"
   },
   "SUGGEST": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/suggest.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/suggest.mp4",
     "source": "SignASL"
   },
   "ACCEPT": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/accept.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/accept.mp4",
     "source": "SignASL"
   },
   "REJECT": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/reject.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/reject.mp4",
     "source": "SignASL"
   },
   "COMPROMISE": {
-    "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/compromise.mp4",
-    "source": "SignASL"
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/compromise.mp4",
+    "source": "Lifeprint / ASL University"
   },
   "NEGOTIATE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/negotiate.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/negotiate.mp4",
     "source": "SignASL"
   },
   "DECIDE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/decide.mp4",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/decide.mp4",
     "source": "SignASL"
   },
   "MEETING": {
@@ -235,32 +235,32 @@ export const EMBED_BY_GLOSS = {
   },
   "PROJECT": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/project.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/assignment.mp4",
     "source": "SignASL"
   },
   "DEADLINE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/due.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/deadline.mp4",
     "source": "SignASL"
   },
   "COMPANY": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/company.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/business.mp4",
     "source": "SignASL"
   },
   "INTERVIEW": {
-    "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/interview.mp4",
-    "source": "SignASL"
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/interview.mp4",
+    "source": "Lifeprint / ASL University"
   },
   "TEAM": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/team.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/team.mp4",
     "source": "SignASL"
   },
   "CLIENT": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/client.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/client.mp4",
     "source": "SignASL"
   },
   "PLAN": {
@@ -269,9 +269,9 @@ export const EMBED_BY_GLOSS = {
     "source": "SignASL"
   },
   "GOAL": {
-    "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/goal.mp4",
-    "source": "SignASL"
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/goal.mp4",
+    "source": "Lifeprint / ASL University"
   },
   "SUCCESS": {
     "provider": "file",
@@ -280,7 +280,7 @@ export const EMBED_BY_GLOSS = {
   },
   "FAIL": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/fail.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/fail.mp4",
     "source": "SignASL"
   },
   "NEWS": {
@@ -290,42 +290,42 @@ export const EMBED_BY_GLOSS = {
   },
   "NEWSPAPER": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/newspaper.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/newspaper.mp4",
     "source": "SignASL"
   },
   "VOTE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/vote.mp4",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/vote.mp4",
     "source": "SignASL"
   },
   "LAW": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/law.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/law.mp4",
     "source": "SignASL"
   },
   "INFORMATION": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/information.mp4",
+    "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/information.mp4",
     "source": "SignASL"
   },
   "LIE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/lie.mp4",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/lie.mp4",
     "source": "SignASL"
   },
   "END": {
-    "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/end.mp4",
-    "source": "SignASL"
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/end.mp4",
+    "source": "Lifeprint / ASL University"
   },
   "UNDERSTAND": {
-    "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/understand.mp4",
-    "source": "SignASL"
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/understand.mp4",
+    "source": "Lifeprint / ASL University"
   },
   "MISUNDERSTAND": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/misunderstood.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/misunderstand.mp4",
     "source": "SignASL"
   },
   "FORGET": {
@@ -335,7 +335,7 @@ export const EMBED_BY_GLOSS = {
   },
   "IDIOM": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/idiom.mp4",
+    "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/idiom.mp4",
     "source": "SignASL"
   },
   "FORMAL": {
@@ -345,32 +345,32 @@ export const EMBED_BY_GLOSS = {
   },
   "CASUAL": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/casual.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/casual.mp4",
     "source": "SignASL"
   },
   "REGISTER": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/register.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/register.mp4",
     "source": "SignASL"
   },
   "CULTURE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/culture.mp4",
+    "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/culture.mp4",
     "source": "SignASL"
   },
   "COMMUNITY": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/community.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/community.mp4",
     "source": "SignASL"
   },
   "INTERPRET": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/interpret.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/interpret.mp4",
     "source": "SignASL"
   },
   "AUDIENCE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/audience.mp4",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/audience.mp4",
     "source": "SignASL"
   },
   "HELLO": {
@@ -655,12 +655,12 @@ export const EMBED_BY_GLOSS = {
   },
   "ARTICLE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/article.mp4",
+    "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/article.mp4",
     "source": "SignASL"
   },
   "ASSUME": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/assume.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/assume.mp4",
     "source": "SignASL"
   },
   "BEGIN": {
@@ -670,7 +670,7 @@ export const EMBED_BY_GLOSS = {
   },
   "CALM": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/calm.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/calm.mp4",
     "source": "SignASL"
   },
   "CHEAP": {
@@ -680,7 +680,7 @@ export const EMBED_BY_GLOSS = {
   },
   "CONCLUDE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/conclude.mp4",
+    "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/conclusion.mp4",
     "source": "SignASL"
   },
   "CONTRAST": {
@@ -690,7 +690,7 @@ export const EMBED_BY_GLOSS = {
   },
   "EMPHASIS": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/emphasize.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/emphasize.mp4",
     "source": "SignASL"
   },
   "EVIDENCE": {
@@ -700,7 +700,7 @@ export const EMBED_BY_GLOSS = {
   },
   "FACT": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/fact.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/true.mp4",
     "source": "SignASL"
   },
   "FALSE": {
@@ -725,7 +725,7 @@ export const EMBED_BY_GLOSS = {
   },
   "INFLUENCE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/influence.mp4",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/influence.mp4",
     "source": "SignASL"
   },
   "LEAF": {
@@ -799,9 +799,9 @@ export const EMBED_BY_GLOSS = {
     "source": "SignASL"
   },
   "TEETH": {
-    "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/teeth.mp4",
-    "source": "SignASL"
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/teeth.mp4",
+    "source": "Lifeprint / ASL University"
   },
   "TOPIC": {
     "provider": "signasl",
@@ -840,7 +840,7 @@ export const EMBED_BY_GLOSS = {
   },
   "CUP": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/cup.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/cup.mp4",
     "source": "SignASL"
   },
   "FINE": {
@@ -850,7 +850,7 @@ export const EMBED_BY_GLOSS = {
   },
   "GIVE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/give.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/give.mp4",
     "source": "SignASL"
   },
   "GO": {
@@ -910,12 +910,12 @@ export const EMBED_BY_GLOSS = {
   },
   "SAFE": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/safe.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/safety.mp4",
     "source": "SignASL"
   },
   "SAME": {
     "provider": "signasl",
-    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/same.mp4",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/same.mp4",
     "source": "SignASL"
   },
   "SEE": {
@@ -936,6 +936,901 @@ export const EMBED_BY_GLOSS = {
   "UGLY": {
     "provider": "signasl",
     "src": "https://media.signbsl.com/videos/asl/startasl/mp4/ugly.mp4",
+    "source": "SignASL"
+  },
+  "I FINE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/YSTnrscx1UY.mp4",
+    "source": "SignASL"
+  },
+  "YOU": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/you.mp4",
+    "source": "SignASL"
+  },
+  "PLEASE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/please.mp4",
+    "source": "SignASL"
+  },
+  "WE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/we.mp4",
+    "source": "SignASL"
+  },
+  "GOODBYE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/goodbye.mp4",
+    "source": "SignASL"
+  },
+  "GOOD MORNING": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/goodmorning.mp4",
+    "source": "SignASL"
+  },
+  "EXCUSE-ME": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/excuse-me.mp4",
+    "source": "SignASL"
+  },
+  "THANK-YOU": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/thank-you.mp4",
+    "source": "SignASL"
+  },
+  "LOVE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/DAZB0eVf5t0.mp4",
+    "source": "SignASL"
+  },
+  "ANGRY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/IqfyrDn89iY.mp4",
+    "source": "SignASL"
+  },
+  "HAPPY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/happy.mp4",
+    "source": "SignASL"
+  },
+  "NOW": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/g2j70neQ_lI.mp4",
+    "source": "SignASL"
+  },
+  "TIRED": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/iZ6EeQqzZl0.mp4",
+    "source": "SignASL"
+  },
+  "SAD": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/sad.mp4",
+    "source": "SignASL"
+  },
+  "TODAY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/3BxRfKvfnpU.mp4",
+    "source": "SignASL"
+  },
+  "TOMORROW": {
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/tomorrow.mp4",
+    "source": "Lifeprint / ASL University"
+  },
+  "NIGHT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/hDcREO5I4Ps.mp4",
+    "source": "SignASL"
+  },
+  "YESTERDAY": {
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/yesterday.mp4",
+    "source": "Lifeprint / ASL University"
+  },
+  "LATER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/later.mp4",
+    "source": "SignASL"
+  },
+  "MORNING": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/morning.mp4",
+    "source": "SignASL"
+  },
+  "EXCITED": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/excited.mp4",
+    "source": "SignASL"
+  },
+  "WHO": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/wKl26BsEAoc.mp4",
+    "source": "SignASL"
+  },
+  "WEEK": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/week.mp4",
+    "source": "SignASL"
+  },
+  "WHAT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/what.mp4",
+    "source": "SignASL"
+  },
+  "WHEN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/when.mp4",
+    "source": "SignASL"
+  },
+  "WHERE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/where.mp4",
+    "source": "SignASL"
+  },
+  "WHY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/why.mp4",
+    "source": "SignASL"
+  },
+  "HOW": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/how.mp4",
+    "source": "SignASL"
+  },
+  "PARENTS": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/jlqHVbCS4H0.mp4",
+    "source": "SignASL"
+  },
+  "BROTHER": {
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/brother.mp4",
+    "source": "Lifeprint / ASL University"
+  },
+  "FATHER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/father.mp4",
+    "source": "SignASL"
+  },
+  "MOTHER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/mother.mp4",
+    "source": "SignASL"
+  },
+  "SISTER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/sister.mp4",
+    "source": "SignASL"
+  },
+  "BABY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/baby.mp4",
+    "source": "SignASL"
+  },
+  "FAMILY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/family.mp4",
+    "source": "SignASL"
+  },
+  "UNCLE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/PqtMCA2lu9w.mp4",
+    "source": "SignASL"
+  },
+  "AUNT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/aunt.mp4",
+    "source": "SignASL"
+  },
+  "WIFE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/HRv4XLlwdcc.mp4",
+    "source": "SignASL"
+  },
+  "COUSIN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/cousin.mp4",
+    "source": "SignASL"
+  },
+  "HOW YOU [q]": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/how.mp4",
+    "source": "SignASL"
+  },
+  "DAUGHTER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/daughter.mp4",
+    "source": "SignASL"
+  },
+  "BLUE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/rKtYSjkBB84.mp4",
+    "source": "SignASL"
+  },
+  "HUSBAND": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/husband.mp4",
+    "source": "SignASL"
+  },
+  "COLOR": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/color.mp4",
+    "source": "SignASL"
+  },
+  "YELLOW": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/nK4_8-U-Y9I.mp4",
+    "source": "SignASL"
+  },
+  "GREEN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/green.mp4",
+    "source": "SignASL"
+  },
+  "PINK": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/aNilWTBIl0g.mp4",
+    "source": "SignASL"
+  },
+  "ORANGE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/orange.mp4",
+    "source": "SignASL"
+  },
+  "WHITE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/v8h6mw4zGys.mp4",
+    "source": "SignASL"
+  },
+  "CHERRY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/rMF0qiUG96M.mp4",
+    "source": "SignASL"
+  },
+  "BROWN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/brown.mp4",
+    "source": "SignASL"
+  },
+  "NICE MEET YOU": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/nice.mp4",
+    "source": "SignASL"
+  },
+  "BLACK": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/black.mp4",
+    "source": "SignASL"
+  },
+  "WATER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/-SdOfxGhb0A.mp4",
+    "source": "SignASL"
+  },
+  "PEACH": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/peach.mp4",
+    "source": "SignASL"
+  },
+  "APPLE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/apple.mp4",
+    "source": "SignASL"
+  },
+  "BANANA": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/banana.mp4",
+    "source": "SignASL"
+  },
+  "EAT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/eat.mp4",
+    "source": "SignASL"
+  },
+  "FRUIT": {
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/fruit.mp4",
+    "source": "Lifeprint / ASL University"
+  },
+  "MILK": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/milk.mp4",
+    "source": "SignASL"
+  },
+  "MORE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/fVkzBbQ-whs.mp4",
+    "source": "SignASL"
+  },
+  "FOOD": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/food.mp4",
+    "source": "SignASL"
+  },
+  "LIKE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/like.mp4",
+    "source": "SignASL"
+  },
+  "BREAD": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/bread.mp4",
+    "source": "SignASL"
+  },
+  "EGG": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/egg.mp4",
+    "source": "SignASL"
+  },
+  "WANT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/want.mp4",
+    "source": "SignASL"
+  },
+  "COOKIE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/cookie.mp4",
+    "source": "SignASL"
+  },
+  "STUDENT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/student.mp4",
+    "source": "SignASL"
+  },
+  "SCHOOL": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/school.mp4",
+    "source": "SignASL"
+  },
+  "BOOK": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/book.mp4",
+    "source": "SignASL"
+  },
+  "PAPER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/paper.mp4",
+    "source": "SignASL"
+  },
+  "WRITE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/write.mp4",
+    "source": "SignASL"
+  },
+  "READ": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/read.mp4",
+    "source": "SignASL"
+  },
+  "TEACHER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/teacher.mp4",
+    "source": "SignASL"
+  },
+  "TEST": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/QCuc-PwehGA.mp4",
+    "source": "SignASL"
+  },
+  "CLASS": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/class.mp4",
+    "source": "SignASL"
+  },
+  "PENCIL": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/pencil.mp4",
+    "source": "SignASL"
+  },
+  "LEARN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/learn.mp4",
+    "source": "SignASL"
+  },
+  "NURSE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/zcT4miFawiw.mp4",
+    "source": "SignASL"
+  },
+  "WORK": {
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/work.mp4",
+    "source": "Lifeprint / ASL University"
+  },
+  "POLICE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/TyxYhCL1RSA.mp4",
+    "source": "SignASL"
+  },
+  "LIBRARY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/library.mp4",
+    "source": "SignASL"
+  },
+  "COLLEGE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/college.mp4",
+    "source": "SignASL"
+  },
+  "DESK": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/desk.mp4",
+    "source": "SignASL"
+  },
+  "COOK": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/cook.mp4",
+    "source": "SignASL"
+  },
+  "DOCTOR": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/doctor.mp4",
+    "source": "SignASL"
+  },
+  "BOSS": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/boss.mp4",
+    "source": "SignASL"
+  },
+  "FARMER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/farm.mp4",
+    "source": "SignASL"
+  },
+  "BED": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/bed.mp4",
+    "source": "SignASL"
+  },
+  "HOUSE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/house.mp4",
+    "source": "SignASL"
+  },
+  "HOME": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/home.mp4",
+    "source": "SignASL"
+  },
+  "BATHROOM": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/bathroom.mp4",
+    "source": "SignASL"
+  },
+  "DOOR": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/door.mp4",
+    "source": "SignASL"
+  },
+  "KITCHEN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/kitchen.mp4",
+    "source": "SignASL"
+  },
+  "SHIRT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/BLqzpaKkkk4.mp4",
+    "source": "SignASL"
+  },
+  "ROOM": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/room.mp4",
+    "source": "SignASL"
+  },
+  "DRESS": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/B-_Gi1swFQY.mp4",
+    "source": "SignASL"
+  },
+  "CAT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/a3b8LAX68Ho.mp4",
+    "source": "SignASL"
+  },
+  "DOG": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/dog.mp4",
+    "source": "SignASL"
+  },
+  "COAT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/coat.mp4",
+    "source": "SignASL"
+  },
+  "CHAIR": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/chair.mp4",
+    "source": "SignASL"
+  },
+  "HAT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/hat.mp4",
+    "source": "SignASL"
+  },
+  "FISH": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/fish.mp4",
+    "source": "SignASL"
+  },
+  "PANTS": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/pants.mp4",
+    "source": "SignASL"
+  },
+  "RAIN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/utTSQeTEDxk.mp4",
+    "source": "SignASL"
+  },
+  "BIRD": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/bird.mp4",
+    "source": "SignASL"
+  },
+  "SUN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/sun.mp4",
+    "source": "SignASL"
+  },
+  "WIND": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/RA04zvXojYA.mp4",
+    "source": "SignASL"
+  },
+  "HORSE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/horse.mp4",
+    "source": "SignASL"
+  },
+  "SHOES": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/shoes.mp4",
+    "source": "SignASL"
+  },
+  "WEATHER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/AxL3Q6C73fg.mp4",
+    "source": "SignASL"
+  },
+  "COW": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/cow.mp4",
+    "source": "SignASL"
+  },
+  "SNOW": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/snow.mp4",
+    "source": "SignASL"
+  },
+  "HAIR": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/9j2d2WQsriY.mp4",
+    "source": "SignASL"
+  },
+  "COLD": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/cold.mp4",
+    "source": "SignASL"
+  },
+  "ONE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/one.mp4",
+    "source": "SignASL"
+  },
+  "HOT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/hot.mp4",
+    "source": "SignASL"
+  },
+  "FIVE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/five.mp4",
+    "source": "SignASL"
+  },
+  "FOUR": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/four.mp4",
+    "source": "SignASL"
+  },
+  "FACE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/8_GCUYb19w0.mp4",
+    "source": "SignASL"
+  },
+  "NOSE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/nose.mp4",
+    "source": "SignASL"
+  },
+  "MOUTH": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/mouth.mp4",
+    "source": "SignASL"
+  },
+  "HEADACHE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/hCePLZW65pQ.mp4",
+    "source": "SignASL"
+  },
+  "SICK": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/oe9All9w7Ng.mp4",
+    "source": "SignASL"
+  },
+  "HEART": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/heart.mp4",
+    "source": "SignASL"
+  },
+  "EAR": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/ear.mp4",
+    "source": "SignASL"
+  },
+  "HAND": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslbricks/mp4/hand.mp4",
+    "source": "SignASL"
+  },
+  "PILL": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/2O4cCgMGpXM.mp4",
+    "source": "SignASL"
+  },
+  "VOMIT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/eyu6rDm1uFM.mp4",
+    "source": "SignASL"
+  },
+  "HOSPITAL": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/hospital.mp4",
+    "source": "SignASL"
+  },
+  "HURT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/hurt.mp4",
+    "source": "SignASL"
+  },
+  "DIZZY": {
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/dizzy.mp4",
+    "source": "Lifeprint / ASL University"
+  },
+  "BETTER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/better.mp4",
+    "source": "SignASL"
+  },
+  "AIRPLANE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/eD5BTz7lR-o.mp4",
+    "source": "SignASL"
+  },
+  "COUGH": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/cough.mp4",
+    "source": "SignASL"
+  },
+  "MEDICINE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/medicine.mp4",
+    "source": "SignASL"
+  },
+  "BICYCLE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/bicycle.mp4",
+    "source": "SignASL"
+  },
+  "CAR": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/car.mp4",
+    "source": "SignASL"
+  },
+  "BOAT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/aDt-KNA-v04.mp4",
+    "source": "SignASL"
+  },
+  "DRIVE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/drive.mp4",
+    "source": "SignASL"
+  },
+  "BUY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/wEPDfmy2M8w.mp4",
+    "source": "SignASL"
+  },
+  "WALK": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/walk.mp4",
+    "source": "SignASL"
+  },
+  "MOTORCYCLE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/motorcycle.mp4",
+    "source": "SignASL"
+  },
+  "COST": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/expensive.mp4",
+    "source": "SignASL"
+  },
+  "SUBWAY": {
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/subway.mp4",
+    "source": "Lifeprint / ASL University"
+  },
+  "STORE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/store.mp4",
+    "source": "SignASL"
+  },
+  "EXPENSIVE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/expensive.mp4",
+    "source": "SignASL"
+  },
+  "PAY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/pay.mp4",
+    "source": "SignASL"
+  },
+  "CENT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/penny.mp4",
+    "source": "SignASL"
+  },
+  "BROKE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/broke.mp4",
+    "source": "SignASL"
+  },
+  "SELL": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/sell.mp4",
+    "source": "SignASL"
+  },
+  "TREE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/tree.mp4",
+    "source": "SignASL"
+  },
+  "RIVER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/NyaG1U8eSOk.mp4",
+    "source": "SignASL"
+  },
+  "MOUNTAIN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/mountain.mp4",
+    "source": "SignASL"
+  },
+  "FLOWER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/flower.mp4",
+    "source": "SignASL"
+  },
+  "PLAY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/wSj0zfdppNc.mp4",
+    "source": "SignASL"
+  },
+  "STAR": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/star.mp4",
+    "source": "SignASL"
+  },
+  "GRASS": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/grass.mp4",
+    "source": "SignASL"
+  },
+  "OCEAN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/ocean.mp4",
+    "source": "SignASL"
+  },
+  "BALL": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/ball.mp4",
+    "source": "SignASL"
+  },
+  "FOOTBALL": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/football.mp4",
+    "source": "SignASL"
+  },
+  "BASKETBALL": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/basketball.mp4",
+    "source": "SignASL"
+  },
+  "PLANT": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/plant.mp4",
+    "source": "SignASL"
+  },
+  "MONEY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/money.mp4",
+    "source": "SignASL"
+  },
+  "BASEBALL": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/baseball.mp4",
+    "source": "SignASL"
+  },
+  "SWIM": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/handspeak/mp4/swim.mp4",
+    "source": "SignASL"
+  },
+  "CHURCH": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/d3oSWkxdHNo.mp4",
+    "source": "SignASL"
+  },
+  "DANCE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/dance.mp4",
+    "source": "SignASL"
+  },
+  "GAME": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/game.mp4",
+    "source": "SignASL"
+  },
+  "SOCCER": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/soccer.mp4",
+    "source": "SignASL"
+  },
+  "CITY": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/city.mp4",
+    "source": "SignASL"
+  },
+  "BUILDING": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/youtube/mp4/_UAPcbyeN_I.mp4",
+    "source": "SignASL"
+  },
+  "RUN": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/run.mp4",
+    "source": "SignASL"
+  },
+  "MOVIE": {
+    "provider": "file",
+    "src": "https://www.lifeprint.com/asl101/videos/movie.mp4",
+    "source": "Lifeprint / ASL University"
+  },
+  "B-U-S": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/mariekatzenbachschool/mp4/bus.mp4",
+    "source": "SignASL"
+  },
+  "STREET": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/startasl/mp4/street.mp4",
+    "source": "SignASL"
+  },
+  "B-A-N-K": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/aslsearch/mp4/bank.mp4",
+    "source": "SignASL"
+  },
+  "IX": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/signlanguagestudent/mp4/point.mp4",
+    "source": "SignASL"
+  },
+  "PERSUADE": {
+    "provider": "signasl",
+    "src": "https://media.signbsl.com/videos/asl/elementalaslconcepts/mp4/convince.mp4",
     "source": "SignASL"
   }
 };
