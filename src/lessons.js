@@ -1,6 +1,7 @@
 import { clarifyPrompt } from "./exerciseCopy.js";
 import { analyze, normalizeToken, tokenize } from "./gloss.js";
-import { TOPIC_UNITS } from "./topics.js";
+import { TOPIC_UNITS, TOPIC_VOCAB } from "./topics.js";
+import { withFilmLessons } from "./unit-film.js";
 import {
   exercisesForVariant,
   resolveLessonVariants,
@@ -53,7 +54,11 @@ function match(prompt, pairs, extra = {}) {
   return exercise;
 }
 
-export const UNITS = [
+function lesson(id, title, tip, exercises) {
+  return { id, title, tip, exercises };
+}
+
+const CORE_UNITS = [
   {
     id: "foundations",
     title: "Foundations",
@@ -836,6 +841,10 @@ export const UNITS = [
       },
     ],
   },
+];
+
+export const UNITS = [
+  ...withFilmLessons(CORE_UNITS, TOPIC_VOCAB, { lesson, choice, match }),
   ...TOPIC_UNITS,
 ];
 

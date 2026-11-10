@@ -1,4 +1,5 @@
 import { clarifyPrompt } from "./exerciseCopy.js";
+import { materializeExtras } from "./unit-film.js";
 import { normalizeEmbed } from "./video.js";
 
 const lp = (path) => `https://www.lifeprint.com/asl101/pages-signs/${path}`;
@@ -100,7 +101,7 @@ export const ADVANCED_NOTES = {
     "Register is how formal the room feels. FORMAL and CASUAL are honest labels. CULTURE, COMMUNITY, and RESPECT sit with Deaf-world talk. TRANSLATE and INTERPRET name cross-language work. Keep regional claims short: forms vary.",
 };
 
-export const ADVANCED_VOCAB = [
+const ADVANCED_BASE = [
   // Discourse
   sign("Role", "ROLE", "Discourse", "None required.", "An R hand rests on the opposite forearm, then can move into a person place.", "R on the forearm, then into space.", "r/role.htm"),
   sign("Shift", "SHIFT", "Discourse", "The torso often turns with the move.", "Both open hands, palms facing, slide sideways to a new place.", "Flat hands shift left or right.", "s/shift.htm"),
@@ -271,6 +272,28 @@ export const ADVANCED_VOCAB = [
   sign("Experience", "EXPERIENCE", "Register", "None required.", "Open fingertips brush down the chest twice.", "5-hands brush the chest.", "e/experience.htm"),
   sign("Skill", "SKILL", "Register", "None required.", "Grip the edge of the other hand and pull.", "Grip and pull.", "s/skill.htm"),
 
+];
+
+export const ADVANCED_VOCAB = [
+  ...ADVANCED_BASE,
+  ...materializeExtras(
+    sign,
+    [
+      "Discourse",
+      "Depict",
+      "Classifiers",
+      "Ideas",
+      "Intensity",
+      "Opinion",
+      "Debate",
+      "Professional",
+      "News",
+      "Narrative",
+      "Nuance",
+      "Register",
+    ],
+    ADVANCED_BASE.map((row) => row.gloss),
+  ),
 ];
 
 export const ADVANCED_UNITS = [

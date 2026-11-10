@@ -1,4 +1,5 @@
 import { clarifyPrompt } from "./exerciseCopy.js";
+import { materializeExtras } from "./unit-film.js";
 import { normalizeEmbed } from "./video.js";
 
 const lp = (path) => `https://www.lifeprint.com/asl101/pages-signs/${path}`;
@@ -92,7 +93,7 @@ export const MORE_NOTES = {
     "CITY taps the fingertips of flat hands, shifts, and taps again, like rooftops. CHURCH taps the thumb of a C on the back of a fist. BANK, ZOO, and a recreation PARK are fingerspelled.",
 };
 
-export const MORE_VOCAB = [
+const MORE_BASE = [
   sign("One", "ONE", "Numbers", "None required.", "Index finger up. The palm faces you.", "1-hand, palm in. The other fingers are closed.", "o/one.htm", "6GDdm_hL0xk"),
   sign("Two", "TWO", "Numbers", "None required.", "Index and middle fingers up, together. The palm faces you.", "Palm in. Two fingers stay side by side.", "t/two.htm"),
   sign("Three", "THREE", "Numbers", "None required.", "Thumb, index, and middle extend. The palm faces you.", "Palm in. Three digits: thumb plus two fingers.", "t/three.htm"),
@@ -187,6 +188,15 @@ export const MORE_VOCAB = [
   sign("Bank", "B-A-N-K", "Places", "None required.", "Fingerspell B-A-N-K. At speed some letters blend. It is still spelling.", "Four letters, produced quickly.", "b/bank.htm", "yxQCw_MF3CQ"),
   sign("Zoo", "Z-O-O", "Places", "None required.", "Fingerspell Z-O-O. The second O can be a small second O, not a new handshape.", "Three letters: Z, O, O.", "z/zoo.htm"),
   sign("Park", "P-A-R-K", "Places", "None required.", "For a recreation place, fingerspell P-A-R-K. Parking a car is a different sign. An area of trees can be TREE, slid along the arm.", "Four letters: P, A, R, K.", "p/park.htm"),
+];
+
+export const MORE_VOCAB = [
+  ...MORE_BASE,
+  ...materializeExtras(
+    sign,
+    ["Numbers", "Body", "Health", "Travel", "Money", "Nature", "Sports", "Places"],
+    MORE_BASE.map((row) => row.gloss),
+  ),
 ];
 
 export const MORE_UNITS = [

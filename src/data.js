@@ -1,7 +1,21 @@
 import { applyEmbeds } from "./embeds.js";
 import { TOPIC_CATEGORIES, TOPIC_NOTES, TOPIC_VOCAB } from "./topics.js";
+import { materializeExtras } from "./unit-film.js";
+import { normalizeEmbed } from "./video.js";
 
 const lp = (path) => `https://www.lifeprint.com/asl101/pages-signs/${path}`;
+
+function baseSign(term, gloss, category, face, manual, params, page, film) {
+  const row = { term, gloss, category, face, manual, params, href: lp(page) };
+  const embed =
+    normalizeEmbed(film) ||
+    (typeof film === "string" && film ? normalizeEmbed({ provider: "youtube", id: film }) : null);
+  if (embed) {
+    row.video = embed;
+    if (embed.provider === "youtube" && embed.id) row.youtubeId = embed.id;
+  }
+  return row;
+}
 
 export const LESSONS = {
   one: {
@@ -264,7 +278,7 @@ export const CATEGORY_NOTES = {
   ...TOPIC_NOTES,
 };
 
-export const VOCAB = applyEmbeds([
+const BASE_VOCAB = [
   {
     term: "Hello",
     gloss: "HELLO",
@@ -647,6 +661,15 @@ export const VOCAB = applyEmbeds([
     href: lp("h/how.htm"),
     youtubeId: "BaPzB4Xsq9Y",
   },
+];
+
+export const VOCAB = applyEmbeds([
+  ...BASE_VOCAB,
+  ...materializeExtras(
+    baseSign,
+    ["Greetings", "Pronouns", "Emotions", "Time", "Question words"],
+    BASE_VOCAB.map((row) => row.gloss),
+  ),
   ...TOPIC_VOCAB,
 ]);
 

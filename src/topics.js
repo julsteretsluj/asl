@@ -1,5 +1,6 @@
 import { clarifyPrompt } from "./exerciseCopy.js";
 import { applyEmbeds } from "./embeds.js";
+import { materializeCoreGaps, materializeExtras, withFilmLessons } from "./unit-film.js";
 import { ADVANCED_CATEGORIES, ADVANCED_NOTES, ADVANCED_UNITS, ADVANCED_VOCAB } from "./topics-advanced.js";
 import { MORE_CATEGORIES, MORE_NOTES, MORE_UNITS, MORE_VOCAB } from "./topics-more.js";
 import { normalizeEmbed } from "./video.js";
@@ -101,7 +102,7 @@ export const TOPIC_NOTES = {
   ...ADVANCED_NOTES,
 };
 
-export const TOPIC_VOCAB = applyEmbeds([
+const TOPIC_BASE = [
   sign("Mother", "MOTHER", "Family", "None required.", "Open 5-hand. The thumb taps the chin.", "5-hand, thumb on the chin, a short tap.", "m/mother.htm", "qUkCg3rtEws"),
   sign("Father", "FATHER", "Family", "None required.", "Open 5-hand. The thumb taps the forehead.", "5-hand, thumb on the forehead, a short tap.", "f/father.htm", "UnAiMqWCzNs"),
   sign("Parents", "PARENTS", "Family", "None required.", "The thumb taps the forehead, then the chin.", "5-hand moves from the forehead to the chin.", "p/parents.htm", "jlqHVbCS4H0"),
@@ -230,11 +231,26 @@ export const TOPIC_VOCAB = applyEmbeds([
   sign("Hot", "HOT", "Weather", "None required.", "A claw hand at the mouth turns outward.", "Claw at the mouth rotates out, as if throwing heat.", "h/hot.htm", "00cPyUsrC6M"),
   sign("Cold", "COLD", "Weather", "None required.", "Shoulders rise and the fists shiver.", "Two S-hands shake beside the body.", "c/cold.htm", "vHgjYI-ig2s"),
   sign("Weather", "WEATHER", "Weather", "None required.", "Two W hands face each other and twist.", "W-hands change orientation.", "w/weather.htm", "AxL3Q6C73fg"),
-  ...MORE_VOCAB,
-  ...ADVANCED_VOCAB,
+];
+
+const TOPIC_EXISTING = new Set([
+  ...TOPIC_BASE.map((row) => row.gloss),
+  ...MORE_VOCAB.map((row) => row.gloss),
+  ...ADVANCED_VOCAB.map((row) => row.gloss),
 ]);
 
-export const TOPIC_UNITS = [
+const TOPIC_EXTRA = [
+  ...materializeExtras(
+    sign,
+    ["Family", "Colors", "Food", "Jobs", "Home", "Clothes", "Animals", "Weather"],
+    TOPIC_EXISTING,
+  ),
+  ...materializeCoreGaps(sign, TOPIC_EXISTING),
+];
+
+export const TOPIC_VOCAB = applyEmbeds([...TOPIC_BASE, ...TOPIC_EXTRA, ...MORE_VOCAB, ...ADVANCED_VOCAB]);
+
+const TOPIC_UNITS_RAW = [
   unit("family", "Family", "#/vocab/family", [
     lesson(
       "family-parents",
@@ -999,3 +1015,9 @@ export const TOPIC_UNITS = [
   ...MORE_UNITS,
   ...ADVANCED_UNITS,
 ];
+
+export const TOPIC_UNITS = withFilmLessons(TOPIC_UNITS_RAW, TOPIC_VOCAB, {
+  lesson,
+  choice,
+  match,
+});
